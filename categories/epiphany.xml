@@ -1,5 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (epiphany)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/epiphany.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Thu, 20 Aug 2015 20:10:02 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Introduction to Parallella</title><link>https://markdewing.github.io/blog/posts/introduction-to-parallella/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The Parallella is a single board computer with a dual core ARM and a 16 core Epiphany coprocessor. 
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (epiphany)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/epiphany.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Tue, 25 Aug 2015 19:29:11 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Communicating with Epiphany</title><link>https://markdewing.github.io/blog/posts/communicating-with-epiphany/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;This post is going look at the Epiphany memory map, and give a very simple example demonstration.
+I will skim over some background information that is covered elsewhere.
+See the following posts and resources that describe the Parallella and Epiphany architectures.&lt;/p&gt;
+&lt;h3&gt;Resources&lt;/h3&gt;
+&lt;p&gt;Parallella Chronicles&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.parallella.org/2014/11/25/parallella-chronicles-part-one-2/"&gt;Part One: Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.parallella.org/2014/12/15/parallella-chronicles-part-two-2/"&gt;Part Two: The Software Development Kit&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.parallella.org/2015/01/14/parallella-chronicles-part-three/"&gt;Part Three: "Hello World"&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.parallella.org/2015/02/28/parallella-chronicles-part-five/"&gt;Part Five: The Epiphany Memory Map&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Technical Musings&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://suzannejmatthews.github.io/2015/06/02/epiphany-overview/"&gt;Overview of Epiphany Architecture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://suzannejmatthews.github.io/2015/06/03/epiphany-hello-world/"&gt;Hello Epiphany&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Manuals&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://adapteva.com/docs/epiphany_arch_ref.pdf"&gt;Epiphany Architecture Reference Manual&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://adapteva.com/docs/epiphany_sdk_ref.pdf"&gt;Epiphany SDK Reference Manual&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Source code&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/adapteva/epiphany-libs"&gt;epiphany-libs&lt;/a&gt; repo on github with the e-hal and various utilities.
+The epiphany-sdk repo contains download and build script for the GNU toolchain.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This post is going to be written from the perspective of a PC programmer.
+Desktop operating systems use virtual memory, and programmers don't have to think about hardware addresses very much. 
+The relative addresses inside each process matter most.
+Many of the addresses on the Epiphany are fixed, or fixed relative to each core, and require more 'hard-coding' of addresses.
+Although most of that is accomplished through the toolchain, it is useful to understand when programming the board.
+(Programmers of embedded systems are more used to this sort of memory layout control.)&lt;/p&gt;
+&lt;h3&gt;Memory Layout&lt;/h3&gt;
+&lt;p&gt;The Epiphany contains onboard RAM (32K per core). This called 'local' or 'core-local' memory, and is the fastest to access.&lt;/p&gt;
+&lt;p&gt;There is a larger section of memory (32MB) that is reserved from top of the SDRAM and shared with the Epiphany.
+This is called 'external memory' from the perspective of the Epiphany.  It's also called 'shared memory'.
+It is much slower to access from the Epiphany.&lt;/p&gt;
+&lt;p&gt;The shared memory and memory locations inside the chip are both mapped in the address space of the host, and can be access by the host.
+Locations in the chip include&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;32K local to each core&lt;/li&gt;
+&lt;li&gt;Registers on each core&lt;/li&gt;
+&lt;li&gt;Chip-wide registers &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Something interesting here is that the registers all have memory mappings.
+That means the registers can be accessed by the host (and other cores) by simply reading or writing a specific memory location.
+(It is important to note that register values are only valid when the core is halted.)&lt;/p&gt;
+&lt;h3&gt;Epiphany Software Development Kit&lt;/h3&gt;
+&lt;p&gt;The ESDK contains some utilities to access these memory regions from the command line.
+The commands &lt;code&gt;e-read&lt;/code&gt; and &lt;code&gt;e-write&lt;/code&gt; are used to read and write the locations.
+To access the core-local memory, use row/column coordinate of the core (0-3 for each), followed by the offset.
+For reading, optionally add the number of 4-byte words to read.  For writing, give a list of 4-byte word values.&lt;/p&gt;
+&lt;p&gt;For example, to read 8 bytes from core (0,0)&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;parallella@parallella:~$ e-read 0 0 0x100 2
+[0x00000100] = 0x782de028
+[0x00000104] = 0x0d906c89
+&lt;/pre&gt;
+
+
+&lt;p&gt;To access the external memory, use a single -1 instead of the row,col coordinates.&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;parallella@parallella:~$ e-write -1 0 1 2 3
+[0x00000000] = 0x00000001
+[0x00000004] = 0x00000002
+[0x00000008] = 0x00000003
+&lt;/pre&gt;
+
+
+&lt;p&gt;Upon power up, it appears the memory is filled with random values.
+The &lt;code&gt;epiphany-examples&lt;/code&gt; directory contains some useful utilities in the &lt;code&gt;apps&lt;/code&gt; directory.
+To fill memory with some values, use &lt;code&gt;e-fill-mem&lt;/code&gt; (build it by running the &lt;code&gt;build.sh&lt;/code&gt; script first)&lt;/p&gt;
+&lt;p&gt;To zero all the local memory in core 0, 0:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;parallella@parallella:~/epiphany-examples/apps/e-fill-mem$ ./bin/e-fill-mem.elf  0 0 1 1 8192 0
+&lt;/pre&gt;
+
+
+&lt;p&gt;Verify a few locations&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;parallella@parallella:~/epiphany-examples/apps/e-fill-mem$ e-read 0 0 0 4
+[0x00000000] = 0x00000000
+[0x00000004] = 0x00000000
+[0x00000008] = 0x00000000
+[0x0000000c] = 0x00000000
+&lt;/pre&gt;
+
+
+&lt;p&gt;Nostalgia sidebar: If you want to reminisce about the days of Commodore 64, Apple II's and other microcomputers, alias &lt;code&gt;e-read&lt;/code&gt; and &lt;code&gt;e-write&lt;/code&gt; to &lt;code&gt;peek&lt;/code&gt; and &lt;code&gt;poke&lt;/code&gt;. (For the bash shell that would be &lt;code&gt;alias peek=e-read&lt;/code&gt; and &lt;code&gt;alias poke=e-write&lt;/code&gt;)&lt;/p&gt;
+&lt;h3&gt;Simple example of local memory access&lt;/h3&gt;
+&lt;p&gt;To solidify understanding of how this works, let's try a simple program that adds two numbers in core-local memory,
+and saves the result to another location in core-local memory.  We will use the command line tools to set memory and verify
+the operation. &lt;/p&gt;
+&lt;p&gt;The 32KB of local memory puts all the offsets in the range 0x0000 - 0x8000.   Let's choose a base location 0x2000, which will be above the executable code, and below the stack.&lt;/p&gt;
+&lt;p&gt;Start with the following C program (mem.c)&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="c1"&gt;// Demonstrate local memory access at a low level&lt;/span&gt;
+
+&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;// Location in local memory will not interfere&lt;/span&gt;
+    &lt;span class="c1"&gt;// with the executable or the stack&lt;/span&gt;
+    &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;outbuf&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="mh"&gt;0x2000&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;outbuf&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;outbuf&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="n"&gt;outbuf&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;Compile with &lt;/p&gt;
+&lt;pre class="code literal-block"&gt;e-gcc mem.c -T /opt/adapteva/esdk/bsps/current/fast.ldf -o mem.elf
+&lt;/pre&gt;
+
+
+&lt;p&gt;The -T option refers to a linker script, which controls where various pieces of the executable are placed in memory.&lt;/p&gt;
+&lt;p&gt;Set the initial memory locations&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;parallella@parallella:~$ e-write 0 0 0x2000 1 2 0
+[0x00002000] = 0x00000001
+[0x00002004] = 0x00000002
+[0x00002008] = 0x00000000
+&lt;/pre&gt;
+
+
+&lt;p&gt;Load and run the program (the -s option to e-loader runs the program after loading)&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;parallella@parallella:~$ e-loader -s mem.elf 
+Loading program "mem.elf" on cores (0,0)-(0,0)
+e_set_loader_verbosity(): setting loader verbosity to 1.
+e_load_group(): loading ELF file mem.elf ...
+e_load_group(): send SYNC signal to core (0,0)...
+e_start(): SYNC (0xf042c) to core (0,0)...
+e_start(): done.
+e_load_group(): done.
+e_load_group(): done loading.
+e_load_group(): closed connection.
+e_load_group(): leaving loader.
+&lt;/pre&gt;
+
+
+&lt;p&gt;Now verify the program produced the expected result:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;parallella@parallella:~$ e-read 0 0 0x2000 3
+[0x00002000] = 0x00000001
+[0x00002004] = 0x00000002
+[0x00002008] = 0x00000003
+&lt;/pre&gt;
+
+
+&lt;p&gt;Yes.  It worked!&lt;/p&gt;
+&lt;p&gt;Now we've seen some concrete low-level details on how memory works on the Parallella and Epiphany.
+Next time I want to look the e-loader in more detail, and how programs start running on the cores.&lt;/p&gt;&lt;/div&gt;</description><category>epiphany</category><category>parallella</category><guid>https://markdewing.github.io/blog/posts/communicating-with-epiphany/</guid><pubDate>Tue, 25 Aug 2015 19:19:00 GMT</pubDate></item><item><title>Introduction to Parallella</title><link>https://markdewing.github.io/blog/posts/introduction-to-parallella/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The Parallella is a single board computer with a dual core ARM and a 16 core Epiphany coprocessor. 
 I've had some boards sitting around after backing the Kickstarter, and now I've finally started to play with them.&lt;/p&gt;
 &lt;p&gt;The main purpose of the board is to highlight the Ephiphany coprocessor, but it has other interesting
 resources as well.  I'd like to look into how to use each of them.&lt;/p&gt;
