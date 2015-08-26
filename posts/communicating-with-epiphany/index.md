@@ -10,7 +10,7 @@
 -->
 
 
-This post is going look at the Epiphany memory map, and give a very simple example demonstration.
+This post is going to look at the Epiphany memory map, and give a very simple example demonstration.
 I will skim over some background information that is covered elsewhere.
 See the following posts and resources that describe the Parallella and Epiphany architectures.
 
