@@ -1,5 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (epiphany)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/epiphany.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Wed, 26 Aug 2015 03:43:51 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Communicating with Epiphany</title><link>https://markdewing.github.io/blog/posts/communicating-with-epiphany/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;This post is going to look at the Epiphany memory map, and give a very simple example demonstration.
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (epiphany)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/epiphany.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Tue, 01 Sep 2015 18:25:59 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Running Programs on Epiphany</title><link>https://markdewing.github.io/blog/posts/running-programs-on-epiphany/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;In the &lt;a href="https://markdewing.github.io/blog/posts/communicating-with-epiphany/index.html"&gt;last post&lt;/a&gt;, we looked at the memory layout and ran a simple demo.
+Let's take a closer look at how a program starts running.&lt;/p&gt;
+&lt;p&gt;For starters, compile and run the program from last time.  We're going to run the program again, this time manually using the low-level mechanism that &lt;code&gt;e-loader&lt;/code&gt; uses to start programs.&lt;/p&gt;
+&lt;p&gt;Writing a 1 (SYNC) value to the ILATST register will trigger the Sync interrupt, and cause an existing program to run on the core.&lt;/p&gt;
+&lt;p&gt;Remember that the registers from each core are memory mapped to the host.
+The register addresses are defined in &lt;code&gt;/opt/adapteva/esdk/tools/host/include/epiphany-hal-data.h&lt;/code&gt;.
+We want E_REG_ILATST, which is 0xf042C.&lt;/p&gt;
+&lt;p&gt;To see if this works, change the input values.&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;parallella@parallella:~$ e-write 0 0 2000 4 5 0
+[0x00002000] = 0x00000004
+[0x00002004] = 0x00000005
+[0x00002008] = 0x00000000
+&lt;/pre&gt;
+
+
+&lt;p&gt;Now, write the ILATST register to run the program&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;parallella@parallella:~$ e-write 0 0 0xf042c 1
+&lt;/pre&gt;
+
+
+&lt;p&gt;And check the result&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;parallella@parallella:~$ e-read 0 0 0x2000 3
+[0x00002000] = 0x00000004
+[0x00002004] = 0x00000005
+[0x00002008] = 0x00000009
+&lt;/pre&gt;
+
+
+&lt;p&gt;It worked!&lt;/p&gt;
+&lt;p&gt;Okay, now let's look at the details of what happened.&lt;/p&gt;
+&lt;p&gt;The first 40 bytes of the core-local memory are reserved for the Interrupt Vector Table (IVT).
+Each entry is 4 bytes long, and should contain a jump (branch) instruction to the desired code.
+The first entry in the table is the Sync interrupt, used to start the program.
+(See the &lt;a href="http://adapteva.com/docs/epiphany_arch_ref.pdf"&gt;Epiphany Architecture Reference&lt;/a&gt; for the rest of the IVT entries)&lt;/p&gt;
+&lt;p&gt;We can disassemble the compiled object file with &lt;code&gt;e-objdump -D&lt;/code&gt; and look for address 0 
+(we need -D instead of -d to disassemble all the sections, not just the normal executable sections).&lt;/p&gt;
+&lt;p&gt;This looks promising.  Address of 0, in a section called &lt;code&gt;ivt_reset&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;Disassembly of section ivt_reset:
+
+00000000 &amp;lt;_start&amp;gt;:
+   0:   2ce8 0000       b 58 &amp;lt;.normal_start&amp;gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;After the Sync interrupt, control transfers to address 0, and then branches to location 0x58.
+The next section in the objdump output has that address.&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;Disassembly of section .reserved_crt0:
+
+00000058 &amp;lt;.normal_start&amp;gt;:
+  58:   720b 0002       mov r3,0x90
+  5c:   600b 1002       movt r3,0x0
+  60:   0d52            jalr r3
+&lt;/pre&gt;
+
+
+&lt;p&gt;This loads address 0x90 and jumps to it.
+The &lt;code&gt;mov&lt;/code&gt; instruction loads the lower 16 bits of r3 and the &lt;code&gt;movt&lt;/code&gt; instruction loads the upper 16 bits.&lt;/p&gt;
+&lt;p&gt;Now look for that address&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;Disassembly of section .text:
+
+00000090 &amp;lt;_epiphany_start&amp;gt;:
+  90:   be0b 27f2       mov sp,0x7ff0
+  94:   a00b 3002       movt sp,0x0
+
+   ... 
+&lt;/pre&gt;
+
+
+&lt;p&gt;This sets up the stack by loading the stack pointer with 0x7ff0, which is the top of the 32K local address space.
+The code calls other routines, which eventually call &lt;code&gt;main&lt;/code&gt;, but I won't trace it all here.&lt;/p&gt;&lt;/div&gt;</description><category>epiphany</category><category>parallella</category><guid>https://markdewing.github.io/blog/posts/running-programs-on-epiphany/</guid><pubDate>Tue, 01 Sep 2015 18:13:00 GMT</pubDate></item><item><title>Communicating with Epiphany</title><link>https://markdewing.github.io/blog/posts/communicating-with-epiphany/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;This post is going to look at the Epiphany memory map, and give a very simple example demonstration.
 I will skim over some background information that is covered elsewhere.
 See the following posts and resources that describe the Parallella and Epiphany architectures.&lt;/p&gt;
 &lt;h3&gt;Resources&lt;/h3&gt;

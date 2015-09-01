@@ -8,7 +8,7 @@
 <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/">
-<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/communicating-with-epiphany/" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/running-programs-on-epiphany/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -57,7 +57,92 @@
             
 
 <div class="postindex">
-    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/communicating-with-epiphany/" class="u-url">Communicating with Epiphany</a></h1>
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/running-programs-on-epiphany/" class="u-url">Running Programs on Epiphany</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="posts/running-programs-on-epiphany/" rel="bookmark"><time class="published dt-published" datetime="2015-09-01T13:13:00-05:00" title="2015-09-01 13:13">2015-09-01 13:13</time></a></p>
+                <p class="commentline">
+        
+    <a href="posts/running-programs-on-epiphany/#disqus_thread" data-disqus-identifier="cache/posts/running-programs-on-epiphany.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>In the <a href="posts/communicating-with-epiphany/index.html">last post</a>, we looked at the memory layout and ran a simple demo.
+Let's take a closer look at how a program starts running.</p>
+<p>For starters, compile and run the program from last time.  We're going to run the program again, this time manually using the low-level mechanism that <code>e-loader</code> uses to start programs.</p>
+<p>Writing a 1 (SYNC) value to the ILATST register will trigger the Sync interrupt, and cause an existing program to run on the core.</p>
+<p>Remember that the registers from each core are memory mapped to the host.
+The register addresses are defined in <code>/opt/adapteva/esdk/tools/host/include/epiphany-hal-data.h</code>.
+We want E_REG_ILATST, which is 0xf042C.</p>
+<p>To see if this works, change the input values.</p>
+<pre class="code literal-block">parallella@parallella:~$ e-write 0 0 2000 4 5 0
+[0x00002000] = 0x00000004
+[0x00002004] = 0x00000005
+[0x00002008] = 0x00000000
+</pre>
+
+
+<p>Now, write the ILATST register to run the program</p>
+<pre class="code literal-block">parallella@parallella:~$ e-write 0 0 0xf042c 1
+</pre>
+
+
+<p>And check the result</p>
+<pre class="code literal-block">parallella@parallella:~$ e-read 0 0 0x2000 3
+[0x00002000] = 0x00000004
+[0x00002004] = 0x00000005
+[0x00002008] = 0x00000009
+</pre>
+
+
+<p>It worked!</p>
+<p>Okay, now let's look at the details of what happened.</p>
+<p>The first 40 bytes of the core-local memory are reserved for the Interrupt Vector Table (IVT).
+Each entry is 4 bytes long, and should contain a jump (branch) instruction to the desired code.
+The first entry in the table is the Sync interrupt, used to start the program.
+(See the <a href="http://adapteva.com/docs/epiphany_arch_ref.pdf">Epiphany Architecture Reference</a> for the rest of the IVT entries)</p>
+<p>We can disassemble the compiled object file with <code>e-objdump -D</code> and look for address 0 
+(we need -D instead of -d to disassemble all the sections, not just the normal executable sections).</p>
+<p>This looks promising.  Address of 0, in a section called <code>ivt_reset</code>.</p>
+<pre class="code literal-block">Disassembly of section ivt_reset:
+
+00000000 &lt;_start&gt;:
+   0:   2ce8 0000       b 58 &lt;.normal_start&gt;
+</pre>
+
+
+<p>After the Sync interrupt, control transfers to address 0, and then branches to location 0x58.
+The next section in the objdump output has that address.</p>
+<pre class="code literal-block">Disassembly of section .reserved_crt0:
+
+00000058 &lt;.normal_start&gt;:
+  58:   720b 0002       mov r3,0x90
+  5c:   600b 1002       movt r3,0x0
+  60:   0d52            jalr r3
+</pre>
+
+
+<p>This loads address 0x90 and jumps to it.
+The <code>mov</code> instruction loads the lower 16 bits of r3 and the <code>movt</code> instruction loads the upper 16 bits.</p>
+<p>Now look for that address</p>
+<pre class="code literal-block">Disassembly of section .text:
+
+00000090 &lt;_epiphany_start&gt;:
+  90:   be0b 27f2       mov sp,0x7ff0
+  94:   a00b 3002       movt sp,0x0
+
+   ... 
+</pre>
+
+
+<p>This sets up the stack by loading the stack pointer with 0x7ff0, which is the top of the 32K local address space.
+The code calls other routines, which eventually call <code>main</code>, but I won't trace it all here.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/communicating-with-epiphany/" class="u-url">Communicating with Epiphany</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
             <p class="dateline"><a href="posts/communicating-with-epiphany/" rel="bookmark"><time class="published dt-published" datetime="2015-08-25T14:19:00-05:00" title="2015-08-25 14:19">2015-08-25 14:19</time></a></p>
