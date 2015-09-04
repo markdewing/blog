@@ -11,7 +11,7 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/2015/</loc>
-  <lastmod>2015-08-20T04:29:00Z</lastmod>
+  <lastmod>2015-09-04T03:57:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/archive.html</loc>
@@ -19,15 +19,39 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/</loc>
-  <lastmod>2015-08-20T20:10:00Z</lastmod>
+  <lastmod>2015-09-04T15:34:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/categories/comd/</loc>
+  <lastmod>2015-09-02T16:46:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/epiphany/</loc>
   <lastmod>2015-08-20T20:10:00Z</lastmod>
  </url>
  <url>
+  <loc>https://markdewing.github.io/blog/categories/julia/</loc>
+  <lastmod>2015-09-02T16:46:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/categories/mantevo/</loc>
+  <lastmod>2015-09-02T16:46:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/categories/numba/</loc>
+  <lastmod>2015-09-04T15:34:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://markdewing.github.io/blog/categories/parallella/</loc>
   <lastmod>2015-08-20T20:10:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/categories/pypy/</loc>
+  <lastmod>2015-09-04T15:34:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/categories/python/</loc>
+  <lastmod>2015-09-02T16:46:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/zynq/</loc>
@@ -36,6 +60,10 @@
  <url>
   <loc>https://markdewing.github.io/blog/posts/communicating-with-epiphany/</loc>
   <lastmod>2015-08-25T17:37:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</loc>
+  <lastmod>2015-09-04T03:57:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/introduction-to-parallella/</loc>

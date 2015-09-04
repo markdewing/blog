@@ -6,12 +6,36 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/comd.xml</loc>
+  <lastmod>2015-09-04T15:34:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>https://markdewing.github.io/blog/categories/epiphany.xml</loc>
-  <lastmod>2015-08-26T03:43:00Z</lastmod>
+  <lastmod>2015-09-01T18:25:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/julia.xml</loc>
+  <lastmod>2015-09-04T15:34:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/mantevo.xml</loc>
+  <lastmod>2015-09-04T15:34:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/numba.xml</loc>
+  <lastmod>2015-09-04T15:34:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/parallella.xml</loc>
-  <lastmod>2015-08-26T03:43:00Z</lastmod>
+  <lastmod>2015-09-01T18:25:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/pypy.xml</loc>
+  <lastmod>2015-09-04T15:34:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/python.xml</loc>
+  <lastmod>2015-09-04T15:34:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/zynq.xml</loc>
@@ -19,10 +43,10 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/rss.xml</loc>
-  <lastmod>2015-08-31T19:26:00Z</lastmod>
+  <lastmod>2015-09-04T15:34:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/sitemap.xml</loc>
-  <lastmod>2015-08-31T19:26:00Z</lastmod>
+  <lastmod>2015-09-04T15:34:00Z</lastmod>
  </sitemap>
 </sitemapindex>

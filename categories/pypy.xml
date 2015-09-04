@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (PyPy)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/pypy.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 04 Sep 2015 15:34:31 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Comparing languages with miniapps</title><link>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The &lt;a href="https://mantevo.org/"&gt;Mantevo project&lt;/a&gt; provides a collection of miniapps, which are simplified versions
+of real scientific applications that make it easier to explore performance, scaling, languages, programming models, etc.
+I want to focus on the language aspect and port some apps to new languages to see how they compare. &lt;/p&gt;
+&lt;p&gt;The first miniapp I started with is &lt;a href="http://www.exmatex.org/comd.html"&gt;CoMD&lt;/a&gt;, a molecular dynamics code in C.&lt;/p&gt;
+&lt;p&gt;For the language ports, I made multiple variants of increasing complexity.&lt;/p&gt;
+&lt;dl&gt;
+&lt;dt&gt;nsquared&lt;/dt&gt;
+&lt;dd&gt;This uses the naive algorithm in computing inter-particle interactions. The central loop computes the
+   interaction of every particle with every other particle.  The scaling of run time vs number of particles is N&lt;sup&gt;2&lt;/sup&gt;.&lt;/dd&gt;
+&lt;dt&gt;cell&lt;/dt&gt;
+&lt;dd&gt;The cell list method divides space into cells and tracks the particles in each cell.  When computing interactions, only the particles in neighboring cells need to be considered.  The scaling of run time vs. the number of particles is N.&lt;/dd&gt;
+&lt;dt&gt;mpi&lt;/dt&gt;
+&lt;dd&gt;Parallel version of the cell method.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;The C version corresponds to the 'cell' and 'mpi' variants (plus the C version has OpenMP and several other programming model variants)&lt;/p&gt;
+&lt;p&gt;Currently there are Python and Julia ports for the nsquared and cell variants, and a Python version of the mpi variant.
+They are available in my 'multitevo' github repository: &lt;a href="https://github.com/markdewing/multitevo"&gt;https://github.com/markdewing/multitevo&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The Julia version is a pretty straightforward port of the Python version, so it is probably not very idiomatic Julia code.
+(I would be happy to take suggestions from the Julia community on how to improve the style and organization)&lt;/p&gt;
+&lt;!--
+C does not have multidimensional arrays so the 3D cell indices need to be mapped to a linear index of atom coordinates (and
+the reverse), and this involves some complicated expressions.
+The Julia and Python version preserve this approach, but since they have multidimensional arrays,
+it might make the code much simpler to store the atom information directly in a multidimensional array.
+--&gt;
+
+&lt;h3&gt;Scaling with system size&lt;/h3&gt;
+&lt;p&gt;First let's verify the scaling of the nsquared version vs. the cell list version (using the Julia versions).&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Graph of scaling nsquared and cell list method" src="https://markdewing.github.io/blog/2015/scaling.png"&gt;&lt;/p&gt;
+&lt;p&gt;As expected, the cell list variant has better scaling at larger system sizes.&lt;/p&gt;
+&lt;!--
+Data for nsquared variant
+natoms time(s)   time_per_atom (us/atom)
+256   0.011350  44.335089
+500   0.034140  68.280823
+864   0.099966 115.700927
+1372   0.239239 174.372460
+2048   0.509494 248.776288
+2916   1.050071 360.106739
+4000   1.942931 485.732711
+5324   3.327456 624.991804
+6912   5.769225 834.667932
+--&gt;
+
+&lt;!--
+Data for cell method variant
+natoms  time(s)   time_per_atom (us/atom)
+256   0.045821 178.987427
+500   0.049810  99.619442
+864   0.142849 165.333940
+1372   0.151120 110.145543
+2048   0.310324 151.525439
+2916   0.344807 118.246625
+4000   0.344878  86.219497
+5324   0.621829 116.797365
+6912   0.626944  90.703648
+--&gt;
+
+&lt;h3&gt;Initial performance&lt;/h3&gt;
+&lt;p&gt;For a purely computational code such as this, performance matters.
+The ultimate goal is near C/Fortran speeds using a higher-level language to express the algorithm.&lt;/p&gt;
+&lt;p&gt;Some initial timings (for a system size of 4000 atoms, using the cell variant)&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Language/Compiler  &lt;/th&gt;
+&lt;th align="left"&gt;Version&lt;/th&gt;
+&lt;th align="right"&gt;Time/atom (microseconds)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;C - gcc&lt;/td&gt;
+&lt;td align="left"&gt;4.8.2&lt;/td&gt;
+&lt;td align="right"&gt;2.3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Julia&lt;/td&gt;
+&lt;td align="left"&gt;0.3.11&lt;/td&gt;
+&lt;td align="right"&gt;153.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Julia&lt;/td&gt;
+&lt;td align="left"&gt;0.4.0-dev+6990&lt;/td&gt;
+&lt;td align="right"&gt;88.8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Python&lt;/td&gt;
+&lt;td align="left"&gt;2.7.10 (from Anaconda)  &lt;/td&gt;
+&lt;td align="right"&gt;941.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Numba&lt;/td&gt;
+&lt;td align="left"&gt;0.20.0&lt;/td&gt;
+&lt;td align="right"&gt;789.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Pypy&lt;/td&gt;
+&lt;td align="left"&gt;2.6.1&lt;/td&gt;
+&lt;td align="right"&gt;98.4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;(Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Disclaimer&lt;/strong&gt;: These numbers indicate how a particular version of the language and compiler perform on a particular version of this code. The main purpose for these numbers is a baseline to measure future performance improvements.&lt;/p&gt;
+&lt;p&gt;I tried &lt;a href="http://www.cosmology.ethz.ch/research/software-lab/HOPE.html"&gt;HOPE&lt;/a&gt;, a Python to C++ JIT compiler.
+It require some modifications to the python code, but then failed in compiling the resulting C++ code.
+I also tried &lt;a href="http://www.parakeetpython.com/"&gt;Parakeet&lt;/a&gt;.  It failed to translate the Python code, and I did not investigate further.&lt;/p&gt;
+&lt;p&gt;It is clear when comparing to C there is quite a bit of room for improvement in the code using the high-level language compilers (Julia, Numba, PyPy).
+Whether that needs to come from the modifications to the code, or improvements in the compilers, I don't know yet.&lt;/p&gt;
+&lt;p&gt;The only real performance optimization so far has been adding type declarations to the composite types in Julia.
+This boosted performance by about 3x. Without the type declarations, the Julia 0.4.0 speed is about 275 us/atom.
+First performance lesson: Add type declarations to composite types in Julia.&lt;/p&gt;
+&lt;p&gt;Julia and Numba have a number of similarities and so I want to focus on improving the performance of the code
+under these two systems in the next few posts.&lt;/p&gt;
+&lt;!--
+Julia and Numba have similar stages (infer types, convert to LLVM IR, convert to native code), and so I hope to look
+at them in parallel going forward.  
+--&gt;&lt;/div&gt;</description><category>CoMD</category><category>julia</category><category>Mantevo</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</guid><pubDate>Wed, 02 Sep 2015 16:18:50 GMT</pubDate></item></channel></rss>
