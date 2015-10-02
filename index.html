@@ -8,7 +8,7 @@
 <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/">
-<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/two-meanings-of-vectorization/" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/improvements-in-comd-cell-method-performance/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -57,7 +57,132 @@
             
 
 <div class="postindex">
-    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/two-meanings-of-vectorization/" class="u-url">Two Meanings of Vectorization</a></h1>
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/improvements-in-comd-cell-method-performance/" class="u-url">Improvements in CoMD Cell Method Performance</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="posts/improvements-in-comd-cell-method-performance/" rel="bookmark"><time class="published dt-published" datetime="2015-10-02T13:56:00-05:00" title="2015-10-02 13:56">2015-10-02 13:56</time></a></p>
+                <p class="commentline">
+        
+    <a href="posts/improvements-in-comd-cell-method-performance/#disqus_thread" data-disqus-identifier="cache/posts/improvements-in-cell-method-performance.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>A <a href="http://markdewing.github.io/blog/posts/first-performance-improvements/">previous post</a> showed some performance improvements with the <em>nsquared</em> version of the code.
+This post will tackle the <em>cell</em> version of the code.
+In the <em>nsquared</em> version the time-consuming inner loop had no function calls.
+The <em>cell</em> version does call other functions, which may complicate optimization.</p>
+<table>
+<thead><tr>
+<th>Language/compiler  </th>
+<th>Version   </th>
+<th align="right">Initial time</th>
+<th align="right">  Final time</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>C</td>
+<td>4.8.2</td>
+<td align="right">2.3</td>
+<td align="right">2.3</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>2.7.10</td>
+<td align="right">1014</td>
+<td align="right">1014</td>
+</tr>
+<tr>
+<td>PyPy</td>
+<td>2.6.1</td>
+<td align="right">96</td>
+<td align="right">96</td>
+</tr>
+<tr>
+<td>Julia</td>
+<td>0.4.0-rc3</td>
+<td align="right">87</td>
+<td align="right">6.1</td>
+</tr>
+<tr>
+<td>Cython</td>
+<td>0.23.3</td>
+<td align="right">729</td>
+<td align="right">13</td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>0.21.0</td>
+<td align="right">867</td>
+<td align="right">47</td>
+</tr>
+</tbody>
+</table>
+<p><br>
+Times are all in μs/atom. System size is 4000 atoms.
+Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
+<br>
+The 'Initial Time' column results from the minimal amount of code changes to get the compiler working.
+<br>
+The 'Final Time' is the time after the tuning in this post.</p>
+<h3>Julia</h3>
+<p>The <em>cell</em> version contains the same issue with array operations as the <em>nsquared</em> version - the computation of <code>dd</code> allocates a temporary to hold the results every time through the loop.</p>
+<p>The <a href="https://github.com/lindahua/Devectorize.jl">Devectorize</a> package can automatically convert array notation
+to a loop.  If we add the <code>@devec</code> annotation, the time drops to 43 μs/atom.
+Unfortunately, the allocation to hold the result must still be performed, and it remains inside the inner particle loop.
+If we manually create the loop and hoist the allocation out of the loop, time is 27 μs/atom.</p>
+<p>The code uses <code>dot</code> to compute the vector norm.  This calls a routine (<code>julia_dot</code>) to perform the
+dot product.
+For long vectors calling an optimized linear algebra routine is beneficial, but for a vector of length 3 this adds overhead.
+Replacing <code>dot</code> with the equivalent loop reduces the time to 23 μs/atom.</p>
+<p>Looking through the memory allocation output (<code>--track-allocation=user</code>) shows some vector operations
+when the force array is zeroed and accumulated.
+Also in <code>putAtomInBox</code> in <code>linkcell.jl</code>.
+ These spots are also visible in the profile output, but the profile output is less convenient because it is not shown with source.
+The <code>@devec</code> macro does work here, and the performance is now 7.7 μs/atom.   Explicit loops
+give a slightly better time of 7.3 μs/atom.</p>
+<p>Profiling shows even more opportunities for devectorization in <code>advanceVelocity</code> and <code>advancePosition</code> in <code>simflat.jl</code>  Time is now 6.4 μs/atom.</p>
+<p>The Julia executable has a <code>-O</code> switch for more time-intensive optimizations (it adds more LLVM optimization passes).   This improves the time to 6.2 μs/atom.</p>
+<p>The <code>@fastmath</code> macro improves the time a little more, to 6.1 μs/atom.
+The <code>@inbounds</code> macro to skip the bounds checks did not seem to improve the time.</p>
+<p>The final Julia time is now within a factor of 3 of the C time.  The code is <a href="https://gist.github.com/markdewing/54709a0fd6a17348a7cb">here</a>.  It's not clear where the remaining time overhead comes from. </p>
+<h3>PyPy</h3>
+<p>The PyPy approach to JIT compilation is very general, but that also makes it difficult to target what code
+changes might improve performance.
+The <a href="https://bitbucket.org/pypy/jitviewer">Jitviewer</a> tool is nice, but not helpful at a cursory glance.
+The <a href="https://vmprof.readthedocs.org/en/latest/">vmprof</a> profiler solves an important problem by collecting the native code stack plus the python stack. 
+In this particular case, it reports at the function level, and the bulk of the time was spent in <code>computeForce</code>.
+I hope to write more about vmprof in a future post, as it could help with integrated profiling of Python + native code (either compiled or JIT-ed).</p>
+<h3>Cython</h3>
+<p>The simplest step is to add an initialization line and move some <code>.py</code> files to <code>.pyx</code> files.  This gives 729 μs/atom.
+Adding types to the computeForce function and assigning a few attribute lookups to local variables so the types can be assigned (playing a game of 'remove the yellow' in the Cython annotation output) gives 30 μs/atom.</p>
+<p>Adding types and removing bounds checks more routines  (in  <code>halo.py</code>, <code>linkcell.py</code>, <code>simflat.py</code>) gives 13 μs/atom.</p>
+<p>Code is <a href="https://gist.github.com/markdewing/3688c6eebc0a88081e07">here</a>.
+Further progress needs deeper investigation with profiling tools.</p>
+<h3>Numba</h3>
+<p>Starting with adding <code>@numba.jit</code> decorators to <code>computeForce</code>, and the functions it calls gives the
+initial time of 867 μs/atom.
+Extracting all the attribute lookups (including the function call to <code>getNeighborBoxes</code>) gives 722 μs/atom.</p>
+<p>We should ensure the call to <code>getNeighborBoxes</code> is properly JIT-ed.  Unfortunately, this requires more involved
+code restructuring.  Functions need to be split into a wrapper that performs any needed attribute lookups, and
+an inner function that gets JIT-ed.  Loop lifting automatically performs this transformation on functions
+  with loops.  On functions without loops, however, it needs to be done manually.
+Once this is done, the time improves dramatically to 47 μs/atom.</p>
+<p>Hopefully the upcoming "JIT Classes" feature will make this easier, and require less code restructuring. </p>
+<p>Code is <a href="https://gist.github.com/markdewing/89cce577f5b8625cc776">here</a></p>
+<h3>Summary</h3>
+<p>Julia is leading in terms of getting the best performance on this example.  Many of these projects are rapidly improving, so this is just a snapshot at their current state.</p>
+<p>All these projects need better profiling tools to show the user where code is slow and to give feedback on why the code is slow.
+The Cython annotated output is probably the the best - it highlights which lines need attention. 
+However it is not integrated with profiler output, so in a project of any size, it's not clear where a user should spend time adding types.  </p>
+<p>Julia has some useful collection and feedback tools, but they would be much more helpful if combined.  The memory allocation output is bytes allocated.
+It's useful for finding allocations where none were expected, or for allocations in known hot loops, but it's less clear which other allocations are impacting performance.
+Ideally this could be integrated with profiler output and weighted by time spent to show which allocations are actually affecting execution time.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/two-meanings-of-vectorization/" class="u-url">Two Meanings of Vectorization</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
             <p class="dateline"><a href="posts/two-meanings-of-vectorization/" rel="bookmark"><time class="published dt-published" datetime="2015-10-01T22:23:00-05:00" title="2015-10-01 22:23">2015-10-01 22:23</time></a></p>

@@ -79,7 +79,11 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/improvements-in-cell-method-performance/</loc>
-  <lastmod>2015-10-02T02:47:00Z</lastmod>
+  <lastmod>2015-10-02T03:43:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</loc>
+  <lastmod>2015-10-02T18:57:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/introduction-to-parallella/</loc>
@@ -88,10 +92,6 @@
  <url>
   <loc>https://markdewing.github.io/blog/posts/introduction/</loc>
   <lastmod>2015-08-20T04:29:00Z</lastmod>
- </url>
- <url>
-  <loc>https://markdewing.github.io/blog/posts/meaning-of-vectorization/</loc>
-  <lastmod>2015-10-02T02:47:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/running-programs-on-epiphany/</loc>
