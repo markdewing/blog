@@ -19,7 +19,7 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/</loc>
-  <lastmod>2015-09-11T21:13:00Z</lastmod>
+  <lastmod>2015-10-02T02:49:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/comd/</loc>
@@ -58,6 +58,10 @@
   <lastmod>2015-09-02T16:46:00Z</lastmod>
  </url>
  <url>
+  <loc>https://markdewing.github.io/blog/categories/vectorization/</loc>
+  <lastmod>2015-10-02T02:49:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://markdewing.github.io/blog/categories/zynq/</loc>
   <lastmod>2015-08-20T20:10:00Z</lastmod>
  </url>
@@ -74,6 +78,10 @@
   <lastmod>2015-09-11T21:13:00Z</lastmod>
  </url>
  <url>
+  <loc>https://markdewing.github.io/blog/posts/improvements-in-cell-method-performance/</loc>
+  <lastmod>2015-10-02T02:47:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://markdewing.github.io/blog/posts/introduction-to-parallella/</loc>
   <lastmod>2015-08-20T20:10:00Z</lastmod>
  </url>
@@ -82,15 +90,19 @@
   <lastmod>2015-08-20T04:29:00Z</lastmod>
  </url>
  <url>
+  <loc>https://markdewing.github.io/blog/posts/meaning-of-vectorization/</loc>
+  <lastmod>2015-10-02T02:47:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://markdewing.github.io/blog/posts/running-programs-on-epiphany/</loc>
   <lastmod>2015-08-31T19:26:00Z</lastmod>
  </url>
  <url>
-  <loc>https://markdewing.github.io/blog/posts/why-types-help-performance/</loc>
-  <lastmod>2015-09-24T02:56:00Z</lastmod>
+  <loc>https://markdewing.github.io/blog/posts/two-meanings-of-vectorization/</loc>
+  <lastmod>2015-10-02T02:49:00Z</lastmod>
  </url>
  <url>
-  <loc>https://markdewing.github.io/blog/posts/why-typing-helps-performance/</loc>
-  <lastmod>2015-09-22T15:46:00Z</lastmod>
+  <loc>https://markdewing.github.io/blog/posts/why-types-help-performance/</loc>
+  <lastmod>2015-09-24T02:56:00Z</lastmod>
  </url>
 </urlset>

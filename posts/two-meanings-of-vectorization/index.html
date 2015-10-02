@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two Meanings of Vectorization | Journey to the Center of the Computer</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
+<link rel="canonical" href="https://markdewing.github.io/blog/posts/two-meanings-of-vectorization/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Mark Dewing">
+<link rel="prev" href="../why-types-help-performance/" title="Why Types Help Performance" type="text/html">
+<meta property="og:site_name" content="Journey to the Center of the Computer">
+<meta property="og:title" content="Two Meanings of Vectorization">
+<meta property="og:url" content="https://markdewing.github.io/blog/posts/two-meanings-of-vectorization/">
+<meta property="og:description" content="The term 'vectorize' as used by programmers has at least two separate uses.
+Both uses can have implications for performance, which sometimes leads to confusion.
+One meaning refers to a language syntax">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2015-10-01T22:23:00-05:00">
+<meta property="article:tag" content="vectorization">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://markdewing.github.io/blog/">
+
+                <span id="blog-title">Journey to the Center of the Computer</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../archive.html">Archive</a>
+                </li>
+<li>
+<a href="../../categories/">Tags</a>
+                </li>
+<li>
+<a href="../../rss.xml">RSS feed</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+    <a href="index.md" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Two Meanings of Vectorization</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2015-10-01T22:23:00-05:00" itemprop="datePublished" title="2015-10-01 22:23">2015-10-01 22:23</time></a></p>
+                <p class="commentline">
+        
+    <a href=".#disqus_thread" data-disqus-identifier="cache/posts/two-meanings-of-vectorization.html">Comments</a>
+
+
+            
+        </p>
+<p class="sourceline"><a href="index.md" id="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>The term 'vectorize' as used by programmers has at least two separate uses.
+Both uses can have implications for performance, which sometimes leads to confusion.</p>
+<p>One meaning refers to a language syntax to express operations on multiple values - typically an entire array, or a slice of a array.
+This can be a very convenient notation for expressing algorithms.</p>
+<p>Here is a simple example (in Julia) using loop-oriented (devectorized) notation</p>
+<pre class="code literal-block"><span class="n">a</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="c"># allocate space for result</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="p">:</span><span class="mi">10</span>
+    <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="k">end</span>
+</pre>
+
+
+<p>Now compare with using vectorized (array) notation</p>
+<pre class="code literal-block"><span class="n">a</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="c"># space for result automatically allocated</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre>
+
+
+<p>The vectorized notation is more compact.
+Julia and Python/Numpy programmers usually mean this when referring to 'vectorization'.
+See more in the Wikipedia entry on <a href="https://en.wikipedia.org/wiki/Array_programming">Array programming</a></p>
+<p>John Myles White wrote a post discussing the performance implications of <a href="http://www.johnmyleswhite.com/notebook/2013/12/22/the-relationship-between-vectorized-and-devectorized-code/">vectorized and devectorized code</a> in Julia and R.
+Note that Python/Numpy operates similar to R as described in the post - good performance usually requires appropriately vectorized code, because that skips the interpreter and calls higher performing C routines underneath.</p>
+<p>The other meaning of 'vectorization' refers to generating assembly code to make effective use of fine-grained parallelism in hardware SIMD units.
+This is what Fortran or C/C++ programmers (and their compilers) mean by 'vectorization'.
+In Julia, the <code>@simd</code> macro gives hints to the compiler that a given loop can be vectorized.</p>
+<p>See more in the Wikipedia entry on <a href="https://en.wikipedia.org/wiki/Automatic_vectorization">Automatic vectorization</a></p>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/vectorization/" rel="tag">vectorization</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../why-types-help-performance/" rel="prev" title="Why Types Help Performance">Previous post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="journeytothecenterofthecomputer",
+            disqus_url="https://markdewing.github.io/blog/posts/two-meanings-of-vectorization/",
+        disqus_title="Two Meanings of Vectorization",
+        disqus_identifier="cache/posts/two-meanings-of-vectorization.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="//disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="//"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2015         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
+    moment.locale("");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates -->
+</body>
+</html>
