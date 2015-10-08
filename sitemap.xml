@@ -19,7 +19,7 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/</loc>
-  <lastmod>2015-10-02T02:49:00Z</lastmod>
+  <lastmod>2015-10-07T16:09:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/comd/</loc>
@@ -62,6 +62,10 @@
   <lastmod>2015-10-02T02:49:00Z</lastmod>
  </url>
  <url>
+  <loc>https://markdewing.github.io/blog/categories/vmprof/</loc>
+  <lastmod>2015-10-07T16:09:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://markdewing.github.io/blog/categories/zynq/</loc>
   <lastmod>2015-08-20T20:10:00Z</lastmod>
  </url>
@@ -78,10 +82,6 @@
   <lastmod>2015-09-11T21:13:00Z</lastmod>
  </url>
  <url>
-  <loc>https://markdewing.github.io/blog/posts/improvements-in-cell-method-performance/</loc>
-  <lastmod>2015-10-02T03:43:00Z</lastmod>
- </url>
- <url>
   <loc>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</loc>
   <lastmod>2015-10-02T18:57:00Z</lastmod>
  </url>
@@ -96,6 +96,10 @@
  <url>
   <loc>https://markdewing.github.io/blog/posts/running-programs-on-epiphany/</loc>
   <lastmod>2015-08-31T19:26:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/</loc>
+  <lastmod>2015-10-07T16:09:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/two-meanings-of-vectorization/</loc>

@@ -1,5 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer</title><link>https://markdewing.github.io/blog/</link><description>Investigations into hardware and software details</description><atom:link href="https://markdewing.github.io/blog/rss.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 02 Oct 2015 18:58:41 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Improvements in CoMD Cell Method Performance</title><link>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;A &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements/"&gt;previous post&lt;/a&gt; showed some performance improvements with the &lt;em&gt;nsquared&lt;/em&gt; version of the code.
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer</title><link>https://markdewing.github.io/blog/</link><description>Investigations into hardware and software details</description><atom:link href="https://markdewing.github.io/blog/rss.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Thu, 08 Oct 2015 02:08:09 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Towards Profiling Accelerated Python</title><link>https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;One of the conclusions from last post is a need for better profiling tools to show where time is spent in the code.
+Profiling Python + JIT'ed code requires dealing with a couple of issues.&lt;/p&gt;
+&lt;p&gt;The first issue is collecting stack information at different language levels.
+A native profiler collects a stack for the JIT'ed (or compiled extension) code, but eventually the stack enters the implementation of the Python interpreter loop.
+Unless we are trying to optimized the interpreter loop, this is not useful.
+We would rather know what Python code is being executed.
+Python profilers can collect the stack at the Python level, but can't collect native code stacks.&lt;/p&gt;
+&lt;p&gt;The PyPy developers created a solution in &lt;a href="https://vmprof.readthedocs.org/en/latest/"&gt;vmprof&lt;/a&gt;.
+It walks the stack like a native profiler, but also hooks the Python interpreter
+so that it can collect the Python code's file, function, and line number.
+This solution is general to any type of compiled extension (C extensions, Cython, Numba, etc.)
+Read the section in the vmprof docs on &lt;a href="https://vmprof.readthedocs.org/en/latest/#why-a-new-profiler"&gt;Why a new profiler?&lt;/a&gt; for more information.&lt;/p&gt;
+&lt;p&gt;The second issue is particular to JIT'ed code - resolving symbol information after the run.
+For low overhead, native profilers collect a minimum of information at runtime (usually the Instruction Pointer (IP) address at each stack level).
+These IP addresses need to resolved to symbol information after collection.
+Normally this information is kept in debug sections that are generated at compile time.
+However, with JIT compilation, the functions and their address mappings are generated at runtime.&lt;/p&gt;
+&lt;p&gt;LLVM includes an interface to get symbol information at runtime.
+The simplest way to keep it for use after the run is to follow the Linux perf standard (documented &lt;a href="https://github.com/torvalds/linux/blob/master/tools/perf/Documentation/jit-interface.txt"&gt;here&lt;/a&gt;), which stores the address, size, and function name in a file &lt;code&gt;/tmp/perf-&amp;lt;pid&amp;gt;.map&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;To enable Numba with vmprof, I've created a version of llvmlite that is amenable to stack collection, at the &lt;em&gt;perf&lt;/em&gt; branch &lt;a href="https://github.com/markdewing/llvmlite/tree/perf"&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This does two things:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Keep the frame pointer in JIT'ed code, so a backtrace can be taken.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;li&gt;Output a perf-compatible JIT map file (not on by default - need to call &lt;code&gt;enable_jit_events&lt;/code&gt; to turn it on)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;To use this, modify Numba to enable JIT events and frame pointers:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;In  &lt;code&gt;targets\codegen.py&lt;/code&gt;, at the end of the &lt;code&gt;_init&lt;/code&gt; method of &lt;code&gt;BaseCPUCodegen&lt;/code&gt;, add &lt;code&gt;self._engine.enable_jit_events()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;And for good measure, turn on frame pointers for Numba code as well (set &lt;code&gt;CFLAGS=-fno-omit-frame-pointer&lt;/code&gt; before building it)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The next piece is a modified version of vmprof ( in branch &lt;a href="https://github.com/markdewing/vmprof-python/tree/numba"&gt;&lt;em&gt;numba&lt;/em&gt;&lt;/a&gt; ).
+So far all it does is read the perf compatible output and dump raw stacks.
+Filtering and aggregating Numba stacks remains to be done (meaning neither the CLI nor the GUI display work yet).&lt;/p&gt;
+&lt;p&gt;How to use what works, so far:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Run vmprof, using perf-enabled Numba above:  &lt;code&gt;python -m vmprof -o vmprof.out &amp;lt;target python&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Copy map file &lt;code&gt;/tmp/perf-&amp;lt;pid&amp;gt;.map&lt;/code&gt; to some directory.   I usually copy &lt;code&gt;vmprof.out&lt;/code&gt; to something like &lt;code&gt;vmprof-&amp;lt;pid&amp;gt;.out&lt;/code&gt; to remember which files correlate.&lt;/li&gt;
+&lt;li&gt;View raw stacks with &lt;code&gt;vmprofdump vmprof-&amp;lt;pid&amp;gt;.out --perf perf-&amp;lt;pid&amp;gt;.map&lt;/code&gt;.  &lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="footnote"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;With x86_64, it is possible to use DWARF debug information to walk the stack.  I couldn't figure out how to output the appropriate debug information.  LLVM 3.6 has a promising target option named &lt;code&gt;JITEmitDebugInfo&lt;/code&gt;.  However, &lt;code&gt;JITEmitDebugInfo&lt;/code&gt; is a lie!  It's not hooked up to anything, and has been removed in LLVM 3.7. &lt;a class="footnote-backref" href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;↩&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>Numba</category><category>PyPy</category><category>python</category><category>vmprof</category><guid>https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/</guid><pubDate>Thu, 08 Oct 2015 01:58:00 GMT</pubDate></item><item><title>Improvements in CoMD Cell Method Performance</title><link>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;A &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements/"&gt;previous post&lt;/a&gt; showed some performance improvements with the &lt;em&gt;nsquared&lt;/em&gt; version of the code.
 This post will tackle the &lt;em&gt;cell&lt;/em&gt; version of the code.
 In the &lt;em&gt;nsquared&lt;/em&gt; version the time-consuming inner loop had no function calls.
 The &lt;em&gt;cell&lt;/em&gt; version does call other functions, which may complicate optimization.&lt;/p&gt;

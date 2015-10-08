@@ -8,7 +8,7 @@
 <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/">
-<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/improvements-in-comd-cell-method-performance/" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/towards-profiling-accelerated-python/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -57,7 +57,72 @@
             
 
 <div class="postindex">
-    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/improvements-in-comd-cell-method-performance/" class="u-url">Improvements in CoMD Cell Method Performance</a></h1>
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/towards-profiling-accelerated-python/" class="u-url">Towards Profiling Accelerated Python</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="posts/towards-profiling-accelerated-python/" rel="bookmark"><time class="published dt-published" datetime="2015-10-07T20:58:00-05:00" title="2015-10-07 20:58">2015-10-07 20:58</time></a></p>
+                <p class="commentline">
+        
+    <a href="posts/towards-profiling-accelerated-python/#disqus_thread" data-disqus-identifier="cache/posts/towards-profiling-accelerated-python.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>One of the conclusions from last post is a need for better profiling tools to show where time is spent in the code.
+Profiling Python + JIT'ed code requires dealing with a couple of issues.</p>
+<p>The first issue is collecting stack information at different language levels.
+A native profiler collects a stack for the JIT'ed (or compiled extension) code, but eventually the stack enters the implementation of the Python interpreter loop.
+Unless we are trying to optimized the interpreter loop, this is not useful.
+We would rather know what Python code is being executed.
+Python profilers can collect the stack at the Python level, but can't collect native code stacks.</p>
+<p>The PyPy developers created a solution in <a href="https://vmprof.readthedocs.org/en/latest/">vmprof</a>.
+It walks the stack like a native profiler, but also hooks the Python interpreter
+so that it can collect the Python code's file, function, and line number.
+This solution is general to any type of compiled extension (C extensions, Cython, Numba, etc.)
+Read the section in the vmprof docs on <a href="https://vmprof.readthedocs.org/en/latest/#why-a-new-profiler">Why a new profiler?</a> for more information.</p>
+<p>The second issue is particular to JIT'ed code - resolving symbol information after the run.
+For low overhead, native profilers collect a minimum of information at runtime (usually the Instruction Pointer (IP) address at each stack level).
+These IP addresses need to resolved to symbol information after collection.
+Normally this information is kept in debug sections that are generated at compile time.
+However, with JIT compilation, the functions and their address mappings are generated at runtime.</p>
+<p>LLVM includes an interface to get symbol information at runtime.
+The simplest way to keep it for use after the run is to follow the Linux perf standard (documented <a href="https://github.com/torvalds/linux/blob/master/tools/perf/Documentation/jit-interface.txt">here</a>), which stores the address, size, and function name in a file <code>/tmp/perf-&lt;pid&gt;.map</code>.</p>
+<p>To enable Numba with vmprof, I've created a version of llvmlite that is amenable to stack collection, at the <em>perf</em> branch <a href="https://github.com/markdewing/llvmlite/tree/perf">here</a>.</p>
+<p>This does two things:</p>
+<ol>
+<li>Keep the frame pointer in JIT'ed code, so a backtrace can be taken.<sup id="fnref:1"><a class="footnote-ref" href="posts/towards-profiling-accelerated-python/#fn:1" rel="footnote">1</a></sup>
+</li>
+<li>Output a perf-compatible JIT map file (not on by default - need to call <code>enable_jit_events</code> to turn it on)</li>
+</ol>
+<p>To use this, modify Numba to enable JIT events and frame pointers:</p>
+<ol>
+<li>In  <code>targets\codegen.py</code>, at the end of the <code>_init</code> method of <code>BaseCPUCodegen</code>, add <code>self._engine.enable_jit_events()</code>
+</li>
+<li>And for good measure, turn on frame pointers for Numba code as well (set <code>CFLAGS=-fno-omit-frame-pointer</code> before building it)</li>
+</ol>
+<p>The next piece is a modified version of vmprof ( in branch <a href="https://github.com/markdewing/vmprof-python/tree/numba"><em>numba</em></a> ).
+So far all it does is read the perf compatible output and dump raw stacks.
+Filtering and aggregating Numba stacks remains to be done (meaning neither the CLI nor the GUI display work yet).</p>
+<p>How to use what works, so far:</p>
+<ol>
+<li>Run vmprof, using perf-enabled Numba above:  <code>python -m vmprof -o vmprof.out &lt;target python&gt;</code>
+</li>
+<li>Copy map file <code>/tmp/perf-&lt;pid&gt;.map</code> to some directory.   I usually copy <code>vmprof.out</code> to something like <code>vmprof-&lt;pid&gt;.out</code> to remember which files correlate.</li>
+<li>View raw stacks with <code>vmprofdump vmprof-&lt;pid&gt;.out --perf perf-&lt;pid&gt;.map</code>.  </li>
+</ol>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn:1">
+<p>With x86_64, it is possible to use DWARF debug information to walk the stack.  I couldn't figure out how to output the appropriate debug information.  LLVM 3.6 has a promising target option named <code>JITEmitDebugInfo</code>.  However, <code>JITEmitDebugInfo</code> is a lie!  It's not hooked up to anything, and has been removed in LLVM 3.7. <a class="footnote-backref" href="posts/towards-profiling-accelerated-python/#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">↩</a></p>
+</li>
+</ol>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/improvements-in-comd-cell-method-performance/" class="u-url">Improvements in CoMD Cell Method Performance</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
             <p class="dateline"><a href="posts/improvements-in-comd-cell-method-performance/" rel="bookmark"><time class="published dt-published" datetime="2015-10-02T13:56:00-05:00" title="2015-10-02 13:56">2015-10-02 13:56</time></a></p>
