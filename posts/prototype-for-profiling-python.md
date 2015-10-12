@@ -1,8 +1,8 @@
 <!-- 
 .. title: Prototype for Profiling Python
 .. slug: prototype-for-profiling-python
-.. date: 2015-10-11 09:26:41 UTC-05:00
-.. tags: 
+.. date: 2015-10-12 12:20:00 UTC-05:00
+.. tags: python, Numba, profiling, vmprof
 .. category: 
 .. link: 
 .. description: 
