@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://markdewing.github.io/blog/</loc>
-  <lastmod>2015-08-20T04:29:00Z</lastmod>
+  <lastmod>2015-10-12T17:06:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/2015/</loc>
@@ -19,7 +19,7 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/</loc>
-  <lastmod>2015-10-07T16:09:00Z</lastmod>
+  <lastmod>2015-10-12T17:23:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/comd/</loc>
@@ -50,6 +50,10 @@
   <lastmod>2015-08-20T20:10:00Z</lastmod>
  </url>
  <url>
+  <loc>https://markdewing.github.io/blog/categories/profiling/</loc>
+  <lastmod>2015-10-12T17:23:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://markdewing.github.io/blog/categories/pypy/</loc>
   <lastmod>2015-09-04T15:34:00Z</lastmod>
  </url>
@@ -68,6 +72,10 @@
  <url>
   <loc>https://markdewing.github.io/blog/categories/zynq/</loc>
   <lastmod>2015-08-20T20:10:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/index-1.html</loc>
+  <lastmod>2015-10-12T17:06:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/communicating-with-epiphany/</loc>
@@ -92,6 +100,10 @@
  <url>
   <loc>https://markdewing.github.io/blog/posts/introduction/</loc>
   <lastmod>2015-08-20T04:29:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/posts/prototype-for-profiling-python/</loc>
+  <lastmod>2015-10-12T17:06:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/running-programs-on-epiphany/</loc>

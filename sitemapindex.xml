@@ -27,19 +27,23 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/numba.xml</loc>
-  <lastmod>2015-10-07T16:09:00Z</lastmod>
+  <lastmod>2015-10-12T17:23:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/parallella.xml</loc>
   <lastmod>2015-09-01T18:25:00Z</lastmod>
  </sitemap>
  <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/profiling.xml</loc>
+  <lastmod>2015-10-12T17:23:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>https://markdewing.github.io/blog/categories/pypy.xml</loc>
-  <lastmod>2015-10-07T16:09:00Z</lastmod>
+  <lastmod>2015-10-08T02:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/python.xml</loc>
-  <lastmod>2015-10-07T16:09:00Z</lastmod>
+  <lastmod>2015-10-12T17:23:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/vectorization.xml</loc>
@@ -47,7 +51,7 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/vmprof.xml</loc>
-  <lastmod>2015-10-07T16:09:00Z</lastmod>
+  <lastmod>2015-10-12T17:23:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/zynq.xml</loc>
@@ -55,10 +59,10 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/rss.xml</loc>
-  <lastmod>2015-10-07T16:09:00Z</lastmod>
+  <lastmod>2015-10-12T17:23:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/sitemap.xml</loc>
-  <lastmod>2015-10-07T16:09:00Z</lastmod>
+  <lastmod>2015-10-12T17:23:00Z</lastmod>
  </sitemap>
 </sitemapindex>
