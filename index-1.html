@@ -58,7 +58,76 @@
             
 
 <div class="postindex">
-    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/introduction/" class="u-url">Introduction</a></h1>
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/introduction-to-parallella/" class="u-url">Introduction to Parallella</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="posts/introduction-to-parallella/" rel="bookmark"><time class="published dt-published" datetime="2015-08-20T15:08:00-05:00" title="2015-08-20 15:08">2015-08-20 15:08</time></a></p>
+                <p class="commentline">
+        
+    <a href="posts/introduction-to-parallella/#disqus_thread" data-disqus-identifier="cache/posts/introduction-to-parallella.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>The Parallella is a single board computer with a dual core ARM and a 16 core Epiphany coprocessor. 
+I've had some boards sitting around after backing the Kickstarter, and now I've finally started to play with them.</p>
+<p>The main purpose of the board is to highlight the Ephiphany coprocessor, but it has other interesting
+resources as well.  I'd like to look into how to use each of them.</p>
+<p>Resources to program:</p>
+<ul>
+<li>Xilinx Zynq (7010 or 7020), which contains<ul>
+<li>dual core ARM Cortex A9 processors (with NEON SIMD instructions)</li>
+<li>FPGA</li>
+</ul>
+</li>
+<li>Epiphany 16 core coprocessor (simple cores in a grid)</li>
+</ul>
+<p>See the website (<a href="http://parallella.org">parallella.org</a>) for more <a href="http://parallella.org/board">details of the board</a>.</p>
+<p>After getting the system set up and running according to the <a href="https://www.parallella.org/quick-start/">directions</a>, the first question is how 
+to compile code?   Since there are two architectures on the board, it gets a bit more complex.</p>
+<ul>
+<li>Regular PC (in my case, 64 bit, running Ubuntu) - the host for cross compilation, targeting either the ARM cores or the Epiphany.</li>
+<li>ARM on Zynq - can be a cross-compilation target, can compile for itself, or can compile for the Epiphany</li>
+<li>Epiphany - only a target</li>
+</ul>
+<p>While code can be compiled on the board, compiling on host PC can have some definite advantages with much larger resources of disk space, disk speed, etc.
+However, setting up projects for cross-compiliation can be more challenging.</p>
+<h2>Cross compiling to ARM</h2>
+<p>On Ubuntu, this turns out to be fairly easy - the compiler packages that target ARM are already available in the repository.</p>
+<p>Using the Ubuntu Software Center (or Synaptic, or the apt- tools, as you prefer), install the following packages</p>
+<ul>
+<li>gcc-arm-linux-gnueabihf</li>
+<li>binutils-arm-linux-gnueabihf</li>
+</ul>
+<p>Selecting these should install the necessary dependencies (some listed here):</p>
+<ul>
+<li>libc6-armhf-cross</li>
+<li>libc6-dev-armhf-cross</li>
+<li>cpp-arm-linux-gnueabihf</li>
+<li>gcc-4.8-multilib-arm-linux-gnueabihf</li>
+</ul>
+<p>(By the way, the 'hf' at the end stands for 'Hard Float' - it means the processor has floating point in hardware)</p>
+<p>See this <a href="https://parallella.org/forums/viewtopic.php?f=13&amp;t=935">forum post</a> for more information.  That post also contains instructions for setting up Eclipse (I'm more partial to the command line).</p>
+<p>To cross compile using the command line, all the normal compiler tools are prefixed with <code>arm-linux-gnueabihf</code>.  Use <code>arm-linux-gnueabihf-gcc -o hello hello.c</code> to compile a simple example.</p>
+<p>Run <code>file</code> on the output file to verify it compiled as an ARM executable.</p>
+<h3>Clang</h3>
+<p>Compiling with clang needs at least the include and lib files from the 'libc6-*-armhf-cross' packages.</p>
+<p>Assuming the version of clang is built to output the 'arm' target, the following should work</p>
+<pre class="code literal-block">clang -target arm-linux-guneabihf -I /usr/arm-linux-gnueabihf/include hello.cpp
+</pre>
+
+
+<h2>Cross compiling to Epiphany</h2>
+<p>These are the tools in the ESDK.</p>
+<p>If using the ARM as a host, the ESDK is already in the microSD images and the tools are in the path (<code>\opt\adapteva\esdk\tools\e-gnu\bin</code>)
+The tools are prefixed with <code>e-</code>.  Use <code>e-gcc</code> to invoke the compiler.</p>
+<p>For a Linux host, download and install the ESDK from the website (under <code>Software -&gt; Pre-built -&gt; Epiphany SDK</code>)(<a href="ftp://ftp.parallella.org/esdk">direct link</a>).  Look for 'linux_x86_64' in the file name.</p>
+<p>The ESDK has examples you can compile and run.  Sometime later I want to take a closer look at how the Epiphany files are loaded to the coprocessor and run.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/introduction/" class="u-url">Introduction</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
             <p class="dateline"><a href="posts/introduction/" rel="bookmark"><time class="published dt-published" datetime="2015-08-19T23:18:00-05:00" title="2015-08-19 23:18">2015-08-19 23:18</time></a></p>

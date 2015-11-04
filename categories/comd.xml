@@ -1,5 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (CoMD)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/comd.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 02 Oct 2015 18:58:41 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Improvements in CoMD Cell Method Performance</title><link>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;A &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements/"&gt;previous post&lt;/a&gt; showed some performance improvements with the &lt;em&gt;nsquared&lt;/em&gt; version of the code.
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (CoMD)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/comd.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Wed, 04 Nov 2015 21:41:02 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Performance Updates with PyPy 4.0</title><link>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The PyPy team recently released version &lt;a href="http://morepypy.blogspot.com/2015/10/pypy-400-released-jit-with-simd.html"&gt;4.0&lt;/a&gt;
+(The jump in version number is to reduce confusion with the Python version supported.)
+One of the features is improved performance.&lt;/p&gt;
+&lt;p&gt;But first, an issue with reporting accurate timings with this version of CoMD should be addressed. The initial iteration contains overhead from tracing and JIT compilation (Cython and Numba have the same issue).
+For this example we are concerned with the steady-state timing, so the time for the first iteration should be excluded.
+I've added a '--skip' parameter to the CoMD code (default: 1) that skips the first &lt;code&gt;printRate&lt;/code&gt; steps (default: 10) in computing the overall average update rate at the end.&lt;/p&gt;
+&lt;p&gt;Now the table with the most recent performance numbers  (from &lt;a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/"&gt;this post&lt;/a&gt; ), updated with PyPy 4.0 results:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Language/compiler  &lt;/th&gt;
+&lt;th&gt;Version   &lt;/th&gt;
+&lt;th align="right"&gt;Time&lt;/th&gt;
+&lt;th align="right"&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Python&lt;/td&gt;
+&lt;td&gt;2.7.10&lt;/td&gt;
+&lt;td align="right"&gt;1014&lt;/td&gt;
+&lt;td align="right"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;PyPy&lt;/td&gt;
+&lt;td&gt;2.6.1&lt;/td&gt;
+&lt;td align="right"&gt;96&lt;/td&gt;
+&lt;td align="right"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Numba&lt;/td&gt;
+&lt;td&gt;0.21.0&lt;/td&gt;
+&lt;td align="right"&gt;47&lt;/td&gt;
+&lt;td align="right"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;PyPy&lt;/td&gt;
+&lt;td&gt;4.0&lt;/td&gt;
+&lt;td align="right"&gt;30&lt;/td&gt;
+&lt;td align="right"&gt;    New result&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Cython&lt;/td&gt;
+&lt;td&gt;0.23.3&lt;/td&gt;
+&lt;td align="right"&gt;13&lt;/td&gt;
+&lt;td align="right"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Julia&lt;/td&gt;
+&lt;td&gt;0.4.0-rc3&lt;/td&gt;
+&lt;td align="right"&gt;6.1&lt;/td&gt;
+&lt;td align="right"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;4.8.2&lt;/td&gt;
+&lt;td align="right"&gt;2.3&lt;/td&gt;
+&lt;td align="right"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;br&gt;
+Times are all in μs/atom. System size is 4000 atoms.
+Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
+&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;The new release of PyPy also includes some SIMD vectorization support (&lt;code&gt;--jit vec=1&lt;/code&gt; or &lt;code&gt;--jit vec_all=1&lt;/code&gt;).  Neither of these provided any improvement in performance on this code.   Not too surprising given the vectorization support is new, and the code contains
+conditionals in the inner loop.&lt;/p&gt;
+&lt;p&gt;PyPy 4.0 gives a very good 34x performance improvement over bare Python, and 3x improvement over the previous release (2.6.1).
+PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>PyPy</category><guid>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</guid><pubDate>Wed, 04 Nov 2015 21:39:00 GMT</pubDate></item><item><title>Improvements in CoMD Cell Method Performance</title><link>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;A &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements/"&gt;previous post&lt;/a&gt; showed some performance improvements with the &lt;em&gt;nsquared&lt;/em&gt; version of the code.
 This post will tackle the &lt;em&gt;cell&lt;/em&gt; version of the code.
 In the &lt;em&gt;nsquared&lt;/em&gt; version the time-consuming inner loop had no function calls.
 The &lt;em&gt;cell&lt;/em&gt; version does call other functions, which may complicate optimization.&lt;/p&gt;

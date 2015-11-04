@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Performance Updates with PyPy 4.0 | Journey to the Center of the Computer</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
+<link rel="canonical" href="https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Mark Dewing">
+<link rel="prev" href="../prototype-for-profiling-python/" title="Prototype for Profiling Python" type="text/html">
+<meta property="og:site_name" content="Journey to the Center of the Computer">
+<meta property="og:title" content="Performance Updates with PyPy 4.0">
+<meta property="og:url" content="https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/">
+<meta property="og:description" content="The PyPy team recently released version 4.0
+(The jump in version number is to reduce confusion with the Python version supported.)
+One of the features is improved performance.
+But first, an issue with">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2015-11-04T15:39:00-06:00">
+<meta property="article:tag" content="CoMD">
+<meta property="article:tag" content="PyPy">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://markdewing.github.io/blog/">
+
+                <span id="blog-title">Journey to the Center of the Computer</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../archive.html">Archive</a>
+                </li>
+<li>
+<a href="../../categories/">Tags</a>
+                </li>
+<li>
+<a href="../../rss.xml">RSS feed</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+    <a href="index.md" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Performance Updates with PyPy 4.0</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2015-11-04T15:39:00-06:00" itemprop="datePublished" title="2015-11-04 15:39">2015-11-04 15:39</time></a></p>
+                <p class="commentline">
+        
+    <a href=".#disqus_thread" data-disqus-identifier="cache/posts/updated-performance-with-pypy-40.html">Comments</a>
+
+
+            
+        </p>
+<p class="sourceline"><a href="index.md" id="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>The PyPy team recently released version <a href="http://morepypy.blogspot.com/2015/10/pypy-400-released-jit-with-simd.html">4.0</a>
+(The jump in version number is to reduce confusion with the Python version supported.)
+One of the features is improved performance.</p>
+<p>But first, an issue with reporting accurate timings with this version of CoMD should be addressed. The initial iteration contains overhead from tracing and JIT compilation (Cython and Numba have the same issue).
+For this example we are concerned with the steady-state timing, so the time for the first iteration should be excluded.
+I've added a '--skip' parameter to the CoMD code (default: 1) that skips the first <code>printRate</code> steps (default: 10) in computing the overall average update rate at the end.</p>
+<p>Now the table with the most recent performance numbers  (from <a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/">this post</a> ), updated with PyPy 4.0 results:</p>
+<table>
+<thead><tr>
+<th>Language/compiler  </th>
+<th>Version   </th>
+<th align="right">Time</th>
+<th align="right"></th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>2.7.10</td>
+<td align="right">1014</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>PyPy</td>
+<td>2.6.1</td>
+<td align="right">96</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>0.21.0</td>
+<td align="right">47</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>PyPy</td>
+<td>4.0</td>
+<td align="right">30</td>
+<td align="right">    New result</td>
+</tr>
+<tr>
+<td>Cython</td>
+<td>0.23.3</td>
+<td align="right">13</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>Julia</td>
+<td>0.4.0-rc3</td>
+<td align="right">6.1</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>C</td>
+<td>4.8.2</td>
+<td align="right">2.3</td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+<p><br>
+Times are all in μs/atom. System size is 4000 atoms.
+Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
+<br></p>
+<p>The new release of PyPy also includes some SIMD vectorization support (<code>--jit vec=1</code> or <code>--jit vec_all=1</code>).  Neither of these provided any improvement in performance on this code.   Not too surprising given the vectorization support is new, and the code contains
+conditionals in the inner loop.</p>
+<p>PyPy 4.0 gives a very good 34x performance improvement over bare Python, and 3x improvement over the previous release (2.6.1).
+PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)</p>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/comd/" rel="tag">CoMD</a></li>
+            <li><a class="tag p-category" href="../../categories/pypy/" rel="tag">PyPy</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../prototype-for-profiling-python/" rel="prev" title="Prototype for Profiling Python">Previous post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="journeytothecenterofthecomputer",
+            disqus_url="https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/",
+        disqus_title="Performance Updates with PyPy 4.0",
+        disqus_identifier="cache/posts/updated-performance-with-pypy-40.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="//disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="//"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2015         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
+    moment.locale("");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates -->
+</body>
+</html>

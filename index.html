@@ -9,7 +9,7 @@
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/">
 <link rel="next" href="index-1.html" type="text/html">
-<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/prototype-for-profiling-python/" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/updated-performance-with-pypy-40/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -58,7 +58,89 @@
             
 
 <div class="postindex">
-    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/prototype-for-profiling-python/" class="u-url">Prototype for Profiling Python</a></h1>
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/updated-performance-with-pypy-40/" class="u-url">Performance Updates with PyPy 4.0</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="posts/updated-performance-with-pypy-40/" rel="bookmark"><time class="published dt-published" datetime="2015-11-04T15:39:00-06:00" title="2015-11-04 15:39">2015-11-04 15:39</time></a></p>
+                <p class="commentline">
+        
+    <a href="posts/updated-performance-with-pypy-40/#disqus_thread" data-disqus-identifier="cache/posts/updated-performance-with-pypy-40.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>The PyPy team recently released version <a href="http://morepypy.blogspot.com/2015/10/pypy-400-released-jit-with-simd.html">4.0</a>
+(The jump in version number is to reduce confusion with the Python version supported.)
+One of the features is improved performance.</p>
+<p>But first, an issue with reporting accurate timings with this version of CoMD should be addressed. The initial iteration contains overhead from tracing and JIT compilation (Cython and Numba have the same issue).
+For this example we are concerned with the steady-state timing, so the time for the first iteration should be excluded.
+I've added a '--skip' parameter to the CoMD code (default: 1) that skips the first <code>printRate</code> steps (default: 10) in computing the overall average update rate at the end.</p>
+<p>Now the table with the most recent performance numbers  (from <a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/">this post</a> ), updated with PyPy 4.0 results:</p>
+<table>
+<thead><tr>
+<th>Language/compiler  </th>
+<th>Version   </th>
+<th align="right">Time</th>
+<th align="right"></th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>2.7.10</td>
+<td align="right">1014</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>PyPy</td>
+<td>2.6.1</td>
+<td align="right">96</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>0.21.0</td>
+<td align="right">47</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>PyPy</td>
+<td>4.0</td>
+<td align="right">30</td>
+<td align="right">    New result</td>
+</tr>
+<tr>
+<td>Cython</td>
+<td>0.23.3</td>
+<td align="right">13</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>Julia</td>
+<td>0.4.0-rc3</td>
+<td align="right">6.1</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>C</td>
+<td>4.8.2</td>
+<td align="right">2.3</td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+<p><br>
+Times are all in μs/atom. System size is 4000 atoms.
+Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
+<br></p>
+<p>The new release of PyPy also includes some SIMD vectorization support (<code>--jit vec=1</code> or <code>--jit vec_all=1</code>).  Neither of these provided any improvement in performance on this code.   Not too surprising given the vectorization support is new, and the code contains
+conditionals in the inner loop.</p>
+<p>PyPy 4.0 gives a very good 34x performance improvement over bare Python, and 3x improvement over the previous release (2.6.1).
+PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/prototype-for-profiling-python/" class="u-url">Prototype for Profiling Python</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
             <p class="dateline"><a href="posts/prototype-for-profiling-python/" rel="bookmark"><time class="published dt-published" datetime="2015-10-12T12:20:00-05:00" title="2015-10-12 12:20">2015-10-12 12:20</time></a></p>
@@ -1050,75 +1132,6 @@ e_load_group(): leaving loader.
 <p>Yes.  It worked!</p>
 <p>Now we've seen some concrete low-level details on how memory works on the Parallella and Epiphany.
 Next time I want to look the e-loader in more detail, and how programs start running on the cores.</p>
-</div>
-    </div>
-    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/introduction-to-parallella/" class="u-url">Introduction to Parallella</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/introduction-to-parallella/" rel="bookmark"><time class="published dt-published" datetime="2015-08-20T15:08:00-05:00" title="2015-08-20 15:08">2015-08-20 15:08</time></a></p>
-                <p class="commentline">
-        
-    <a href="posts/introduction-to-parallella/#disqus_thread" data-disqus-identifier="cache/posts/introduction-to-parallella.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>The Parallella is a single board computer with a dual core ARM and a 16 core Epiphany coprocessor. 
-I've had some boards sitting around after backing the Kickstarter, and now I've finally started to play with them.</p>
-<p>The main purpose of the board is to highlight the Ephiphany coprocessor, but it has other interesting
-resources as well.  I'd like to look into how to use each of them.</p>
-<p>Resources to program:</p>
-<ul>
-<li>Xilinx Zynq (7010 or 7020), which contains<ul>
-<li>dual core ARM Cortex A9 processors (with NEON SIMD instructions)</li>
-<li>FPGA</li>
-</ul>
-</li>
-<li>Epiphany 16 core coprocessor (simple cores in a grid)</li>
-</ul>
-<p>See the website (<a href="http://parallella.org">parallella.org</a>) for more <a href="http://parallella.org/board">details of the board</a>.</p>
-<p>After getting the system set up and running according to the <a href="https://www.parallella.org/quick-start/">directions</a>, the first question is how 
-to compile code?   Since there are two architectures on the board, it gets a bit more complex.</p>
-<ul>
-<li>Regular PC (in my case, 64 bit, running Ubuntu) - the host for cross compilation, targeting either the ARM cores or the Epiphany.</li>
-<li>ARM on Zynq - can be a cross-compilation target, can compile for itself, or can compile for the Epiphany</li>
-<li>Epiphany - only a target</li>
-</ul>
-<p>While code can be compiled on the board, compiling on host PC can have some definite advantages with much larger resources of disk space, disk speed, etc.
-However, setting up projects for cross-compiliation can be more challenging.</p>
-<h2>Cross compiling to ARM</h2>
-<p>On Ubuntu, this turns out to be fairly easy - the compiler packages that target ARM are already available in the repository.</p>
-<p>Using the Ubuntu Software Center (or Synaptic, or the apt- tools, as you prefer), install the following packages</p>
-<ul>
-<li>gcc-arm-linux-gnueabihf</li>
-<li>binutils-arm-linux-gnueabihf</li>
-</ul>
-<p>Selecting these should install the necessary dependencies (some listed here):</p>
-<ul>
-<li>libc6-armhf-cross</li>
-<li>libc6-dev-armhf-cross</li>
-<li>cpp-arm-linux-gnueabihf</li>
-<li>gcc-4.8-multilib-arm-linux-gnueabihf</li>
-</ul>
-<p>(By the way, the 'hf' at the end stands for 'Hard Float' - it means the processor has floating point in hardware)</p>
-<p>See this <a href="https://parallella.org/forums/viewtopic.php?f=13&amp;t=935">forum post</a> for more information.  That post also contains instructions for setting up Eclipse (I'm more partial to the command line).</p>
-<p>To cross compile using the command line, all the normal compiler tools are prefixed with <code>arm-linux-gnueabihf</code>.  Use <code>arm-linux-gnueabihf-gcc -o hello hello.c</code> to compile a simple example.</p>
-<p>Run <code>file</code> on the output file to verify it compiled as an ARM executable.</p>
-<h3>Clang</h3>
-<p>Compiling with clang needs at least the include and lib files from the 'libc6-*-armhf-cross' packages.</p>
-<p>Assuming the version of clang is built to output the 'arm' target, the following should work</p>
-<pre class="code literal-block">clang -target arm-linux-guneabihf -I /usr/arm-linux-gnueabihf/include hello.cpp
-</pre>
-
-
-<h2>Cross compiling to Epiphany</h2>
-<p>These are the tools in the ESDK.</p>
-<p>If using the ARM as a host, the ESDK is already in the microSD images and the tools are in the path (<code>\opt\adapteva\esdk\tools\e-gnu\bin</code>)
-The tools are prefixed with <code>e-</code>.  Use <code>e-gcc</code> to invoke the compiler.</p>
-<p>For a Linux host, download and install the ESDK from the website (under <code>Software -&gt; Pre-built -&gt; Epiphany SDK</code>)(<a href="ftp://ftp.parallella.org/esdk">direct link</a>).  Look for 'linux_x86_64' in the file name.</p>
-<p>The ESDK has examples you can compile and run.  Sometime later I want to take a closer look at how the Epiphany files are loaded to the coprocessor and run.</p>
 </div>
     </div>
     </article>
