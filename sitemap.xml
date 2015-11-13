@@ -11,7 +11,7 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/2015/</loc>
-  <lastmod>2015-09-04T03:57:00Z</lastmod>
+  <lastmod>2015-11-12T18:03:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/archive.html</loc>
@@ -75,7 +75,7 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/index-1.html</loc>
-  <lastmod>2015-11-04T19:52:00Z</lastmod>
+  <lastmod>2015-11-12T15:25:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/communicating-with-epiphany/</loc>
@@ -100,6 +100,10 @@
  <url>
   <loc>https://markdewing.github.io/blog/posts/introduction/</loc>
   <lastmod>2015-08-20T04:29:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/posts/more-with-numba/</loc>
+  <lastmod>2015-11-12T15:25:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/prototype-for-profiling-python/</loc>

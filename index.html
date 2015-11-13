@@ -9,7 +9,7 @@
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/">
 <link rel="next" href="index-1.html" type="text/html">
-<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/updated-performance-with-pypy-40/" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/more-with-numba/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -58,7 +58,156 @@
             
 
 <div class="postindex">
-    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/updated-performance-with-pypy-40/" class="u-url">Performance Updates with PyPy 4.0</a></h1>
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/more-with-numba/" class="u-url">More Performance With Numba</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="posts/more-with-numba/" rel="bookmark"><time class="published dt-published" datetime="2015-11-13T10:30:00-06:00" title="2015-11-13 10:30">2015-11-13 10:30</time></a></p>
+                <p class="commentline">
+        
+    <a href="posts/more-with-numba/#disqus_thread" data-disqus-identifier="cache/posts/more-with-numba.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Having acquired a shiny new <a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/">profiler</a>, it's time to dig into the performance of the Numba version some more.</p>
+<p>Picking up from the <a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/">previous optimizations</a>, I can't seem to reproduce the timing (47 μs/atom) in the that table.  Now I get 40 μs/atom.</p>
+<h2>First step</h2>
+<p>Run the profiler (<code>vmprofrun comd.py</code>) and display the results in KCacheGrind (<code>kcachegrind vmprof-20664.out</code>)</p>
+<p>Sorting by self time, we see <code>getBoxFromCoord</code> at the top:</p>
+<p><img alt="KCachegrind screenshot of functions sorted by self time" src="2015/profile1_by_self_sm.png"></p>
+<p>Also a screen shot of the call graph - <code>getBoxFromCoord</code> gets called from two different places - <code>putAtomInBox</code> and <code>updateLinkCells</code>.</p>
+<p><img alt="KCachegrind screenshot of call graph" src="2015/profile1_call_graph_sm.png"></p>
+<p>To improve performance here, convert <code>getBoxFromCoord</code> to a free function and put all the attribute references into function arguments.</p>
+<p>Before:</p>
+<pre class="code literal-block">    <span class="k">def</span> <span class="nf">getBoxFromCoord</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+        <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">iz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBoxFromTuple</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">iz</span><span class="p">)</span>
+</pre>
+
+
+<p>After:</p>
+<pre class="code literal-block"><span class="nd">@numba.njit</span>
+<span class="k">def</span> <span class="nf">getBoxFromCoordInner</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">invBoxSize</span><span class="p">,</span> <span class="n">nLocalBoxes</span><span class="p">,</span> <span class="n">gs</span><span class="p">):</span>
+    <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">iz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">z</span><span class="o">*</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">getBoxFromTupleInner</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">iz</span><span class="p">,</span> <span class="n">nLocalBoxes</span><span class="p">,</span> <span class="n">gs</span><span class="p">)</span>
+</pre>
+
+
+<p>(Changing the parameter <code>r</code> to individual components was not strictly necessary.)</p>
+<p>And the call sites change (for example) from</p>
+<pre class="code literal-block">        <span class="n">iBox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBoxFromCoord</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+</pre>
+
+
+<p>to</p>
+<pre class="code literal-block">        <span class="n">iBox</span> <span class="o">=</span> <span class="n">getBoxFromCoordInner</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">invBoxSize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nLocalBoxes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">)</span>
+</pre>
+
+
+<p>This improves performance to 20 μs/atom.</p>
+<p>Repeating the same transformation for putAtomInBox gives 18.4 μs/atom.</p>
+<h2>Second step</h2>
+<p>Run the profiler again.  By self time, <code>loadAtomsBuffer</code> is at the top.  Let's look at that in context.
+Sort by inclusive time, and we see that the parts of the call tree starting at <code>redistributeAtoms</code> take a significant amount of time.</p>
+<p><img alt="KCachegrind screenshot of functions sorted by inclusive time" src="2015/profile2_by_incl_sm.png"></p>
+<p><img alt="KCachegrind screenshot of call graph" src="2015/profile2_call_graph_sm.png"></p>
+<p>This part of the code:</p>
+<ul>
+<li>Applies periodic boundary conditions</li>
+<li>Moves atoms to a new cell</li>
+<li>Packs atom into a buffer at source</li>
+<li>Unpacks buffer into atom data structure at destination</li>
+</ul>
+<p>This packing/unpacking anticipates the parallel version, which transmits the buffer across processors.</p>
+<p>A previous attempt at using numpy records did not work well (and ran into a serious performance regression with numpy 1.10).
+This time I went with two buffers - one for integers, and one for floating point numbers.  This works better, and the
+performance is now 10.2 μs/atom.</p>
+<h2>More steps</h2>
+<p>Continuing the process of profiling, and converting routines to be Numba friendly eventually reached a performance of 2.9 μs/atom.
+(Wow, this is only about 30% slower than C.)</p>
+<p>Modified code is <a href="https://gist.github.com/markdewing/8bd6bd8dbef8613004fe">here</a></p>
+<p>The updated performance table is</p>
+<table>
+<thead><tr>
+<th>Language/compiler  </th>
+<th>Version   </th>
+<th align="right">Initial time</th>
+<th align="right">  Final time</th>
+<th></th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>2.7.10</td>
+<td align="right">1014</td>
+<td align="right">1014</td>
+<td></td>
+</tr>
+<tr>
+<td>PyPy</td>
+<td>4.0</td>
+<td align="right">30</td>
+<td align="right">30</td>
+<td></td>
+</tr>
+<tr>
+<td>Cython</td>
+<td>0.23.3</td>
+<td align="right">729</td>
+<td align="right">13</td>
+<td></td>
+</tr>
+<tr>
+<td>Julia</td>
+<td>0.4.0-rc3</td>
+<td align="right">87</td>
+<td align="right">6.1</td>
+<td></td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>0.21.0</td>
+<td align="right">867</td>
+<td align="right">2.9</td>
+<td>    New result</td>
+</tr>
+<tr>
+<td>C (clang)</td>
+<td>3.7</td>
+<td align="right">2.2</td>
+<td align="right">2.2</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<div style="font-size:80%">
+Times are all in μs/atom. System size is 4000 atoms.
+Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
+<br>
+The 'Initial Time' column results from the minimal amount of code changes to get the compiler working.
+<br>
+The 'Final Time' is the time after tuning.
+</div>
+<br><p>Do note that the Cython, Julia, and Numba results reflect the amount of effort put into optimization.
+Cython and Julia still need to be improved with the assistance of a profiler (or in Julia's case, a better viewer
+for existing profile data).</p>
+<h2>Summary</h2>
+<p>Using a profiler to guide our optimization efforts has been very helpful.</p>
+<p>The Numba results are really promising, but, in addition to creating ugly code, it required an amount of work
+that I would not want to perform on a regular basis.    These transformations are fairly regular, so it should
+be possible to incorporate them into Numba.  Alternately, if doing so in a safe manner inside the compiler is difficult,
+some sort of automated AST transformation of the source should be possible.</p>
+<p>As the optimization process proceeds on this code, increasing amount of time is being spent in the core routine, computeForce, (as it should), and we will need to move beyond a function-level profiler to look for optimization opportunities.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/updated-performance-with-pypy-40/" class="u-url">Performance Updates with PyPy 4.0</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
             <p class="dateline"><a href="posts/updated-performance-with-pypy-40/" rel="bookmark"><time class="published dt-published" datetime="2015-11-04T15:39:00-06:00" title="2015-11-04 15:39">2015-11-04 15:39</time></a></p>
@@ -969,169 +1118,6 @@ The <code>mov</code> instruction loads the lower 16 bits of r3 and the <code>mov
 
 <p>This sets up the stack by loading the stack pointer with 0x7ff0, which is the top of the 32K local address space.
 The code calls other routines, which eventually call <code>main</code>, but I won't trace it all here.</p>
-</div>
-    </div>
-    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/communicating-with-epiphany/" class="u-url">Communicating with Epiphany</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/communicating-with-epiphany/" rel="bookmark"><time class="published dt-published" datetime="2015-08-25T14:19:00-05:00" title="2015-08-25 14:19">2015-08-25 14:19</time></a></p>
-                <p class="commentline">
-        
-    <a href="posts/communicating-with-epiphany/#disqus_thread" data-disqus-identifier="cache/posts/communicating-with-epiphany.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>This post is going to look at the Epiphany memory map, and give a very simple example demonstration.
-I will skim over some background information that is covered elsewhere.
-See the following posts and resources that describe the Parallella and Epiphany architectures.</p>
-<h3>Resources</h3>
-<p>Parallella Chronicles</p>
-<ul>
-<li><a href="https://www.parallella.org/2014/11/25/parallella-chronicles-part-one-2/">Part One: Introduction</a></li>
-<li><a href="https://www.parallella.org/2014/12/15/parallella-chronicles-part-two-2/">Part Two: The Software Development Kit</a></li>
-<li><a href="https://www.parallella.org/2015/01/14/parallella-chronicles-part-three/">Part Three: "Hello World"</a></li>
-<li><a href="https://www.parallella.org/2015/02/28/parallella-chronicles-part-five/">Part Five: The Epiphany Memory Map</a></li>
-</ul>
-<p>Technical Musings</p>
-<ul>
-<li><a href="http://suzannejmatthews.github.io/2015/06/02/epiphany-overview/">Overview of Epiphany Architecture</a></li>
-<li><a href="http://suzannejmatthews.github.io/2015/06/03/epiphany-hello-world/">Hello Epiphany</a></li>
-</ul>
-<p>Manuals</p>
-<ul>
-<li><a href="http://adapteva.com/docs/epiphany_arch_ref.pdf">Epiphany Architecture Reference Manual</a></li>
-<li><a href="http://adapteva.com/docs/epiphany_sdk_ref.pdf">Epiphany SDK Reference Manual</a></li>
-</ul>
-<p>Source code</p>
-<ul>
-<li>
-<a href="https://github.com/adapteva/epiphany-libs">epiphany-libs</a> repo on github with the e-hal and various utilities.
-The epiphany-sdk repo contains download and build script for the GNU toolchain.</li>
-</ul>
-<p>This post is going to be written from the perspective of a PC programmer.
-Desktop operating systems use virtual memory, and programmers don't have to think about hardware addresses very much. 
-The relative addresses inside each process matter most.
-Many of the addresses on the Epiphany are fixed, or fixed relative to each core, and require more 'hard-coding' of addresses.
-Although most of that is accomplished through the toolchain, it is useful to understand when programming the board.
-(Programmers of embedded systems are more used to this sort of memory layout control.)</p>
-<h3>Memory Layout</h3>
-<p>The Epiphany contains onboard RAM (32K per core). This called 'local' or 'core-local' memory, and is the fastest to access.</p>
-<p>There is a larger section of memory (32MB) that is reserved from top of the SDRAM and shared with the Epiphany.
-This is called 'external memory' from the perspective of the Epiphany.  It's also called 'shared memory'.
-It is much slower to access from the Epiphany.</p>
-<p>The shared memory and memory locations inside the chip are both mapped in the address space of the host, and can be access by the host.
-Locations in the chip include</p>
-<ul>
-<li>32K local to each core</li>
-<li>Registers on each core</li>
-<li>Chip-wide registers </li>
-</ul>
-<p>Something interesting here is that the registers all have memory mappings.
-That means the registers can be accessed by the host (and other cores) by simply reading or writing a specific memory location.
-(It is important to note that register values are only valid when the core is halted.)</p>
-<h3>Epiphany Software Development Kit</h3>
-<p>The ESDK contains some utilities to access these memory regions from the command line.
-The commands <code>e-read</code> and <code>e-write</code> are used to read and write the locations.
-To access the core-local memory, use row/column coordinate of the core (0-3 for each), followed by the offset.
-For reading, optionally add the number of 4-byte words to read.  For writing, give a list of 4-byte word values.</p>
-<p>For example, to read 8 bytes from core (0,0)</p>
-<pre class="code literal-block">parallella@parallella:~$ e-read 0 0 0x100 2
-[0x00000100] = 0x782de028
-[0x00000104] = 0x0d906c89
-</pre>
-
-
-<p>To access the external memory, use a single -1 instead of the row,col coordinates.</p>
-<pre class="code literal-block">parallella@parallella:~$ e-write -1 0 1 2 3
-[0x00000000] = 0x00000001
-[0x00000004] = 0x00000002
-[0x00000008] = 0x00000003
-</pre>
-
-
-<p>Upon power up, it appears the memory is filled with random values.
-The <code>epiphany-examples</code> directory contains some useful utilities in the <code>apps</code> directory.
-To fill memory with some values, use <code>e-fill-mem</code> (build it by running the <code>build.sh</code> script first)</p>
-<p>To zero all the local memory in core 0, 0:</p>
-<pre class="code literal-block">parallella@parallella:~/epiphany-examples/apps/e-fill-mem$ ./bin/e-fill-mem.elf  0 0 1 1 8192 0
-</pre>
-
-
-<p>Verify a few locations</p>
-<pre class="code literal-block">parallella@parallella:~/epiphany-examples/apps/e-fill-mem$ e-read 0 0 0 4
-[0x00000000] = 0x00000000
-[0x00000004] = 0x00000000
-[0x00000008] = 0x00000000
-[0x0000000c] = 0x00000000
-</pre>
-
-
-<p>Nostalgia sidebar: If you want to reminisce about the days of Commodore 64, Apple II's and other microcomputers, alias <code>e-read</code> and <code>e-write</code> to <code>peek</code> and <code>poke</code>. (For the bash shell that would be <code>alias peek=e-read</code> and <code>alias poke=e-write</code>)</p>
-<h3>Simple example of local memory access</h3>
-<p>To solidify understanding of how this works, let's try a simple program that adds two numbers in core-local memory,
-and saves the result to another location in core-local memory.  We will use the command line tools to set memory and verify
-the operation. </p>
-<p>The 32KB of local memory puts all the offsets in the range 0x0000 - 0x8000.   Let's choose a base location 0x2000, which will be above the executable code, and below the stack.</p>
-<p>Start with the following C program (mem.c)</p>
-<pre class="code literal-block"><span class="c1">// Demonstrate local memory access at a low level</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="c1">// Location in local memory will not interfere</span>
-    <span class="c1">// with the executable or the stack</span>
-    <span class="kt">int</span> <span class="o">*</span><span class="n">outbuf</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x2000</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">outbuf</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">outbuf</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-    <span class="n">outbuf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre>
-
-
-<p>Compile with </p>
-<pre class="code literal-block">e-gcc mem.c -T /opt/adapteva/esdk/bsps/current/fast.ldf -o mem.elf
-</pre>
-
-
-<p>The -T option refers to a linker script, which controls where various pieces of the executable are placed in memory.</p>
-<p>Set the initial memory locations</p>
-<pre class="code literal-block">parallella@parallella:~$ e-write 0 0 0x2000 1 2 0
-[0x00002000] = 0x00000001
-[0x00002004] = 0x00000002
-[0x00002008] = 0x00000000
-</pre>
-
-
-<p>Load and run the program (the -s option to e-loader runs the program after loading)</p>
-<pre class="code literal-block">parallella@parallella:~$ e-loader -s mem.elf 
-Loading program "mem.elf" on cores (0,0)-(0,0)
-e_set_loader_verbosity(): setting loader verbosity to 1.
-e_load_group(): loading ELF file mem.elf ...
-e_load_group(): send SYNC signal to core (0,0)...
-e_start(): SYNC (0xf042c) to core (0,0)...
-e_start(): done.
-e_load_group(): done.
-e_load_group(): done loading.
-e_load_group(): closed connection.
-e_load_group(): leaving loader.
-</pre>
-
-
-<p>Now verify the program produced the expected result:</p>
-<pre class="code literal-block">parallella@parallella:~$ e-read 0 0 0x2000 3
-[0x00002000] = 0x00000001
-[0x00002004] = 0x00000002
-[0x00002008] = 0x00000003
-</pre>
-
-
-<p>Yes.  It worked!</p>
-<p>Now we've seen some concrete low-level details on how memory works on the Parallella and Epiphany.
-Next time I want to look the e-loader in more detail, and how programs start running on the cores.</p>
 </div>
     </div>
     </article>

@@ -1,5 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (python)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/python.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Mon, 12 Oct 2015 17:23:11 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Prototype for Profiling Python</title><link>https://markdewing.github.io/blog/posts/prototype-for-profiling-python/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/"&gt;Last post&lt;/a&gt; covered some technical background using vmprof to profile Python with compiled or JIT'ed extensions.
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (python)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/python.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 13 Nov 2015 16:49:05 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>More Performance With Numba</title><link>https://markdewing.github.io/blog/posts/more-with-numba/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Having acquired a shiny new &lt;a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/"&gt;profiler&lt;/a&gt;, it's time to dig into the performance of the Numba version some more.&lt;/p&gt;
+&lt;p&gt;Picking up from the &lt;a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/"&gt;previous optimizations&lt;/a&gt;, I can't seem to reproduce the timing (47 μs/atom) in the that table.  Now I get 40 μs/atom.&lt;/p&gt;
+&lt;h2&gt;First step&lt;/h2&gt;
+&lt;p&gt;Run the profiler (&lt;code&gt;vmprofrun comd.py&lt;/code&gt;) and display the results in KCacheGrind (&lt;code&gt;kcachegrind vmprof-20664.out&lt;/code&gt;)&lt;/p&gt;
+&lt;p&gt;Sorting by self time, we see &lt;code&gt;getBoxFromCoord&lt;/code&gt; at the top:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="KCachegrind screenshot of functions sorted by self time" src="https://markdewing.github.io/blog/2015/profile1_by_self_sm.png"&gt;&lt;/p&gt;
+&lt;p&gt;Also a screen shot of the call graph - &lt;code&gt;getBoxFromCoord&lt;/code&gt; gets called from two different places - &lt;code&gt;putAtomInBox&lt;/code&gt; and &lt;code&gt;updateLinkCells&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="KCachegrind screenshot of call graph" src="https://markdewing.github.io/blog/2015/profile1_call_graph_sm.png"&gt;&lt;/p&gt;
+&lt;p&gt;To improve performance here, convert &lt;code&gt;getBoxFromCoord&lt;/code&gt; to a free function and put all the attribute references into function arguments.&lt;/p&gt;
+&lt;p&gt;Before:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;getBoxFromCoord&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;ix&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+        &lt;span class="n"&gt;iy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+        &lt;span class="n"&gt;iz&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBoxFromTuple&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ix&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iy&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iz&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;After:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="nd"&gt;@numba.njit&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;getBoxFromCoordInner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;nLocalBoxes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gs&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;ix&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+    &lt;span class="n"&gt;iy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+    &lt;span class="n"&gt;iz&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;getBoxFromTupleInner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ix&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iy&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iz&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;nLocalBoxes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;(Changing the parameter &lt;code&gt;r&lt;/code&gt; to individual components was not strictly necessary.)&lt;/p&gt;
+&lt;p&gt;And the call sites change (for example) from&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;        &lt;span class="n"&gt;iBox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBoxFromCoord&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;to&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;        &lt;span class="n"&gt;iBox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;getBoxFromCoordInner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nLocalBoxes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gridSize&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;This improves performance to 20 μs/atom.&lt;/p&gt;
+&lt;p&gt;Repeating the same transformation for putAtomInBox gives 18.4 μs/atom.&lt;/p&gt;
+&lt;h2&gt;Second step&lt;/h2&gt;
+&lt;p&gt;Run the profiler again.  By self time, &lt;code&gt;loadAtomsBuffer&lt;/code&gt; is at the top.  Let's look at that in context.
+Sort by inclusive time, and we see that the parts of the call tree starting at &lt;code&gt;redistributeAtoms&lt;/code&gt; take a significant amount of time.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="KCachegrind screenshot of functions sorted by inclusive time" src="https://markdewing.github.io/blog/2015/profile2_by_incl_sm.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="KCachegrind screenshot of call graph" src="https://markdewing.github.io/blog/2015/profile2_call_graph_sm.png"&gt;&lt;/p&gt;
+&lt;p&gt;This part of the code:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Applies periodic boundary conditions&lt;/li&gt;
+&lt;li&gt;Moves atoms to a new cell&lt;/li&gt;
+&lt;li&gt;Packs atom into a buffer at source&lt;/li&gt;
+&lt;li&gt;Unpacks buffer into atom data structure at destination&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This packing/unpacking anticipates the parallel version, which transmits the buffer across processors.&lt;/p&gt;
+&lt;p&gt;A previous attempt at using numpy records did not work well (and ran into a serious performance regression with numpy 1.10).
+This time I went with two buffers - one for integers, and one for floating point numbers.  This works better, and the
+performance is now 10.2 μs/atom.&lt;/p&gt;
+&lt;h2&gt;More steps&lt;/h2&gt;
+&lt;p&gt;Continuing the process of profiling, and converting routines to be Numba friendly eventually reached a performance of 2.9 μs/atom.
+(Wow, this is only about 30% slower than C.)&lt;/p&gt;
+&lt;p&gt;Modified code is &lt;a href="https://gist.github.com/markdewing/8bd6bd8dbef8613004fe"&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The updated performance table is&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Language/compiler  &lt;/th&gt;
+&lt;th&gt;Version   &lt;/th&gt;
+&lt;th align="right"&gt;Initial time&lt;/th&gt;
+&lt;th align="right"&gt;  Final time&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Python&lt;/td&gt;
+&lt;td&gt;2.7.10&lt;/td&gt;
+&lt;td align="right"&gt;1014&lt;/td&gt;
+&lt;td align="right"&gt;1014&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;PyPy&lt;/td&gt;
+&lt;td&gt;4.0&lt;/td&gt;
+&lt;td align="right"&gt;30&lt;/td&gt;
+&lt;td align="right"&gt;30&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Cython&lt;/td&gt;
+&lt;td&gt;0.23.3&lt;/td&gt;
+&lt;td align="right"&gt;729&lt;/td&gt;
+&lt;td align="right"&gt;13&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Julia&lt;/td&gt;
+&lt;td&gt;0.4.0-rc3&lt;/td&gt;
+&lt;td align="right"&gt;87&lt;/td&gt;
+&lt;td align="right"&gt;6.1&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Numba&lt;/td&gt;
+&lt;td&gt;0.21.0&lt;/td&gt;
+&lt;td align="right"&gt;867&lt;/td&gt;
+&lt;td align="right"&gt;2.9&lt;/td&gt;
+&lt;td&gt;    New result&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;C (clang)&lt;/td&gt;
+&lt;td&gt;3.7&lt;/td&gt;
+&lt;td align="right"&gt;2.2&lt;/td&gt;
+&lt;td align="right"&gt;2.2&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;br&gt;
+&lt;/p&gt;&lt;div style="font-size:80%"&gt;
+Times are all in μs/atom. System size is 4000 atoms.
+Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
+&lt;br&gt;
+The 'Initial Time' column results from the minimal amount of code changes to get the compiler working.
+&lt;br&gt;
+The 'Final Time' is the time after tuning.
+&lt;/div&gt;
+&lt;br&gt;
+&lt;p&gt;Do note that the Cython, Julia, and Numba results reflect the amount of effort put into optimization.
+Cython and Julia still need to be improved with the assistance of a profiler (or in Julia's case, a better viewer
+for existing profile data).&lt;/p&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;Using a profiler to guide our optimization efforts has been very helpful.&lt;/p&gt;
+&lt;p&gt;The Numba results are really promising, but, in addition to creating ugly code, it required an amount of work
+that I would not want to perform on a regular basis.    These transformations are fairly regular, so it should
+be possible to incorporate them into Numba.  Alternately, if doing so in a safe manner inside the compiler is difficult,
+some sort of automated AST transformation of the source should be possible.&lt;/p&gt;
+&lt;p&gt;As the optimization process proceeds on this code, increasing amount of time is being spent in the core routine, computeForce, (as it should), and we will need to move beyond a function-level profiler to look for optimization opportunities.&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>Numba</category><category>python</category><guid>https://markdewing.github.io/blog/posts/more-with-numba/</guid><pubDate>Fri, 13 Nov 2015 16:30:00 GMT</pubDate></item><item><title>Prototype for Profiling Python</title><link>https://markdewing.github.io/blog/posts/prototype-for-profiling-python/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/"&gt;Last post&lt;/a&gt; covered some technical background using vmprof to profile Python with compiled or JIT'ed extensions.
 Now I've created a prototype that can convert the output to callgrind format so it can be viewed with &lt;a href="http://kcachegrind.sourceforge.net/html/Home.html"&gt;KCachegrind&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;To install the prototype using the Anaconda distribution:&lt;/p&gt;
 &lt;ol&gt;
