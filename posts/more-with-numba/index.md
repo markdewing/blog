@@ -101,7 +101,7 @@ The updated performance table is
 | PyPy              | 4.0       |   30        |   30         | |
 | Cython            | 0.23.3       |  729        |   13      | |
 | Julia             | 0.4.0-rc3    |  87         | 6.1       | |
-| Numba             | 0.22.0       |  867        |   2.9     |  &nbsp; &nbsp; New result |
+| Numba             | 0.22.1       |  867        |   2.9     |  &nbsp; &nbsp; New result |
 | C (clang)         | 3.7          |  2.2          |   2.2   | |
 
 <br/>

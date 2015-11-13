@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (CoMD)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/comd.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 13 Nov 2015 16:52:03 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>More Performance With Numba</title><link>https://markdewing.github.io/blog/posts/more-with-numba/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Having acquired a shiny new &lt;a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/"&gt;profiler&lt;/a&gt;, it's time to dig into the performance of the Numba version some more.&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (CoMD)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/comd.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 13 Nov 2015 23:44:46 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>More Performance With Numba</title><link>https://markdewing.github.io/blog/posts/more-with-numba/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Having acquired a shiny new &lt;a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/"&gt;profiler&lt;/a&gt;, it's time to dig into the performance of the Numba version some more.&lt;/p&gt;
 &lt;p&gt;Picking up from the &lt;a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/"&gt;previous optimizations&lt;/a&gt;, I can't seem to reproduce the timing (47 μs/atom) in the that table.  Now I get 40 μs/atom.&lt;/p&gt;
 &lt;h2&gt;First step&lt;/h2&gt;
 &lt;p&gt;Run the profiler (&lt;code&gt;vmprofrun comd.py&lt;/code&gt;) and display the results in KCacheGrind (&lt;code&gt;kcachegrind vmprof-20664.out&lt;/code&gt;)&lt;/p&gt;
@@ -102,7 +102,7 @@ performance is now 10.2 μs/atom.&lt;/p&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Numba&lt;/td&gt;
-&lt;td&gt;0.22.0&lt;/td&gt;
+&lt;td&gt;0.22.1&lt;/td&gt;
 &lt;td align="right"&gt;867&lt;/td&gt;
 &lt;td align="right"&gt;2.9&lt;/td&gt;
 &lt;td&gt;    New result&lt;/td&gt;
