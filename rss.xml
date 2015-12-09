@@ -1,5 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer</title><link>https://markdewing.github.io/blog/</link><description>Investigations into hardware and software details</description><atom:link href="https://markdewing.github.io/blog/rss.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 13 Nov 2015 23:44:46 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>More Performance With Numba</title><link>https://markdewing.github.io/blog/posts/more-with-numba/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Having acquired a shiny new &lt;a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/"&gt;profiler&lt;/a&gt;, it's time to dig into the performance of the Numba version some more.&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer</title><link>https://markdewing.github.io/blog/</link><description>Investigations into hardware and software details</description><atom:link href="https://markdewing.github.io/blog/rss.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Wed, 09 Dec 2015 04:16:47 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Visualizing MD Data</title><link>https://markdewing.github.io/blog/posts/visualizing-md-data/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Visualizing atomic positions in 3D is useful when working on a molecular dynamics code.&lt;/p&gt;
+&lt;p&gt;More generally, being able to visualize the structures and algorithms inside a code can help with understanding
+and debugging.
+With all the advances in graphics hardware, it should be possible to quickly create visualizations for various
+aspects of the code.
+But this seems harder than it should be.
+In this particular case, normal plotting packages can sometimes plot atomic positions with 3D scatter plots.
+But then further algorithm visualization is hard (animation, drawing boxes, etc).&lt;/p&gt;
+&lt;p&gt;The &lt;a href="http://vispy.org/VisPy"&gt;VisPy&lt;/a&gt; project looks promising.
+It contains three API levels &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;gloo&lt;/code&gt;- the lowest level API around OpenGL&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;scene&lt;/code&gt;- uses a scene graph description&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;plot&lt;/code&gt; - standard plotting interface&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The 'scene' interface is the appropriate abstraction level for our purposes.
+Note this API is marked experimental and may change in the future.&lt;/p&gt;
+&lt;h3&gt;Pretty pictures&lt;/h3&gt;
+&lt;p&gt;Static screenshots (click for larger version)&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2015/md_screenshot2.png"&gt;&lt;img alt="Screenshot2" src="https://markdewing.github.io/blog/2015/md_screenshot2_sm.png"&gt;&lt;/a&gt;
+&lt;a href="https://markdewing.github.io/blog/2015/md_screenshot3.png"&gt;&lt;img alt="Screenshot3" src="https://markdewing.github.io/blog/2015/md_screenshot3_sm.png"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;And an animation (click for larger version)&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2015/animation.gif"&gt;&lt;img alt="Screenshot3" src="https://markdewing.github.io/blog/2015/animation_sm.gif"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Code&lt;/h3&gt;
+&lt;p&gt;The modified &lt;code&gt;comd.py&lt;/code&gt; is &lt;a href="https://gist.github.com/markdewing/28223759c2dbe24e1147"&gt;here&lt;/a&gt;.
+It should be a drop-in replacement for that file in the &lt;a href="https://github.com/markdewing/multitevo/tree/master/CoMD/python/nsquared"&gt;&lt;code&gt;nsquared&lt;/code&gt;&lt;/a&gt; version of the code.  The bulk of the visualization additions start around line 154.&lt;/p&gt;
+&lt;p&gt;The perceived speed of the simulation can vary.  Pure Python, even at the smallest system size, is too slow.
+Using the &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements/"&gt;Numba-accelerated&lt;/a&gt; loop makes it much faster.
+However, for the smallest system, this feels 'too fast'.
+Increasing the system size will slow it down (`-x 6 -y 6 -z 6' seems to work well on my system).
+There are much better ways of adjusting the speed, but this is the most expedient.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;-N&lt;/code&gt; option specifies the number of steps (defaults to 100).  Set it to a larger value to run the animation longer.&lt;/p&gt;
+&lt;p&gt;During the run, press &lt;code&gt;s&lt;/code&gt; to take a static screenshot (stored in &lt;code&gt;screenshot.png&lt;/code&gt;).  Press 'a' key to start/stop saving
+an animated segment (stored in &lt;code&gt;animation.gif&lt;/code&gt;).   These features require that the &lt;code&gt;imageio&lt;/code&gt; package is installed.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;multiprocessing&lt;/code&gt; package is used to run the simulation and the visualization event loop in separate processes.
+Positions are passed from the simulation to the visualization via a Queue.
+A Timer on the visualization side checks the queue for new positions periodically.&lt;/p&gt;
+&lt;p&gt;This code snippet uses the Marker visual element to display the center of each point.
+This size is the size of the element on the screen, not the size in the scene (that is, elements don't change size when zooming)
+The current size was chosen to easily see the motion of the atoms, not to accurately represent the atom's size.
+Displaying a Sphere at each point would be more accurate, but is much slower.&lt;/p&gt;
+&lt;h3&gt;Summary&lt;/h3&gt;
+&lt;p&gt;I'm very pleased with VisPy.  It enabled live, interactive animation of atoms from a molecular dynamics code with
+ a small amount code.
+I expect extending this to visualize more complex algorithms and data structures should be be straightforward.&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>vispy</category><guid>https://markdewing.github.io/blog/posts/visualizing-md-data/</guid><pubDate>Wed, 09 Dec 2015 04:14:00 GMT</pubDate></item><item><title>More Performance With Numba</title><link>https://markdewing.github.io/blog/posts/more-with-numba/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Having acquired a shiny new &lt;a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/"&gt;profiler&lt;/a&gt;, it's time to dig into the performance of the Numba version some more.&lt;/p&gt;
 &lt;p&gt;Picking up from the &lt;a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/"&gt;previous optimizations&lt;/a&gt;, I can't seem to reproduce the timing (47 μs/atom) in the that table.  Now I get 40 μs/atom.&lt;/p&gt;
 &lt;h2&gt;First step&lt;/h2&gt;
 &lt;p&gt;Run the profiler (&lt;code&gt;vmprofrun comd.py&lt;/code&gt;) and display the results in KCacheGrind (&lt;code&gt;kcachegrind vmprof-20664.out&lt;/code&gt;)&lt;/p&gt;
@@ -838,73 +882,4 @@ under these two systems in the next few posts.&lt;/p&gt;
 &lt;!--
 Julia and Numba have similar stages (infer types, convert to LLVM IR, convert to native code), and so I hope to look
 at them in parallel going forward.  
---&gt;&lt;/div&gt;</description><category>CoMD</category><category>julia</category><category>Mantevo</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</guid><pubDate>Wed, 02 Sep 2015 16:18:50 GMT</pubDate></item><item><title>Running Programs on Epiphany</title><link>https://markdewing.github.io/blog/posts/running-programs-on-epiphany/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;In the &lt;a href="https://markdewing.github.io/blog/posts/communicating-with-epiphany/index.html"&gt;last post&lt;/a&gt;, we looked at the memory layout and ran a simple demo.
-Let's take a closer look at how a program starts running.&lt;/p&gt;
-&lt;p&gt;For starters, compile and run the program from last time.  We're going to run the program again, this time manually using the low-level mechanism that &lt;code&gt;e-loader&lt;/code&gt; uses to start programs.&lt;/p&gt;
-&lt;p&gt;Writing a 1 (SYNC) value to the ILATST register will trigger the Sync interrupt, and cause an existing program to run on the core.&lt;/p&gt;
-&lt;p&gt;Remember that the registers from each core are memory mapped to the host.
-The register addresses are defined in &lt;code&gt;/opt/adapteva/esdk/tools/host/include/epiphany-hal-data.h&lt;/code&gt;.
-We want E_REG_ILATST, which is 0xf042C.&lt;/p&gt;
-&lt;p&gt;To see if this works, change the input values.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;parallella@parallella:~$ e-write 0 0 2000 4 5 0
-[0x00002000] = 0x00000004
-[0x00002004] = 0x00000005
-[0x00002008] = 0x00000000
-&lt;/pre&gt;
-
-
-&lt;p&gt;Now, write the ILATST register to run the program&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;parallella@parallella:~$ e-write 0 0 0xf042c 1
-&lt;/pre&gt;
-
-
-&lt;p&gt;And check the result&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;parallella@parallella:~$ e-read 0 0 0x2000 3
-[0x00002000] = 0x00000004
-[0x00002004] = 0x00000005
-[0x00002008] = 0x00000009
-&lt;/pre&gt;
-
-
-&lt;p&gt;It worked!&lt;/p&gt;
-&lt;p&gt;Okay, now let's look at the details of what happened.&lt;/p&gt;
-&lt;p&gt;The first 40 bytes of the core-local memory are reserved for the Interrupt Vector Table (IVT).
-Each entry is 4 bytes long, and should contain a jump (branch) instruction to the desired code.
-The first entry in the table is the Sync interrupt, used to start the program.
-(See the &lt;a href="http://adapteva.com/docs/epiphany_arch_ref.pdf"&gt;Epiphany Architecture Reference&lt;/a&gt; for the rest of the IVT entries)&lt;/p&gt;
-&lt;p&gt;We can disassemble the compiled object file with &lt;code&gt;e-objdump -D&lt;/code&gt; and look for address 0 
-(we need -D instead of -d to disassemble all the sections, not just the normal executable sections).&lt;/p&gt;
-&lt;p&gt;This looks promising.  Address of 0, in a section called &lt;code&gt;ivt_reset&lt;/code&gt;.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;Disassembly of section ivt_reset:
-
-00000000 &amp;lt;_start&amp;gt;:
-   0:   2ce8 0000       b 58 &amp;lt;.normal_start&amp;gt;
-&lt;/pre&gt;
-
-
-&lt;p&gt;After the Sync interrupt, control transfers to address 0, and then branches to location 0x58.
-The next section in the objdump output has that address.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;Disassembly of section .reserved_crt0:
-
-00000058 &amp;lt;.normal_start&amp;gt;:
-  58:   720b 0002       mov r3,0x90
-  5c:   600b 1002       movt r3,0x0
-  60:   0d52            jalr r3
-&lt;/pre&gt;
-
-
-&lt;p&gt;This loads address 0x90 and jumps to it.
-The &lt;code&gt;mov&lt;/code&gt; instruction loads the lower 16 bits of r3 and the &lt;code&gt;movt&lt;/code&gt; instruction loads the upper 16 bits.&lt;/p&gt;
-&lt;p&gt;Now look for that address&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;Disassembly of section .text:
-
-00000090 &amp;lt;_epiphany_start&amp;gt;:
-  90:   be0b 27f2       mov sp,0x7ff0
-  94:   a00b 3002       movt sp,0x0
-
-   ... 
-&lt;/pre&gt;
-
-
-&lt;p&gt;This sets up the stack by loading the stack pointer with 0x7ff0, which is the top of the 32K local address space.
-The code calls other routines, which eventually call &lt;code&gt;main&lt;/code&gt;, but I won't trace it all here.&lt;/p&gt;&lt;/div&gt;</description><category>epiphany</category><category>parallella</category><guid>https://markdewing.github.io/blog/posts/running-programs-on-epiphany/</guid><pubDate>Tue, 01 Sep 2015 18:13:00 GMT</pubDate></item></channel></rss>
+--&gt;&lt;/div&gt;</description><category>CoMD</category><category>julia</category><category>Mantevo</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</guid><pubDate>Wed, 02 Sep 2015 16:18:50 GMT</pubDate></item></channel></rss>

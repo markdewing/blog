@@ -1,5 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (CoMD)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/comd.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 13 Nov 2015 23:44:46 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>More Performance With Numba</title><link>https://markdewing.github.io/blog/posts/more-with-numba/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Having acquired a shiny new &lt;a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/"&gt;profiler&lt;/a&gt;, it's time to dig into the performance of the Numba version some more.&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (CoMD)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/comd.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Wed, 09 Dec 2015 04:16:47 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Visualizing MD Data</title><link>https://markdewing.github.io/blog/posts/visualizing-md-data/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Visualizing atomic positions in 3D is useful when working on a molecular dynamics code.&lt;/p&gt;
+&lt;p&gt;More generally, being able to visualize the structures and algorithms inside a code can help with understanding
+and debugging.
+With all the advances in graphics hardware, it should be possible to quickly create visualizations for various
+aspects of the code.
+But this seems harder than it should be.
+In this particular case, normal plotting packages can sometimes plot atomic positions with 3D scatter plots.
+But then further algorithm visualization is hard (animation, drawing boxes, etc).&lt;/p&gt;
+&lt;p&gt;The &lt;a href="http://vispy.org/VisPy"&gt;VisPy&lt;/a&gt; project looks promising.
+It contains three API levels &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;gloo&lt;/code&gt;- the lowest level API around OpenGL&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;scene&lt;/code&gt;- uses a scene graph description&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;plot&lt;/code&gt; - standard plotting interface&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The 'scene' interface is the appropriate abstraction level for our purposes.
+Note this API is marked experimental and may change in the future.&lt;/p&gt;
+&lt;h3&gt;Pretty pictures&lt;/h3&gt;
+&lt;p&gt;Static screenshots (click for larger version)&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2015/md_screenshot2.png"&gt;&lt;img alt="Screenshot2" src="https://markdewing.github.io/blog/2015/md_screenshot2_sm.png"&gt;&lt;/a&gt;
+&lt;a href="https://markdewing.github.io/blog/2015/md_screenshot3.png"&gt;&lt;img alt="Screenshot3" src="https://markdewing.github.io/blog/2015/md_screenshot3_sm.png"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;And an animation (click for larger version)&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2015/animation.gif"&gt;&lt;img alt="Screenshot3" src="https://markdewing.github.io/blog/2015/animation_sm.gif"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Code&lt;/h3&gt;
+&lt;p&gt;The modified &lt;code&gt;comd.py&lt;/code&gt; is &lt;a href="https://gist.github.com/markdewing/28223759c2dbe24e1147"&gt;here&lt;/a&gt;.
+It should be a drop-in replacement for that file in the &lt;a href="https://github.com/markdewing/multitevo/tree/master/CoMD/python/nsquared"&gt;&lt;code&gt;nsquared&lt;/code&gt;&lt;/a&gt; version of the code.  The bulk of the visualization additions start around line 154.&lt;/p&gt;
+&lt;p&gt;The perceived speed of the simulation can vary.  Pure Python, even at the smallest system size, is too slow.
+Using the &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements/"&gt;Numba-accelerated&lt;/a&gt; loop makes it much faster.
+However, for the smallest system, this feels 'too fast'.
+Increasing the system size will slow it down (`-x 6 -y 6 -z 6' seems to work well on my system).
+There are much better ways of adjusting the speed, but this is the most expedient.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;-N&lt;/code&gt; option specifies the number of steps (defaults to 100).  Set it to a larger value to run the animation longer.&lt;/p&gt;
+&lt;p&gt;During the run, press &lt;code&gt;s&lt;/code&gt; to take a static screenshot (stored in &lt;code&gt;screenshot.png&lt;/code&gt;).  Press 'a' key to start/stop saving
+an animated segment (stored in &lt;code&gt;animation.gif&lt;/code&gt;).   These features require that the &lt;code&gt;imageio&lt;/code&gt; package is installed.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;multiprocessing&lt;/code&gt; package is used to run the simulation and the visualization event loop in separate processes.
+Positions are passed from the simulation to the visualization via a Queue.
+A Timer on the visualization side checks the queue for new positions periodically.&lt;/p&gt;
+&lt;p&gt;This code snippet uses the Marker visual element to display the center of each point.
+This size is the size of the element on the screen, not the size in the scene (that is, elements don't change size when zooming)
+The current size was chosen to easily see the motion of the atoms, not to accurately represent the atom's size.
+Displaying a Sphere at each point would be more accurate, but is much slower.&lt;/p&gt;
+&lt;h3&gt;Summary&lt;/h3&gt;
+&lt;p&gt;I'm very pleased with VisPy.  It enabled live, interactive animation of atoms from a molecular dynamics code with
+ a small amount code.
+I expect extending this to visualize more complex algorithms and data structures should be be straightforward.&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>vispy</category><guid>https://markdewing.github.io/blog/posts/visualizing-md-data/</guid><pubDate>Wed, 09 Dec 2015 04:14:00 GMT</pubDate></item><item><title>More Performance With Numba</title><link>https://markdewing.github.io/blog/posts/more-with-numba/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Having acquired a shiny new &lt;a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/"&gt;profiler&lt;/a&gt;, it's time to dig into the performance of the Numba version some more.&lt;/p&gt;
 &lt;p&gt;Picking up from the &lt;a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/"&gt;previous optimizations&lt;/a&gt;, I can't seem to reproduce the timing (47 μs/atom) in the that table.  Now I get 40 μs/atom.&lt;/p&gt;
 &lt;h2&gt;First step&lt;/h2&gt;
 &lt;p&gt;Run the profiler (&lt;code&gt;vmprofrun comd.py&lt;/code&gt;) and display the results in KCacheGrind (&lt;code&gt;kcachegrind vmprof-20664.out&lt;/code&gt;)&lt;/p&gt;
