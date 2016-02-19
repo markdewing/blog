@@ -9,7 +9,7 @@
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/">
 <link rel="next" href="index-1.html" type="text/html">
-<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/visualizing-md-data/" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/notes-on-cmake/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -58,7 +58,116 @@
             
 
 <div class="postindex">
-    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/visualizing-md-data/" class="u-url">Visualizing MD Data</a></h1>
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/notes-on-cmake/" class="u-url">Notes on CMake</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="posts/notes-on-cmake/" rel="bookmark"><time class="published dt-published" datetime="2016-02-19T05:05:00-06:00" title="2016-02-19 05:05">2016-02-19 05:05</time></a></p>
+                <p class="commentline">
+        
+    <a href="posts/notes-on-cmake/#disqus_thread" data-disqus-identifier="cache/posts/notes-on-cmake.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Recently I started working on a project that uses CMake.  I've used CMake a little before, but never really
+had to dive much into it.
+In particular, I needed to understand the scripting parts of CMake for adding tests for CTest.</p>
+<p>Below are some comments on aspects of CMake.</p>
+<h3>Variables and variable substitution</h3>
+<p>Variables names are strings.  Substitution occurs when the variable is dereferenced with <code>${}</code>.</p>
+<pre class="code literal-block"><span class="nb">SET</span><span class="p">(</span><span class="s">var,</span> <span class="s">a</span><span class="p">)</span>
+<span class="nb">MESSAGE</span><span class="p">(</span><span class="s2">"var = ${var}"</span><span class="p">)</span>
+</pre>
+
+
+<p>produces</p>
+<pre class="code literal-block"><span class="n">var</span> <span class="o">=</span> <span class="n">a</span>
+</pre>
+
+
+<p>Nested substitutions are possible</p>
+<pre class="code literal-block"><span class="nb">SET</span><span class="p">(</span><span class="s">var,</span> <span class="s">a</span><span class="p">)</span>
+<span class="nb">SET</span><span class="p">(</span><span class="s">a,</span> <span class="s">b</span><span class="p">)</span>
+<span class="nb">MESSAGE</span><span class="p">(</span><span class="s2">"var = ${var}  ${${var}}"</span><span class="p">)</span>
+</pre>
+
+
+<p>will produce 
+<code>var = a b</code></p>
+<p>Variable names can be composed during substitution</p>
+<pre class="code literal-block"><span class="nb">SET</span><span class="p">(</span><span class="s">var,</span> <span class="s">a</span><span class="p">)</span>
+<span class="nb">SET</span><span class="p">(</span><span class="s">a_one,</span> <span class="s">apple</span><span class="p">)</span>
+<span class="nb">MESSAGE</span><span class="p">(</span><span class="s2">"var =  ${${var}_one}"</span><span class="p">)</span>
+</pre>
+
+
+<p>will produce <code>var = apple</code></p>
+<h3>Variables and functions</h3>
+<p>Variable references act a little like pointers, but without a type system to enforce (and guide) how many indirections should be performed.</p>
+<p>Example of using a variable inside a function:</p>
+<pre class="code literal-block"><span class="nb">FUNCTION</span><span class="p">(</span><span class="s">MY_FUNC</span> <span class="s">arg1</span><span class="p">)</span>
+    <span class="nb">MESSAGE</span><span class="p">(</span><span class="s2">"arg1 = ${arg1}"</span><span class="p">)</span>
+<span class="nb">ENDFUNCTION</span><span class="p">()</span>
+
+<span class="nb">MY_FUNC</span><span class="p">(</span><span class="s">hello</span><span class="p">)</span>
+<span class="nb">SET</span><span class="p">(</span><span class="s">var,</span> <span class="s">a</span><span class="p">)</span>
+<span class="nb">MY_FUNC</span><span class="p">(</span><span class="s">var</span><span class="p">)</span> <span class="c"># arg1 is set to 'var'</span>
+<span class="nb">MY_FUNC</span><span class="p">(</span><span class="o">${</span><span class="nv">var</span><span class="o">}</span><span class="p">)</span> <span class="c"># arg1 is set to 'a' - this is usually what you want</span>
+</pre>
+
+
+<p>produces</p>
+<pre class="code literal-block"><span class="n">arg1</span> <span class="o">=</span> <span class="n">var</span>
+<span class="n">arg1</span> <span class="o">=</span> <span class="n">a</span>
+</pre>
+
+
+<h3>Return values from functions</h3>
+<p>There is no built-in notion of a return value from a function.   To get values out of a function, write to one of the arguments.</p>
+<p>A function creates a new scope - changes to a variable will only affect the variable's value 
+inside the function.  To affect the value in the parent, the <code>PARENT_SCOPE</code> modifier should be given to the <code>SET</code> command.  (More on variable scopes <a href="https://www.johnlamp.net/cmake-tutorial-5-functionally-improved-testing.html">here</a>)</p>
+<p>Another issue is the variable name for the output value needs to be dereferenced before being set.
+Otherwise a variable with the name used in the function will be set in the parent, which can work by accident
+if the variables have the same name.</p>
+<p>Example:</p>
+<pre class="code literal-block"><span class="nb">FUNCTION</span><span class="p">(</span><span class="s">MY_FUNC_WITH_RET</span> <span class="s">ret</span><span class="p">)</span>
+    <span class="c"># The following line works by accident if the name of variable in the parent</span>
+    <span class="c"># is the same as in the function</span>
+    <span class="nb">SET</span><span class="p">(</span><span class="s">ret</span> <span class="s2">"in function"</span> <span class="s">PARENT_SCOPE</span><span class="p">)</span>
+    <span class="c"># This is the correct way to get the variable name passed to the function</span>
+    <span class="nb">SET</span><span class="p">(</span><span class="o">${</span><span class="nv">ret</span><span class="o">}</span> <span class="s2">"in function"</span> <span class="s">PARENT_SCOPE</span><span class="p">)</span>
+<span class="nb">ENDFUNCTION</span><span class="p">()</span>
+
+<span class="nb">SET</span><span class="p">(</span><span class="s">ret</span> <span class="s2">"before function"</span><span class="p">)</span>
+<span class="nb">MY_FUNC_WITH_RET</span><span class="p">(</span><span class="s">ret</span><span class="p">)</span>
+<span class="nb">MESSAGE</span><span class="p">(</span><span class="s2">"output from function = ${ret}"</span><span class="p">)</span>
+</pre>
+
+
+<p>will produce <code>output from function = in function</code></p>
+<h3>Data structures</h3>
+<p>There is only the List type, with some functions for operations on lists.
+The <a href="https://cmake.org/cmake/help/v3.3/manual/cmake-language.7.html#lists">documentation on lists</a> says that "Lists ... should not be used for complex data processing tasks", but doesn't say what to use instead.</p>
+<p>For associative arrays or maps there are some options:</p>
+<ul>
+<li>Two parallel lists - one of keys and one of values.  Search the key list and use the index to look up value.  More awkward for passing to functions.</li>
+<li>Single list with alternating keys and values.  Search the list for the key, and use index+1 to look up the value.  Only works if the range of possibilities for keys and values are distinct (e.g., keys are strings and values are always numbers).</li>
+<li>The environment (<code>ENV{key}</code>) is a built-in associative array.  It could be overloaded to store other values, at the risk of polluting the environment.</li>
+</ul>
+<h3>Test timeout</h3>
+<p>The default timeout per test is 1500 seconds (25 minutes).</p>
+<p>To increase this, adjust the value of <code>DART_TESTING_TIMEOUT</code>.
+It needs to be set as a cache variable, and it needs to be set before the <code>enable_testing()</code> or <code>include(CTest)</code> is specified.</p>
+<pre class="code literal-block"><span class="nb">SET</span><span class="p">(</span> <span class="s">DART_TESTING_TIMEOUT</span> <span class="s">3600</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">"Maximum time for one test"</span><span class="p">)</span>
+</pre>
+
+
+<p>See also this <a href="http://stackoverflow.com/questions/3545598/using-cmake-with-ctest-and-cdash">Stack Overflow post</a></p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/visualizing-md-data/" class="u-url">Visualizing MD Data</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
             <p class="dateline"><a href="posts/visualizing-md-data/" rel="bookmark"><time class="published dt-published" datetime="2015-12-08T22:14:00-06:00" title="2015-12-08 22:14">2015-12-08 22:14</time></a></p>
@@ -965,139 +1074,6 @@ discovering what changes need to be made and where to make them.</p>
 </ul>
 </div>
     </div>
-    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/comparing-languages-with-miniapps/" class="u-url">Comparing languages with miniapps</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/comparing-languages-with-miniapps/" rel="bookmark"><time class="published dt-published" datetime="2015-09-02T11:18:50-05:00" title="2015-09-02 11:18">2015-09-02 11:18</time></a></p>
-                <p class="commentline">
-        
-    <a href="posts/comparing-languages-with-miniapps/#disqus_thread" data-disqus-identifier="cache/posts/comparing-languages-with-miniapps.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>The <a href="https://mantevo.org/">Mantevo project</a> provides a collection of miniapps, which are simplified versions
-of real scientific applications that make it easier to explore performance, scaling, languages, programming models, etc.
-I want to focus on the language aspect and port some apps to new languages to see how they compare. </p>
-<p>The first miniapp I started with is <a href="http://www.exmatex.org/comd.html">CoMD</a>, a molecular dynamics code in C.</p>
-<p>For the language ports, I made multiple variants of increasing complexity.</p>
-<dl>
-<dt>nsquared</dt>
-<dd>This uses the naive algorithm in computing inter-particle interactions. The central loop computes the
-   interaction of every particle with every other particle.  The scaling of run time vs number of particles is N<sup>2</sup>.</dd>
-<dt>cell</dt>
-<dd>The cell list method divides space into cells and tracks the particles in each cell.  When computing interactions, only the particles in neighboring cells need to be considered.  The scaling of run time vs. the number of particles is N.</dd>
-<dt>mpi</dt>
-<dd>Parallel version of the cell method.</dd>
-</dl>
-<p>The C version corresponds to the 'cell' and 'mpi' variants (plus the C version has OpenMP and several other programming model variants)</p>
-<p>Currently there are Python and Julia ports for the nsquared and cell variants, and a Python version of the mpi variant.
-They are available in my 'multitevo' github repository: <a href="https://github.com/markdewing/multitevo">https://github.com/markdewing/multitevo</a></p>
-<p>The Julia version is a pretty straightforward port of the Python version, so it is probably not very idiomatic Julia code.
-(I would be happy to take suggestions from the Julia community on how to improve the style and organization)</p>
-<!--
-C does not have multidimensional arrays so the 3D cell indices need to be mapped to a linear index of atom coordinates (and
-the reverse), and this involves some complicated expressions.
-The Julia and Python version preserve this approach, but since they have multidimensional arrays,
-it might make the code much simpler to store the atom information directly in a multidimensional array.
--->
-
-<h3>Scaling with system size</h3>
-<p>First let's verify the scaling of the nsquared version vs. the cell list version (using the Julia versions).</p>
-<p><img alt="Graph of scaling nsquared and cell list method" src="2015/scaling.png"></p>
-<p>As expected, the cell list variant has better scaling at larger system sizes.</p>
-<!--
-Data for nsquared variant
-natoms time(s)   time_per_atom (us/atom)
-256   0.011350  44.335089
-500   0.034140  68.280823
-864   0.099966 115.700927
-1372   0.239239 174.372460
-2048   0.509494 248.776288
-2916   1.050071 360.106739
-4000   1.942931 485.732711
-5324   3.327456 624.991804
-6912   5.769225 834.667932
--->
-
-<!--
-Data for cell method variant
-natoms  time(s)   time_per_atom (us/atom)
-256   0.045821 178.987427
-500   0.049810  99.619442
-864   0.142849 165.333940
-1372   0.151120 110.145543
-2048   0.310324 151.525439
-2916   0.344807 118.246625
-4000   0.344878  86.219497
-5324   0.621829 116.797365
-6912   0.626944  90.703648
--->
-
-<h3>Initial performance</h3>
-<p>For a purely computational code such as this, performance matters.
-The ultimate goal is near C/Fortran speeds using a higher-level language to express the algorithm.</p>
-<p>Some initial timings (for a system size of 4000 atoms, using the cell variant)</p>
-<table>
-<thead><tr>
-<th>Language/Compiler  </th>
-<th align="left">Version</th>
-<th align="right">Time/atom (microseconds)</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>C - gcc</td>
-<td align="left">4.8.2</td>
-<td align="right">2.3</td>
-</tr>
-<tr>
-<td>Julia</td>
-<td align="left">0.3.11</td>
-<td align="right">153.0</td>
-</tr>
-<tr>
-<td>Julia</td>
-<td align="left">0.4.0-dev+6990</td>
-<td align="right">88.8</td>
-</tr>
-<tr>
-<td>Python</td>
-<td align="left">2.7.10 (from Anaconda)  </td>
-<td align="right">941.0</td>
-</tr>
-<tr>
-<td>Numba</td>
-<td align="left">0.20.0</td>
-<td align="right">789.0</td>
-</tr>
-<tr>
-<td>Pypy</td>
-<td align="left">2.6.1</td>
-<td align="right">98.4</td>
-</tr>
-</tbody>
-</table>
-<p><br></p>
-<p>(Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04)</p>
-<p><strong>Disclaimer</strong>: These numbers indicate how a particular version of the language and compiler perform on a particular version of this code. The main purpose for these numbers is a baseline to measure future performance improvements.</p>
-<p>I tried <a href="http://www.cosmology.ethz.ch/research/software-lab/HOPE.html">HOPE</a>, a Python to C++ JIT compiler.
-It require some modifications to the python code, but then failed in compiling the resulting C++ code.
-I also tried <a href="http://www.parakeetpython.com/">Parakeet</a>.  It failed to translate the Python code, and I did not investigate further.</p>
-<p>It is clear when comparing to C there is quite a bit of room for improvement in the code using the high-level language compilers (Julia, Numba, PyPy).
-Whether that needs to come from the modifications to the code, or improvements in the compilers, I don't know yet.</p>
-<p>The only real performance optimization so far has been adding type declarations to the composite types in Julia.
-This boosted performance by about 3x. Without the type declarations, the Julia 0.4.0 speed is about 275 us/atom.
-First performance lesson: Add type declarations to composite types in Julia.</p>
-<p>Julia and Numba have a number of similarities and so I want to focus on improving the performance of the code
-under these two systems in the next few posts.</p>
-<!--
-Julia and Numba have similar stages (infer types, convert to LLVM IR, convert to native code), and so I hope to look
-at them in parallel going forward.  
--->
-</div>
-    </div>
     </article>
 </div>
 
@@ -1110,7 +1086,7 @@ at them in parallel going forward.
         <!--End of body content-->
 
         <footer id="footer">
-            Contents © 2015         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2016         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

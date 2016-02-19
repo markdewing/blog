@@ -7,23 +7,35 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://markdewing.github.io/blog/</loc>
-  <lastmod>2015-10-12T17:06:00Z</lastmod>
+  <lastmod>2016-02-09T17:01:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/2015/</loc>
-  <lastmod>2015-12-08T20:06:00Z</lastmod>
+  <lastmod>2015-12-09T04:19:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/2016/</loc>
+  <lastmod>2016-02-09T17:01:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/archive.html</loc>
-  <lastmod>2015-08-20T04:29:00Z</lastmod>
+  <lastmod>2016-02-09T17:01:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/</loc>
-  <lastmod>2015-12-08T17:01:00Z</lastmod>
+  <lastmod>2016-02-09T17:01:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/categories/cmake/</loc>
+  <lastmod>2016-02-09T17:01:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/comd/</loc>
   <lastmod>2015-09-02T16:46:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/categories/ctest/</loc>
+  <lastmod>2016-02-09T17:01:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/cython/</loc>
@@ -79,7 +91,11 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/index-1.html</loc>
-  <lastmod>2015-12-08T17:01:00Z</lastmod>
+  <lastmod>2016-01-05T06:04:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/posts/comments-on-visualizing-program-behavior/</loc>
+  <lastmod>2016-01-05T06:04:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/communicating-with-epiphany/</loc>
@@ -108,6 +124,10 @@
  <url>
   <loc>https://markdewing.github.io/blog/posts/more-with-numba/</loc>
   <lastmod>2015-11-12T15:25:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/posts/notes-on-cmake/</loc>
+  <lastmod>2016-02-09T17:01:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/prototype-for-profiling-python/</loc>
