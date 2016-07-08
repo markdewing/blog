@@ -9,7 +9,7 @@
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/">
 <link rel="next" href="index-1.html" type="text/html">
-<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/notes-on-cmake/" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/integration-callbacks/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -58,7 +58,102 @@
             
 
 <div class="postindex">
-    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/notes-on-cmake/" class="u-url">Notes on CMake</a></h1>
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/integration-callbacks/" class="u-url">Integration Callbacks with Sympy and LLVM</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="posts/integration-callbacks/" rel="bookmark"><time class="published dt-published" datetime="2016-07-08T16:37:00-05:00" title="2016-07-08 16:37">2016-07-08 16:37</time></a></p>
+                <p class="commentline">
+        
+    <a href="posts/integration-callbacks/#disqus_thread" data-disqus-identifier="cache/posts/integration_callbacks.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>This post explores various packages for multi-dimensional integration along with
+generating callbacks for the integrands from Sympy using an LLVM JIT</p>
+<h3>Problem to integrate</h3>
+<p>The particular problem is using the variational principle to find the ground state energy for atoms.
+Some Jupyter notebooks with a description of the problem, along with various integration methods:</p>
+<p><a href="https://github.com/markdewing/next_steps_in_programming/blob/master/examples/integration/Hydogen%20Atom.ipynb">Ground state energy of Hydrogen Atom</a>   (This yields a 3 dimensional integral.)</p>
+<p><a href="https://github.com/markdewing/next_steps_in_programming/blob/master/examples/integration/Helium%20atom.ipynb">Ground state energy of Helium Atom</a>  (This yields a 6 dimensional integral.)</p>
+<p>The standard solution to these integrals is to use Markov Chain Monte Carlo (the Quantum Monte Carlo method).<br>
+However, I'm curious to see how far alternate integration schemes or existing integration packages would work.</p>
+<h3>Integration libraries</h3>
+<p>The <a href="http://docs.scipy.org/doc/scipy/reference/tutorial/integrate.html">scipy quadrature</a> routines accept a natively compiled callback for the integrand. 
+(Noticing this in the documentation initiated the idea for using JIT compilation for callback functions.)</p>
+<p>Next up is the <a href="http://ab-initio.mit.edu/wiki/index.php/Cubature">Cubature</a> integration package, with the <a href="https://github.com/saullocastro/cubature">Python wrapper for cubature</a></p>
+<p>Finally is the <a href="http://www.feynarts.de/cuba/">Cuba</a> library, with the PyCuba interface (part of the <a href="https://github.com/JohannesBuchner/PyMultiNest">PyMultiNest</a> package)</p>
+<p>There are some other libraries such at <a href="http://mint.sbg.ac.at/HIntLib/">HIntLib</a> that I would also like to try.  There doesn't seem to be a python interface for HIntLib.  Let me know if there is one somewhere. And if there are other multidimensional integration packages to try.</p>
+<h3>Evaluating the integrand</h3>
+<p>One of my scientific programming goals is to generate efficient code from a symbolic expression.
+To this end, I've been working on an LLVM JIT converter for Sympy expressions (using the <a href="https://github.com/numba/llvmlite">llvmlite</a> wrapper).</p>
+<p>For the Sympy code, see these pull requests: </p>
+<ul>
+<li>
+<a href="https://github.com/sympy/sympy/pull/10451">Create executable functions from Sympy expressions</a> </li>
+<li><a href="https://github.com/sympy/sympy/pull/10640">Accelerated callbacks for integration routines</a></li>
+<li><a href="https://github.com/sympy/sympy/pull/10683">JIT - handle multiple expressions (as returned from CSE)</a></li>
+<li><a href="https://github.com/sympy/sympy/pull/11057">Add LLVM JIT callbacks for PyCuba integration</a></li>
+</ul>
+<p>As an aside, one can question if is this the right approach, compared with</p>
+<ol>
+<li>Generate C++ or Fortran and compile using the existing autowrap functionality in Sympy.</li>
+<li>Generate Python/Numpy and use Numba.</li>
+<li>Use Julia</li>
+</ol>
+<p>There is always a tradeoff between a narrow, specialized solution, which is faster to implement and
+perhaps easier to understand, and a more general solution, which applies in more cases, but is
+harder and slower to implement.</p>
+<p>Using an LLVM JIT is a specialized solution, but it does have an advantage that there is a short path from the expressions to the compiled code.
+One disadvantage is that it does not leverage existing compilers (Numba or C++), though LLVM compiler optimization passes are available.</p>
+<p>Sometimes a solution just needs to be tried to gain experience with the advantages and drawbacks.</p>
+<h3>Results</h3>
+<p>For the helium atom, the integration times are reported in the table below</p>
+<table>
+<thead><tr>
+<th align="left">Integrator  </th>
+<th align="right">Time (seconds)</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="left">Cubature</td>
+<td align="right">171</td>
+</tr>
+<tr>
+<td align="left">Cubature w/CSE</td>
+<td align="right">141</td>
+</tr>
+<tr>
+<td align="left">Cubature w/CSE and multiple evals</td>
+<td align="right">100</td>
+</tr>
+<tr>
+<td align="left">Cuba (Vegas)</td>
+<td align="right">29</td>
+</tr>
+<tr>
+<td align="left">Cuba (Cuhre)</td>
+<td align="right">22</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>Note that <code>scipy.nquad</code> was not used for the 6D integral. It quickly runs out of steam because it consists of iterated one dimensional integrations, and the glue between the dimensions goes through Python, reducing the effectiveness of a compiled integrand.</p>
+<p>The Cubature library does better.  Profiling shows that most of the time is spent internal to cubature and allocating memory, so faster integrand evaluation is not going to improve the time.
+Some other approaches can help.  One is Common Subexpression Elimination (CSE), which Sympy can perform on the expression.  This extracts duplicate fragments so their value only needs to be computed once.</p>
+<p>The library also allows multiple integrals to be performed at once.   This can amortize some of the overhead of the library.  In this case, the individual calls to integrator for the numerator and denominator can be reduced to a single call.</p>
+<p>The Cuba library performs even better, as there is apparently less overhead inside the integration library.  The Cuhre integrator uses a deterministic grid-based algorithm similar to Cubature.  Vegas uses an adaptive Monte Carlo approach.</p>
+<p>The results are not shown here, but I also used SIMD vectorization to make the function evaluation even faster, which succeeded for the bare function evaluation. (This was one of the original motivations for compiling straight to LLVM, as it would be easier to get vectorization working.)
+ Unfortunately, it did not speed up the overall integration much (if at all), due to overhead in the libraries.</p>
+<h3>Conclusions and future work</h3>
+<p>Using an LLVM JIT to create callbacks for integration works fairly well.</p>
+<p>One important question is how to scale the creation of the callbacks to new libraries without explicitly programming them into Sympy.<br>
+The <a href="https://github.com/sympy/sympy/pull/11057">last pull request</a> has expanded the <code>CodeSignature</code> class, which seems like  a starting point for such a more general callback specification.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/notes-on-cmake/" class="u-url">Notes on CMake</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
             <p class="dateline"><a href="posts/notes-on-cmake/" rel="bookmark"><time class="published dt-published" datetime="2016-02-19T05:05:00-06:00" title="2016-02-19 05:05">2016-02-19 05:05</time></a></p>
@@ -897,181 +992,6 @@ the resulting code.</p>
 </li>
 </ol>
 </div>
-</div>
-    </div>
-    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/first-performance-improvements/" class="u-url">First Performance Improvements</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/first-performance-improvements/" rel="bookmark"><time class="published dt-published" datetime="2015-09-17T23:48:00-05:00" title="2015-09-17 23:48">2015-09-17 23:48</time></a></p>
-                <p class="commentline">
-        
-    <a href="posts/first-performance-improvements/#disqus_thread" data-disqus-identifier="cache/posts/first-performance-improvements.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>The <a href="http://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/">previous post</a> introduced the CoMD miniapp in Python and Julia.
-This post will look a little deeper into the performance of Julia and various Python compilers.
-I will use the nsquared version of the code for simplicity.</p>
-<p>The <code>computeForce</code> function in <code>ljforce</code> takes almost all the time, and it is here we should focus.
-In the nsquared version there are no further function calls inside this loop, which should make it
-easier to analyze and improve the performance.</p>
-<p>The summary performance table (all times are in microseconds/atom, the system is the smallest size at 256 atoms)</p>
-<!-- from laptop -->
-
-<table>
-<thead><tr>
-<th>Language/compiler  </th>
-<th>version   </th>
-<th align="right">Initial time</th>
-<th align="right">  Final time</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>Python</td>
-<td>2.7.10</td>
-<td align="right">560</td>
-<td align="right"></td>
-</tr>
-<tr>
-<td>PyPy</td>
-<td>2.6.1</td>
-<td align="right">98</td>
-<td align="right"></td>
-</tr>
-<tr>
-<td>HOPE</td>
-<td>0.4.0</td>
-<td align="right">8</td>
-<td align="right"></td>
-</tr>
-<tr>
-<td>Cython</td>
-<td>0.23.1</td>
-<td align="right">335</td>
-<td align="right">8.3</td>
-</tr>
-<tr>
-<td>Numba</td>
-<td>0.21.0</td>
-<td align="right">450</td>
-<td align="right">8.3</td>
-</tr>
-<tr>
-<td>Julia</td>
-<td>0.5.0-dev+50</td>
-<td align="right">44</td>
-<td align="right">7.1</td>
-</tr>
-</tbody>
-</table>
-<!-- From desktop 
-| Python            | 2.7.10  | 438          |            |
-| PyPy              |         |  84          |            |
-| HOPE              |         |   7          |            |
-| Cython            |         | 329          |  49        |
-| Numba             |         | 405          |   7        |
-| Julia             |         |  45          |  19        |
---><p><br></p>
-<p>(This table uses a different code version and different hardware, so the numbers are not comparable to the previous post)
-<br>
-(Hardware is i7-3720QM @ 2.6 Ghz and OS is Ubuntu 14.04)
-<br>
-The 'Initial Time' column results from the minimal amount of code changes to get the compiler working.
-<br>
-The 'Final Time' is the time after doing some tuning (for this post, anyway - there's still more work to be done).</p>
-<!--The level of tuning in this post is about adding type information and removing temporary memory allocations.
-Further investigation of the generated intermediate and assembly code is yet to be done.
--->
-
-<h3>HOPE</h3>
-<p>The HOPE compiler will compile the nsquared version, provided the branch involving the cutoff is modified to avoid the <code>continue</code> statement.
-The loop that zeros the force also needs a simple name change to the loop variable.
-The backend C++ compiler is gcc 4.8.4.  No attempt was made to try different compilers or further optimize the generated code.</p>
-<h3>Numba</h3>
-<p>To use Numba, we need to add <code>import numba</code> to <code>ljforce.py</code> and add the <code>@numba.jit</code> decorator to the <code>computeForce</code> method.
-This gives the time in the initial column (450 μs/atom) , which is about a 20% improvement over the plain Python version.</p>
-<p>Code involving attribute lookups cannot currently be compiled to efficient code, and these lookups occur inside this inner loop.
-And the compiler will not hoist attribute lookups outside the loop.
-This can be done manually by assigning the attribute to a temporary variable before the loop, and replacing the values in the loop body. 
-This transformation enables effective compilation of the loop.</p>
-<p>(Internally Numba performs loop-lifting, where it extracts the loop to a separate function in order to compile the loop.)</p>
-<!--Loop-lifting is a way for Numba to extract a loop into a separate function in order to compile the loop.-->
-
-<p>The beginning of the function now looks like</p>
-<pre class="code literal-block">    <span class="nd">@numba.jit</span>
-    <span class="k">def</span> <span class="nf">computeForce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">,</span> <span class="n">sim</span><span class="p">):</span>
-        <span class="c"># hoist the attribute lookups of these values</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">f</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">r</span>
-        <span class="n">bounds</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">bounds</span>
-        <span class="n">nAtoms</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">nAtoms</span>
-        <span class="n">epsilon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span>
-
-        <span class="c"># rest of original function</span>
-        <span class="c"># ...</span>
-</pre>
-
-
-<p>Now Numba can compile the time consuming loop, and this gives about 9 μs/atom.</p>
-<p>The loop that zeros the force can be slightly improved by either looping over the last dimension
-explicitly, or by zeroing the entire array at once.  This change yields the final number in the table (8.3 μs/atom).</p>
-<p>The whole modified file is <a href="https://gist.github.com/markdewing/eb0bf52ea1b71995150a">here</a>.</p>
-<h3>Cython</h3>
-<p>The simplest change to enable Cython is to move <code>ljforce.py</code> to <code>ljforce.pyx</code>, and add <code>import pyximport; pyximport.install()</code> to the beginning of <code>simflat.py</code>.
-This initial time (335 μs/atom) gives a 40% improvement over regular python, but there is more performance available.</p>
-<p>The first step is to add some type information.
-In order to do this we need to hoist the attribute lookups and assign to temporary variables, as in the Numba version.
-At this step, we add types for the same variables as the Numba version.
-The beginning of the function looks like this:</p>
-<pre class="code literal-block">    <span class="k">def</span> <span class="nf">computeForce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">):</span>
-        <span class="n">cdef</span> <span class="nb">int</span> <span class="n">nAtoms</span>
-        <span class="n">cdef</span> <span class="n">double</span> <span class="n">epsilon</span>
-        <span class="n">cdef</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double_t</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span> <span class="n">f</span>
-        <span class="n">cdef</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double_t</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span> <span class="n">r</span>
-        <span class="n">cdef</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double_t</span><span class="p">]</span> <span class="n">bounds</span>
-
-        <span class="n">f</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">f</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">r</span>
-        <span class="n">bounds</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">bounds</span>
-        <span class="n">nAtoms</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">nAtoms</span>
-        <span class="n">epsilon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span>
-
-        <span class="c"># rest of original function</span>
-        <span class="c"># ...</span>
-</pre>
-
-
-<p>The time for this change about 54 μs/atom.</p>
-<p>Cython has a convenient feature that creates an annotated HTML file highlighting lines in the 
-original file that may causing a performance issue.  Run <code>cython -a ljforce.pyx</code> to get the report.
-This indicates some more type declarations need to be added.
-Adding these types gives about 8.6 μs/atom.   Finally a decorator can be added to remove bounds checks (<code>@cython.boundscheck(False)</code>) to get the final performance in the table (8.3 μs/atom).</p>
-<p>The whole <code>ljforce.pyx</code> file is <a href="https://gist.github.com/markdewing/7017e23c883a2bd297cb">here</a></p>
-<h3>Julia</h3>
-<p>The biggest issue in this code seems to be allocations inside the inner loop.
-The memory performance tools can indicate where unexpected allocations are occurring.
-One tool is to use a command line option (<code>--track-allocation=user</code>) to the julia executable.</p>
-<p>One problem is a temporary created inside the loop to hold the results of an array operation (the line that computes <code>dd</code>).
-Moving this allocation out of the loop and setting each element separately improves performance 
-to 19 μs/atom.
-Another allocation occurs when updating the force array using a slice.  Changing this to explicitly loop
-over the elements improves the performance to the final numbers shown in the table (7.1 μs/atom).</p>
-<p>The final modified file is <a href="https://gist.github.com/markdewing/f1c9a46a2fec8a3ade4f">here</a></p>
-<h3>Summary</h3>
-<p>The performance numbers have quite a bit of variance, and they are not a result of a rigorous benchmarking and statistics collection.  If you want to compare between compilers, the final results should probably be read something like: "The performance of Cython and Numba is roughly the same on this code, and Julia is a little bit faster for this code".
-Also keep in mind we're not done yet digging into the performance of these different compilers.</p>
-<p>Some simple changes to the code can give dramatic performance improvements, but the difficulty is
-discovering what changes need to be made and where to make them.</p>
-<p>Future topics to explore:</p>
-<ul>
-<li>Apply these lessons to the cell version of the code.</li>
-<li>With Julia and Numba, it's hard to connect intermediate code stages (internal IR, LLVM IR, assembly) to the original code, and to spot potential performance issues there.  The Cython annotation output is nice here.</li>
-<li>The difference between operating on dynamic objects versus the underlying value types.</li>
-<li>How well does the final assembly utilize the hardware. How to use hardware sampling for analysis.</li>
-</ul>
 </div>
     </div>
     </article>

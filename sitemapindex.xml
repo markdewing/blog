@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/cmake.xml</loc>
-  <lastmod>2016-02-09T17:01:00Z</lastmod>
+  <lastmod>2016-02-19T23:06:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/comd.xml</loc>
@@ -15,7 +15,11 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/ctest.xml</loc>
-  <lastmod>2016-02-09T17:01:00Z</lastmod>
+  <lastmod>2016-02-19T23:06:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/cubature.xml</loc>
+  <lastmod>2016-07-08T21:41:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/cython.xml</loc>
@@ -26,8 +30,16 @@
   <lastmod>2015-09-01T18:25:00Z</lastmod>
  </sitemap>
  <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/integration.xml</loc>
+  <lastmod>2016-07-08T21:41:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>https://markdewing.github.io/blog/categories/julia.xml</loc>
   <lastmod>2015-10-02T18:58:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/llvm.xml</loc>
+  <lastmod>2016-07-08T21:41:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/mantevo.xml</loc>
@@ -54,6 +66,10 @@
   <lastmod>2015-11-13T23:44:00Z</lastmod>
  </sitemap>
  <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/sympy.xml</loc>
+  <lastmod>2016-07-08T21:41:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>https://markdewing.github.io/blog/categories/vectorization.xml</loc>
   <lastmod>2015-10-02T03:24:00Z</lastmod>
  </sitemap>
@@ -71,10 +87,10 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/rss.xml</loc>
-  <lastmod>2016-02-09T17:01:00Z</lastmod>
+  <lastmod>2016-07-08T21:41:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/sitemap.xml</loc>
-  <lastmod>2016-02-09T17:01:00Z</lastmod>
+  <lastmod>2016-07-08T21:41:00Z</lastmod>
  </sitemap>
 </sitemapindex>

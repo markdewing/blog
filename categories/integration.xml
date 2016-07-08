@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (integration)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/integration.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 08 Jul 2016 21:41:16 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Integration Callbacks with Sympy and LLVM</title><link>https://markdewing.github.io/blog/posts/integration-callbacks/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;This post explores various packages for multi-dimensional integration along with
+generating callbacks for the integrands from Sympy using an LLVM JIT&lt;/p&gt;
+&lt;h3&gt;Problem to integrate&lt;/h3&gt;
+&lt;p&gt;The particular problem is using the variational principle to find the ground state energy for atoms.
+Some Jupyter notebooks with a description of the problem, along with various integration methods:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/next_steps_in_programming/blob/master/examples/integration/Hydogen%20Atom.ipynb"&gt;Ground state energy of Hydrogen Atom&lt;/a&gt;   (This yields a 3 dimensional integral.)&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/next_steps_in_programming/blob/master/examples/integration/Helium%20atom.ipynb"&gt;Ground state energy of Helium Atom&lt;/a&gt;  (This yields a 6 dimensional integral.)&lt;/p&gt;
+&lt;p&gt;The standard solution to these integrals is to use Markov Chain Monte Carlo (the Quantum Monte Carlo method).&lt;br&gt;
+However, I'm curious to see how far alternate integration schemes or existing integration packages would work.&lt;/p&gt;
+&lt;h3&gt;Integration libraries&lt;/h3&gt;
+&lt;p&gt;The &lt;a href="http://docs.scipy.org/doc/scipy/reference/tutorial/integrate.html"&gt;scipy quadrature&lt;/a&gt; routines accept a natively compiled callback for the integrand. 
+(Noticing this in the documentation initiated the idea for using JIT compilation for callback functions.)&lt;/p&gt;
+&lt;p&gt;Next up is the &lt;a href="http://ab-initio.mit.edu/wiki/index.php/Cubature"&gt;Cubature&lt;/a&gt; integration package, with the &lt;a href="https://github.com/saullocastro/cubature"&gt;Python wrapper for cubature&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Finally is the &lt;a href="http://www.feynarts.de/cuba/"&gt;Cuba&lt;/a&gt; library, with the PyCuba interface (part of the &lt;a href="https://github.com/JohannesBuchner/PyMultiNest"&gt;PyMultiNest&lt;/a&gt; package)&lt;/p&gt;
+&lt;p&gt;There are some other libraries such at &lt;a href="http://mint.sbg.ac.at/HIntLib/"&gt;HIntLib&lt;/a&gt; that I would also like to try.  There doesn't seem to be a python interface for HIntLib.  Let me know if there is one somewhere. And if there are other multidimensional integration packages to try.&lt;/p&gt;
+&lt;h3&gt;Evaluating the integrand&lt;/h3&gt;
+&lt;p&gt;One of my scientific programming goals is to generate efficient code from a symbolic expression.
+To this end, I've been working on an LLVM JIT converter for Sympy expressions (using the &lt;a href="https://github.com/numba/llvmlite"&gt;llvmlite&lt;/a&gt; wrapper).&lt;/p&gt;
+&lt;p&gt;For the Sympy code, see these pull requests: &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/sympy/sympy/pull/10451"&gt;Create executable functions from Sympy expressions&lt;/a&gt; &lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/sympy/sympy/pull/10640"&gt;Accelerated callbacks for integration routines&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/sympy/sympy/pull/10683"&gt;JIT - handle multiple expressions (as returned from CSE)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/sympy/sympy/pull/11057"&gt;Add LLVM JIT callbacks for PyCuba integration&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As an aside, one can question if is this the right approach, compared with&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Generate C++ or Fortran and compile using the existing autowrap functionality in Sympy.&lt;/li&gt;
+&lt;li&gt;Generate Python/Numpy and use Numba.&lt;/li&gt;
+&lt;li&gt;Use Julia&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;There is always a tradeoff between a narrow, specialized solution, which is faster to implement and
+perhaps easier to understand, and a more general solution, which applies in more cases, but is
+harder and slower to implement.&lt;/p&gt;
+&lt;p&gt;Using an LLVM JIT is a specialized solution, but it does have an advantage that there is a short path from the expressions to the compiled code.
+One disadvantage is that it does not leverage existing compilers (Numba or C++), though LLVM compiler optimization passes are available.&lt;/p&gt;
+&lt;p&gt;Sometimes a solution just needs to be tried to gain experience with the advantages and drawbacks.&lt;/p&gt;
+&lt;h3&gt;Results&lt;/h3&gt;
+&lt;p&gt;For the helium atom, the integration times are reported in the table below&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align="left"&gt;Integrator  &lt;/th&gt;
+&lt;th align="right"&gt;Time (seconds)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align="left"&gt;Cubature&lt;/td&gt;
+&lt;td align="right"&gt;171&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align="left"&gt;Cubature w/CSE&lt;/td&gt;
+&lt;td align="right"&gt;141&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align="left"&gt;Cubature w/CSE and multiple evals&lt;/td&gt;
+&lt;td align="right"&gt;100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align="left"&gt;Cuba (Vegas)&lt;/td&gt;
+&lt;td align="right"&gt;29&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align="left"&gt;Cuba (Cuhre)&lt;/td&gt;
+&lt;td align="right"&gt;22&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Note that &lt;code&gt;scipy.nquad&lt;/code&gt; was not used for the 6D integral. It quickly runs out of steam because it consists of iterated one dimensional integrations, and the glue between the dimensions goes through Python, reducing the effectiveness of a compiled integrand.&lt;/p&gt;
+&lt;p&gt;The Cubature library does better.  Profiling shows that most of the time is spent internal to cubature and allocating memory, so faster integrand evaluation is not going to improve the time.
+Some other approaches can help.  One is Common Subexpression Elimination (CSE), which Sympy can perform on the expression.  This extracts duplicate fragments so their value only needs to be computed once.&lt;/p&gt;
+&lt;p&gt;The library also allows multiple integrals to be performed at once.   This can amortize some of the overhead of the library.  In this case, the individual calls to integrator for the numerator and denominator can be reduced to a single call.&lt;/p&gt;
+&lt;p&gt;The Cuba library performs even better, as there is apparently less overhead inside the integration library.  The Cuhre integrator uses a deterministic grid-based algorithm similar to Cubature.  Vegas uses an adaptive Monte Carlo approach.&lt;/p&gt;
+&lt;p&gt;The results are not shown here, but I also used SIMD vectorization to make the function evaluation even faster, which succeeded for the bare function evaluation. (This was one of the original motivations for compiling straight to LLVM, as it would be easier to get vectorization working.)
+ Unfortunately, it did not speed up the overall integration much (if at all), due to overhead in the libraries.&lt;/p&gt;
+&lt;h3&gt;Conclusions and future work&lt;/h3&gt;
+&lt;p&gt;Using an LLVM JIT to create callbacks for integration works fairly well.&lt;/p&gt;
+&lt;p&gt;One important question is how to scale the creation of the callbacks to new libraries without explicitly programming them into Sympy.&lt;br&gt;
+The &lt;a href="https://github.com/sympy/sympy/pull/11057"&gt;last pull request&lt;/a&gt; has expanded the &lt;code&gt;CodeSignature&lt;/code&gt; class, which seems like  a starting point for such a more general callback specification.&lt;/p&gt;&lt;/div&gt;</description><category>cubature</category><category>integration</category><category>llvm</category><category>sympy</category><guid>https://markdewing.github.io/blog/posts/integration-callbacks/</guid><pubDate>Fri, 08 Jul 2016 21:37:00 GMT</pubDate></item></channel></rss>
