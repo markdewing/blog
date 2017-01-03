@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (MPI)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/mpi.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Tue, 03 Jan 2017 02:56:17 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Building A Parallella Cluster</title><link>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;I finally got around to assembling my small pile of Parallella boards into a cluster.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_lg.jpg"&gt;&lt;img alt="Alternate side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_sm3.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This post documents the choices I made about power distribution, mechanical assembly, cooling, software management, etc.
+For background on the individual boards, see my previous post:
+&lt;a href="https://markdewing.github.io/blog/posts/introduction-to-parallella/"&gt;Introduction to Parallella&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The software directions are based on the Linaro 14.04 image.
+(At some point I should upgrade to the latest Paraubuntu release.)&lt;/p&gt;
+&lt;h3&gt;Power&lt;/h3&gt;
+&lt;p&gt;There are several options for powering multiple boards:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Solder a jumper and use the mounting pads with metal standoffs to transmit the power.  This option requires the fewest cords.&lt;/li&gt;
+&lt;li&gt;Use micro USB connector (need to switch jumper J14).  There are multi-port USB power supplies that should work.  This is probably the simplest option for a small number of boards.&lt;/li&gt;
+&lt;li&gt;Use the 5.5mm barrel plug (default settings).  There are versions with screw terminals on Amazon (&lt;a href="https://www.amazon.com/gp/product/B00VESYK0S/"&gt;these&lt;/a&gt; for example).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I went with option 3 and used an old PC power supply for the power.&lt;/p&gt;
+&lt;h3&gt;Mechanical assembly&lt;/h3&gt;
+&lt;p&gt;I used &lt;a href="https://www.amazon.com/gp/product/B013G1Q300/"&gt;20mm nylon standoffs&lt;/a&gt; and assembled the boards into two stacks.
+A small piece of 1/4" plywood was used for the base.&lt;/p&gt;
+&lt;h3&gt;Cooling&lt;/h3&gt;
+&lt;p&gt;For air flow, I used a cooling fan from an old PC and mounted it to the plywood base.&lt;/p&gt;
+&lt;h3&gt;Network&lt;/h3&gt;
+&lt;p&gt;Needing ports for a maximum of 10 boards, plus one port for the external connection, I chose a &lt;a href="https://www.amazon.com/gp/product/B0092KZBCQ/"&gt;16-port Gigabit D-Link switch&lt;/a&gt;.
+Eventually I would like to power the network switch from the PC power supply, but need to get the right plug first.&lt;/p&gt;
+&lt;p&gt;The nodes use DHCP from my home network get their addresses.
+A future improvement is to run a DHCP server on one node and use that to supply addresses to the other nodes.
+This would make the cluster independent of running on my home network.&lt;/p&gt;
+&lt;h3&gt;MicroSD cards&lt;/h3&gt;
+&lt;p&gt;Follow the directions on the Parallella &lt;a href="http://www.parallella.org/create-sdcard/"&gt;Create SD Card&lt;/a&gt; page.
+After burning the image, use &lt;code&gt;gparted&lt;/code&gt; to resize the partition to the full capacity of the card.&lt;/p&gt;
+&lt;h3&gt;Management and control&lt;/h3&gt;
+&lt;p&gt;Performing software installs and other management on all of boards individually would be too tedious.
+There are many solutions for managing clusters.
+I decided to use &lt;a href="http://docs.ansible.com/ansible/intro_getting_started.html"&gt;Ansible&lt;/a&gt;, as it seemed the simplest (no software needed on nodes) and it runs over ssh.&lt;/p&gt;
+&lt;p&gt;In addition to controlling operations from a PC, it is useful to designate one node as a 'head node' and install Ansible there as well.
+For MPI, it's easier to run MPI programs from the head node than from the PC.
+For setting up configuration files, it can be useful to create or edit the file and make sure it works on one node, and then copy the file to all the other nodes.&lt;/p&gt;
+&lt;p&gt;Ansible and MPI (and general convenience) require setting up &lt;a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/"&gt;passwordless ssh login&lt;/a&gt;.
+&lt;!--Some directions to set up &lt;a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/"&gt;ssh passwordless login&lt;/a&gt;--&gt;&lt;/p&gt;
+&lt;p&gt;Once the keys are set up locally, you can use &lt;code&gt;ssh-copy-id&lt;/code&gt; to copy the credentials.&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;id_rsa&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pub&lt;/span&gt; &lt;span class="n"&gt;parallella&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="mf"&gt;10.0.0.145&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;I keep a small script that puts this line in the history (named &lt;code&gt;ssh_copy_id&lt;/code&gt;)&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;history&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="s"&gt;"ssh-copy-id -i ~/.ssh/id_rsa.pub parallella@10.0.0.145"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;Run the command &lt;code&gt;source ssh_copy_id&lt;/code&gt; to put the command on the history list.
+Use the bash history and line editing features to select the command and update to a new address.&lt;/p&gt;
+&lt;p&gt;Rather than create a new user, I'm using the default 'parallella' user on the nodes.
+The SSH config (in '.ssh/config') can be set up to switch users upon login.&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;Host&lt;/span&gt; &lt;span class="mf"&gt;10.0.0.127&lt;/span&gt;
+    &lt;span class="n"&gt;User&lt;/span&gt; &lt;span class="n"&gt;parallella&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;You might wish to &lt;a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/"&gt;set up a apt-cache server&lt;/a&gt; on a local machine to save on download bandwidth when installing software to all the nodes.
+&lt;!--&lt;a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/"&gt;Some directions here&lt;/a&gt;--&gt;&lt;/p&gt;
+&lt;h4&gt;Using Ansible&lt;/h4&gt;
+&lt;p&gt;See the &lt;a href="http://docs.ansible.com/ansible/intro_getting_started.html"&gt;intro docs&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The inventory file is a list of IP addresses (one per line).     It can be specified on the command line
+with `-i'.  To see if all the nodes work&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;ping&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;To copy the apt-cache server configuration to all the nodes, use&lt;/p&gt;
+&lt;pre class="code literal-block"&gt; &lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;hosts&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;copy&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"src=/etc/apt/apt.conf.d/02proxy dest=/etc/apt/apt.conf.d/02proxy"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;To shutdown all the nodes, use&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;shell&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"shutdown now"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;h3&gt;Compilation&lt;/h3&gt;
+&lt;p&gt;In the &lt;a href="https://markdewing.github.io/blog/posts/introduction-to-parallella/"&gt;introductory post&lt;/a&gt; I talked about cross compiling for the board.
+That gets more complicated with larger software packages.
+For instance, one of my project dependencies, HDF, doesn't cross-compile easily (or at all). &lt;/p&gt;
+&lt;p&gt;Since the nodes use a regular Ubuntu distribution, native compilation is easy, but slow.&lt;/p&gt;
+&lt;p&gt;One solution is to use &lt;a href="https://github.com/distcc/distcc"&gt;distcc&lt;/a&gt;.  &lt;/p&gt;
+&lt;p&gt;The particular software package I'm working with (QMCPACK, which does simulations on atoms, molecules, and solids)
+uses CMake for configuration and build, and builds fine with distcc.&lt;/p&gt;
+&lt;p&gt;Install on all nodes with &lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"apt-get install -y distcc"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;Set the &lt;code&gt;DISTCC_HOSTS&lt;/code&gt; variable to the set of systems to use&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;DISTCC_HOSTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"localhost @10.0.0.144/2 @10.0.0.145/2"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;This example shows three hosts. The initial '@' means to use ssh (no daemon required on remote) and the '/2' on the end means to use two threads.&lt;/p&gt;
+&lt;p&gt;Now set the C and C++ compilers to &lt;code&gt;distcc &amp;lt;compiler&amp;gt;&lt;/code&gt; and run the build.&lt;/p&gt;
+&lt;p&gt;For CMake, building a project with MPI, this is&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"distcc mpicc"&lt;/span&gt;
+&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"distcc mpic++"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;Then&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;You might see an warning message &lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="nx"&gt;distccd&lt;/span&gt;&lt;span class="err"&gt;[&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nb"&gt;pid&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="cp"&gt;]&lt;/span&gt; (tcp_cork_sock) Warning: setsockopt(corked=1) failed: Socket operation on non-socket
+&lt;/pre&gt;
+
+
+&lt;p&gt;This can be ignored.  Or follow some directions to &lt;a href="https://jeffreywildman.wordpress.com/2011/02/11/disable-tcp_cork_sock-warnings-when-using-distcc-over-ssh/"&gt;silence it&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;MPI&lt;/h3&gt;
+&lt;p&gt;One popular method for writing programs that communicate across the boards is &lt;a href="https://computing.llnl.gov/tutorials/mpi/"&gt;MPI (Message Passing Interface)&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Install the 'mpi-default-dev' package (which should also install the 'mpi-default-bin' package).
+This installs the Open MPI implementation (the alternative being MPICH).
+Note that this MPI is only concerned with communication between the ARM cores on different boards.
+There is also the Brown Deer Technology version of MPI for programming the Epiphany accelerator.&lt;/p&gt;
+&lt;p&gt;It's common to use a networked file system so each local node has access to the executables and input files.
+Ansible has file distribution commands that work well enough that a networked file system isn't strictly necessary.
+(Be aware when copying directories with Ansible that if the directory specified in &lt;code&gt;src&lt;/code&gt; does not end with '/', the directory and it's contents are copied.  If it does end with '/', just the directory contents are copied.)&lt;/p&gt;
+&lt;p&gt;Open MPI uses a tree-based launcher for better scalable start-up performance.  Because of this, each node should
+be able to log into each other node (not just head node to other nodes).&lt;/p&gt;
+&lt;p&gt;MPI needs a list of machines to run on.  One method is to create a host file and pass it to &lt;code&gt;mpirun&lt;/code&gt; with the &lt;code&gt;--hostfile&lt;/code&gt; option.  The host file, at its simplest, is one hostname or IP address per line (same as a simple Ansible inventory file.)&lt;/p&gt;
+&lt;h3&gt;Gallery&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_front_side_lg.jpg"&gt;&lt;img alt="Front/side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_front_side_sm2.jpg"&gt;&lt;/a&gt;    
+&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_back_view_lg.jpg"&gt;&lt;img alt="Back view" src="https://markdewing.github.io/blog/2016/parallella_cluster_back_view_sm2.jpg"&gt;&lt;/a&gt;   &lt;/p&gt;
+&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_lg.jpg"&gt;&lt;img alt="Side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_sm2.jpg"&gt;&lt;/a&gt;   
+&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_top_lg.jpg"&gt;&lt;img alt="Top view" src="https://markdewing.github.io/blog/2016/parallella_cluster_top_sm2.jpg"&gt;&lt;/a&gt;  
+&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_lg.jpg"&gt;&lt;img alt="Alternate side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_sm3.jpg"&gt;&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;</description><category>Ansible</category><category>epiphany</category><category>MPI</category><category>parallella</category><category>zynq</category><guid>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</guid><pubDate>Tue, 03 Jan 2017 01:56:00 GMT</pubDate></item></channel></rss>

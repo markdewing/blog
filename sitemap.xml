@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://markdewing.github.io/blog/</loc>
-  <lastmod>2016-02-09T17:01:00Z</lastmod>
+  <lastmod>2017-01-02T05:19:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/2015/</loc>
@@ -15,15 +15,23 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/2016/</loc>
-  <lastmod>2016-02-09T17:01:00Z</lastmod>
+  <lastmod>2017-01-01T21:06:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/2017/</loc>
+  <lastmod>2017-01-02T05:19:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/archive.html</loc>
-  <lastmod>2016-02-09T17:01:00Z</lastmod>
+  <lastmod>2017-01-02T05:19:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/</loc>
-  <lastmod>2016-07-08T21:41:00Z</lastmod>
+  <lastmod>2017-01-02T05:19:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/categories/ansible/</loc>
+  <lastmod>2017-01-02T05:19:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/cmake/</loc>
@@ -64,6 +72,10 @@
  <url>
   <loc>https://markdewing.github.io/blog/categories/mantevo/</loc>
   <lastmod>2015-09-02T16:46:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/categories/mpi/</loc>
+  <lastmod>2017-01-02T05:19:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/numba/</loc>
@@ -107,7 +119,11 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/index-1.html</loc>
-  <lastmod>2016-03-26T04:47:00Z</lastmod>
+  <lastmod>2017-01-02T05:19:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</loc>
+  <lastmod>2016-12-27T05:05:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/communicating-with-epiphany/</loc>
@@ -116,10 +132,6 @@
  <url>
   <loc>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</loc>
   <lastmod>2015-09-04T15:36:00Z</lastmod>
- </url>
- <url>
-  <loc>https://markdewing.github.io/blog/posts/fast-expression-evaluation/</loc>
-  <lastmod>2016-03-26T04:47:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/first-performance-improvements/</loc>

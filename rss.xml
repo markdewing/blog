@@ -1,5 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer</title><link>https://markdewing.github.io/blog/</link><description>Investigations into hardware and software details</description><atom:link href="https://markdewing.github.io/blog/rss.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 08 Jul 2016 21:41:16 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Integration Callbacks with Sympy and LLVM</title><link>https://markdewing.github.io/blog/posts/integration-callbacks/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;This post explores various packages for multi-dimensional integration along with
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer</title><link>https://markdewing.github.io/blog/</link><description>Investigations into hardware and software details</description><atom:link href="https://markdewing.github.io/blog/rss.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Tue, 03 Jan 2017 02:56:17 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Building A Parallella Cluster</title><link>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;I finally got around to assembling my small pile of Parallella boards into a cluster.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_lg.jpg"&gt;&lt;img alt="Alternate side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_sm3.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This post documents the choices I made about power distribution, mechanical assembly, cooling, software management, etc.
+For background on the individual boards, see my previous post:
+&lt;a href="https://markdewing.github.io/blog/posts/introduction-to-parallella/"&gt;Introduction to Parallella&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The software directions are based on the Linaro 14.04 image.
+(At some point I should upgrade to the latest Paraubuntu release.)&lt;/p&gt;
+&lt;h3&gt;Power&lt;/h3&gt;
+&lt;p&gt;There are several options for powering multiple boards:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Solder a jumper and use the mounting pads with metal standoffs to transmit the power.  This option requires the fewest cords.&lt;/li&gt;
+&lt;li&gt;Use micro USB connector (need to switch jumper J14).  There are multi-port USB power supplies that should work.  This is probably the simplest option for a small number of boards.&lt;/li&gt;
+&lt;li&gt;Use the 5.5mm barrel plug (default settings).  There are versions with screw terminals on Amazon (&lt;a href="https://www.amazon.com/gp/product/B00VESYK0S/"&gt;these&lt;/a&gt; for example).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I went with option 3 and used an old PC power supply for the power.&lt;/p&gt;
+&lt;h3&gt;Mechanical assembly&lt;/h3&gt;
+&lt;p&gt;I used &lt;a href="https://www.amazon.com/gp/product/B013G1Q300/"&gt;20mm nylon standoffs&lt;/a&gt; and assembled the boards into two stacks.
+A small piece of 1/4" plywood was used for the base.&lt;/p&gt;
+&lt;h3&gt;Cooling&lt;/h3&gt;
+&lt;p&gt;For air flow, I used a cooling fan from an old PC and mounted it to the plywood base.&lt;/p&gt;
+&lt;h3&gt;Network&lt;/h3&gt;
+&lt;p&gt;Needing ports for a maximum of 10 boards, plus one port for the external connection, I chose a &lt;a href="https://www.amazon.com/gp/product/B0092KZBCQ/"&gt;16-port Gigabit D-Link switch&lt;/a&gt;.
+Eventually I would like to power the network switch from the PC power supply, but need to get the right plug first.&lt;/p&gt;
+&lt;p&gt;The nodes use DHCP from my home network get their addresses.
+A future improvement is to run a DHCP server on one node and use that to supply addresses to the other nodes.
+This would make the cluster independent of running on my home network.&lt;/p&gt;
+&lt;h3&gt;MicroSD cards&lt;/h3&gt;
+&lt;p&gt;Follow the directions on the Parallella &lt;a href="http://www.parallella.org/create-sdcard/"&gt;Create SD Card&lt;/a&gt; page.
+After burning the image, use &lt;code&gt;gparted&lt;/code&gt; to resize the partition to the full capacity of the card.&lt;/p&gt;
+&lt;h3&gt;Management and control&lt;/h3&gt;
+&lt;p&gt;Performing software installs and other management on all of boards individually would be too tedious.
+There are many solutions for managing clusters.
+I decided to use &lt;a href="http://docs.ansible.com/ansible/intro_getting_started.html"&gt;Ansible&lt;/a&gt;, as it seemed the simplest (no software needed on nodes) and it runs over ssh.&lt;/p&gt;
+&lt;p&gt;In addition to controlling operations from a PC, it is useful to designate one node as a 'head node' and install Ansible there as well.
+For MPI, it's easier to run MPI programs from the head node than from the PC.
+For setting up configuration files, it can be useful to create or edit the file and make sure it works on one node, and then copy the file to all the other nodes.&lt;/p&gt;
+&lt;p&gt;Ansible and MPI (and general convenience) require setting up &lt;a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/"&gt;passwordless ssh login&lt;/a&gt;.
+&lt;!--Some directions to set up &lt;a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/"&gt;ssh passwordless login&lt;/a&gt;--&gt;&lt;/p&gt;
+&lt;p&gt;Once the keys are set up locally, you can use &lt;code&gt;ssh-copy-id&lt;/code&gt; to copy the credentials.&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;id_rsa&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pub&lt;/span&gt; &lt;span class="n"&gt;parallella&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="mf"&gt;10.0.0.145&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;I keep a small script that puts this line in the history (named &lt;code&gt;ssh_copy_id&lt;/code&gt;)&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;history&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="s"&gt;"ssh-copy-id -i ~/.ssh/id_rsa.pub parallella@10.0.0.145"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;Run the command &lt;code&gt;source ssh_copy_id&lt;/code&gt; to put the command on the history list.
+Use the bash history and line editing features to select the command and update to a new address.&lt;/p&gt;
+&lt;p&gt;Rather than create a new user, I'm using the default 'parallella' user on the nodes.
+The SSH config (in '.ssh/config') can be set up to switch users upon login.&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;Host&lt;/span&gt; &lt;span class="mf"&gt;10.0.0.127&lt;/span&gt;
+    &lt;span class="n"&gt;User&lt;/span&gt; &lt;span class="n"&gt;parallella&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;You might wish to &lt;a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/"&gt;set up a apt-cache server&lt;/a&gt; on a local machine to save on download bandwidth when installing software to all the nodes.
+&lt;!--&lt;a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/"&gt;Some directions here&lt;/a&gt;--&gt;&lt;/p&gt;
+&lt;h4&gt;Using Ansible&lt;/h4&gt;
+&lt;p&gt;See the &lt;a href="http://docs.ansible.com/ansible/intro_getting_started.html"&gt;intro docs&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The inventory file is a list of IP addresses (one per line).     It can be specified on the command line
+with `-i'.  To see if all the nodes work&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;ping&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;To copy the apt-cache server configuration to all the nodes, use&lt;/p&gt;
+&lt;pre class="code literal-block"&gt; &lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;hosts&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;copy&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"src=/etc/apt/apt.conf.d/02proxy dest=/etc/apt/apt.conf.d/02proxy"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;To shutdown all the nodes, use&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;shell&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"shutdown now"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;h3&gt;Compilation&lt;/h3&gt;
+&lt;p&gt;In the &lt;a href="https://markdewing.github.io/blog/posts/introduction-to-parallella/"&gt;introductory post&lt;/a&gt; I talked about cross compiling for the board.
+That gets more complicated with larger software packages.
+For instance, one of my project dependencies, HDF, doesn't cross-compile easily (or at all). &lt;/p&gt;
+&lt;p&gt;Since the nodes use a regular Ubuntu distribution, native compilation is easy, but slow.&lt;/p&gt;
+&lt;p&gt;One solution is to use &lt;a href="https://github.com/distcc/distcc"&gt;distcc&lt;/a&gt;.  &lt;/p&gt;
+&lt;p&gt;The particular software package I'm working with (QMCPACK, which does simulations on atoms, molecules, and solids)
+uses CMake for configuration and build, and builds fine with distcc.&lt;/p&gt;
+&lt;p&gt;Install on all nodes with &lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"apt-get install -y distcc"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;Set the &lt;code&gt;DISTCC_HOSTS&lt;/code&gt; variable to the set of systems to use&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;DISTCC_HOSTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"localhost @10.0.0.144/2 @10.0.0.145/2"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;This example shows three hosts. The initial '@' means to use ssh (no daemon required on remote) and the '/2' on the end means to use two threads.&lt;/p&gt;
+&lt;p&gt;Now set the C and C++ compilers to &lt;code&gt;distcc &amp;lt;compiler&amp;gt;&lt;/code&gt; and run the build.&lt;/p&gt;
+&lt;p&gt;For CMake, building a project with MPI, this is&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"distcc mpicc"&lt;/span&gt;
+&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"distcc mpic++"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;Then&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;You might see an warning message &lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span class="nx"&gt;distccd&lt;/span&gt;&lt;span class="err"&gt;[&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nb"&gt;pid&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="cp"&gt;]&lt;/span&gt; (tcp_cork_sock) Warning: setsockopt(corked=1) failed: Socket operation on non-socket
+&lt;/pre&gt;
+
+
+&lt;p&gt;This can be ignored.  Or follow some directions to &lt;a href="https://jeffreywildman.wordpress.com/2011/02/11/disable-tcp_cork_sock-warnings-when-using-distcc-over-ssh/"&gt;silence it&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;MPI&lt;/h3&gt;
+&lt;p&gt;One popular method for writing programs that communicate across the boards is &lt;a href="https://computing.llnl.gov/tutorials/mpi/"&gt;MPI (Message Passing Interface)&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Install the 'mpi-default-dev' package (which should also install the 'mpi-default-bin' package).
+This installs the Open MPI implementation (the alternative being MPICH).
+Note that this MPI is only concerned with communication between the ARM cores on different boards.
+There is also the Brown Deer Technology version of MPI for programming the Epiphany accelerator.&lt;/p&gt;
+&lt;p&gt;It's common to use a networked file system so each local node has access to the executables and input files.
+Ansible has file distribution commands that work well enough that a networked file system isn't strictly necessary.
+(Be aware when copying directories with Ansible that if the directory specified in &lt;code&gt;src&lt;/code&gt; does not end with '/', the directory and it's contents are copied.  If it does end with '/', just the directory contents are copied.)&lt;/p&gt;
+&lt;p&gt;Open MPI uses a tree-based launcher for better scalable start-up performance.  Because of this, each node should
+be able to log into each other node (not just head node to other nodes).&lt;/p&gt;
+&lt;p&gt;MPI needs a list of machines to run on.  One method is to create a host file and pass it to &lt;code&gt;mpirun&lt;/code&gt; with the &lt;code&gt;--hostfile&lt;/code&gt; option.  The host file, at its simplest, is one hostname or IP address per line (same as a simple Ansible inventory file.)&lt;/p&gt;
+&lt;h3&gt;Gallery&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_front_side_lg.jpg"&gt;&lt;img alt="Front/side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_front_side_sm2.jpg"&gt;&lt;/a&gt;    
+&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_back_view_lg.jpg"&gt;&lt;img alt="Back view" src="https://markdewing.github.io/blog/2016/parallella_cluster_back_view_sm2.jpg"&gt;&lt;/a&gt;   &lt;/p&gt;
+&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_lg.jpg"&gt;&lt;img alt="Side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_sm2.jpg"&gt;&lt;/a&gt;   
+&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_top_lg.jpg"&gt;&lt;img alt="Top view" src="https://markdewing.github.io/blog/2016/parallella_cluster_top_sm2.jpg"&gt;&lt;/a&gt;  
+&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_lg.jpg"&gt;&lt;img alt="Alternate side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_sm3.jpg"&gt;&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;</description><category>Ansible</category><category>epiphany</category><category>MPI</category><category>parallella</category><category>zynq</category><guid>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</guid><pubDate>Tue, 03 Jan 2017 01:56:00 GMT</pubDate></item><item><title>Integration Callbacks with Sympy and LLVM</title><link>https://markdewing.github.io/blog/posts/integration-callbacks/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;This post explores various packages for multi-dimensional integration along with
 generating callbacks for the integrands from Sympy using an LLVM JIT&lt;/p&gt;
 &lt;h3&gt;Problem to integrate&lt;/h3&gt;
 &lt;p&gt;The particular problem is using the variational principle to find the ground state energy for atoms.
@@ -644,133 +775,4 @@ Note that Python/Numpy operates similar to R as described in the post - good per
 &lt;p&gt;The other meaning of 'vectorization' refers to generating assembly code to make effective use of fine-grained parallelism in hardware SIMD units.
 This is what Fortran or C/C++ programmers (and their compilers) mean by 'vectorization'.
 In Julia, the &lt;code&gt;@simd&lt;/code&gt; macro gives hints to the compiler that a given loop can be vectorized.&lt;/p&gt;
-&lt;p&gt;See more in the Wikipedia entry on &lt;a href="https://en.wikipedia.org/wiki/Automatic_vectorization"&gt;Automatic vectorization&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;</description><category>vectorization</category><guid>https://markdewing.github.io/blog/posts/two-meanings-of-vectorization/</guid><pubDate>Fri, 02 Oct 2015 03:23:00 GMT</pubDate></item><item><title>Why Types Help Performance</title><link>https://markdewing.github.io/blog/posts/why-types-help-performance/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;In &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements"&gt;previous&lt;/a&gt; &lt;a href="http://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/"&gt;posts&lt;/a&gt;, we've seen that adding type information can help the performance of the code generated by dynamic language compilers.
-The documentation for Cython annotations talks of 'Python interaction', and Numba has 'object' mode and 'nopython' modes.
-In post I will look more at what these mean, and how they affect performance.&lt;/p&gt;
-&lt;p&gt;To start, consider how values are represented in a computer, such as a simple integer ('int' type in C).
-The bare value takes 4 bytes in memory, and no additional information about it is stored,
-such as its type or how much space it occupies.
-This information is all implicit at run time &lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="https://markdewing.github.io/blog/posts/why-types-help-performance/#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;.
-That it takes 4-bytes and is interpreted as an integer is determined at compile time.&lt;/p&gt;
-&lt;p&gt;In dynamic languages, this extra information can be queried at run-time.
-For example:&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
-&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nb"&gt;type&lt;/span&gt; &lt;span class="s"&gt;'int'&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
-&lt;/pre&gt;
-
-
-&lt;p&gt;The value stored in &lt;code&gt;a&lt;/code&gt; has type &lt;code&gt;int&lt;/code&gt;, Python's integer type.
-This extra information must be stored somewhere, and languages often solve this by wrapping
-the bare value in an object.
-This is usually called 'boxing'.
-The value plus type information (and any other information) is called a 'boxed type'.
-The bare value is called an 'unboxed type' or a 'primitive value'.&lt;/p&gt;
-&lt;p&gt;In Java, different types can be explicitly created (&lt;code&gt;int&lt;/code&gt; vs. &lt;code&gt;Integer&lt;/code&gt;), and the programmer
-needs to know the differences and tradeoffs.
-(See this &lt;a href="http://stackoverflow.com/questions/13055/what-is-boxing-and-unboxing-and-what-are-the-trade-offs"&gt;Stack Overflow question&lt;/a&gt; for more about boxed and primitive types.)&lt;/p&gt;
-&lt;p&gt;Python only has boxed values ('everything is an object'). From the interpreter, this means we can
-always determine the type of a value.
-If we look a layer down, as would be needed to integrate with C, these values are accessed through the Python API.
-The base type of any object is PyObject.  For our simple example, integers are stored as PyIntObject.&lt;/p&gt;
-&lt;p&gt;For example, consider the following Python code.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;add&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
-    &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-    &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;
-&lt;/pre&gt;
-
-
-&lt;p&gt;One way to see what calls the interpreter would make is to compile with Cython.
-The following C is the result (simplified - reference counting pieces to the Python API are omitted.)&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;PyObject&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="nf"&gt;add&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;span class="p"&gt;{&lt;/span&gt;
-  &lt;span class="n"&gt;PyObject&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;pyx_int_1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;PyInt_FromLong&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-  &lt;span class="n"&gt;PyObject&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;pyx_int_2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;PyInt_FromLong&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-  &lt;span class="n"&gt;PyObject&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;pyx_tmp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;PyNumber_Add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pyx_int_1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pyx_int_2&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;pyx_tmp&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
-&lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;
-
-
-&lt;p&gt;Without type information, Cython basically unrolls the interpreter loop, and makes
-a sequence of Python API calls.
-The HTML annotation output highlights lines with Python interaction, and can be expanded to show
-the generated code.   This gives feedback on where and what types need to be added to avoid
-the Python API calls.&lt;/p&gt;
-&lt;p&gt;Add some Cython annotations and the example becomes&lt;/p&gt;
-&lt;pre class="code literal-block"&gt; &lt;span class="n"&gt;cdef&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
-    &lt;span class="n"&gt;cdef&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
-    &lt;span class="n"&gt;cdef&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;
-    &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-    &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;
-&lt;/pre&gt;
-
-
-&lt;p&gt;Now the following code is generated&lt;/p&gt;
-&lt;pre class="code literal-block"&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;add&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
- &lt;span class="p"&gt;{&lt;/span&gt;
-  &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
-  &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
-  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
- &lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;
-
-
-&lt;p&gt;The add of the two integers is done directly (and runs much faster), rather than going through the Python API call.&lt;/p&gt;
-&lt;h3&gt;Numba&lt;/h3&gt;
-&lt;p&gt;If its type information is insufficient, Numba will call the Python API for every operation.
-Since all the operations occur on Python objects, this is called 'object' mode (slow).
-With sufficient type information, code can be generated with no calls to the Python API, and hence
-the name 'nopython' mode (fast).&lt;/p&gt;
-&lt;h3&gt;Julia&lt;/h3&gt;
-&lt;p&gt;Julia has boxed object types, but is designed to try use the unboxed types as much as possible.
-The most generic type is called 'Any', and it is possible to produce Julia code that runs this mode.&lt;br&gt;
-See the section on &lt;a href="http://julia.readthedocs.org/en/latest/manual/embedding/"&gt;Embedding Julia&lt;/a&gt; in the
-documentation for more about Julia objects.&lt;/p&gt;
-&lt;p&gt;Julia's type inference only happens inside functions.
-This is why composite types (structures) need type annotations for good performance.&lt;/p&gt;
-&lt;p&gt;This example demonstrates the issue&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="k"&gt;type&lt;/span&gt;&lt;span class="nc"&gt; Example&lt;/span&gt;
-    &lt;span class="n"&gt;val&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="k"&gt;function&lt;/span&gt;&lt;span class="nf"&gt; add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;val&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;val&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-
-&lt;span class="n"&gt;v1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Example&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;v2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Example&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;code_llvm&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;v1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;v2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  &lt;span class="c"&gt;# The @code_llvm macro prints the LLVM IR.  &lt;/span&gt;
-&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;v1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;v2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;println&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;"res = "&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
-
-&lt;p&gt;Since the type of the 'val' element is not known, the code operates on a generic object type &lt;code&gt;jl_value_t&lt;/code&gt; and eventually calls &lt;code&gt;jl_apply_generic&lt;/code&gt;, which looks up the right method and dispatches to it at execution time.
-(The LLVM IR is not shown here - run the example to see it.)  Doing all this at execution time is slow.&lt;/p&gt;
-&lt;p&gt;Now add the type annotation&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="k"&gt;type&lt;/span&gt;&lt;span class="nc"&gt; Example&lt;/span&gt;
-    &lt;span class="n"&gt;val&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="kt"&gt;Int&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
-
-
-&lt;p&gt;The resulting LLVM IR (also not shown here) is much shorter in that it adds two integers directly and
-returns the result as an integer.
-With type information, the lookup and dispatch decisions can be made at compile time.&lt;/p&gt;
-&lt;p&gt;Note that Julia uses a Just In Time (JIT) compiler, which means compilation occurs at run time.
-The run time can be split into various phases, which include compilation and execution of
-the resulting code.&lt;/p&gt;
-&lt;h3&gt;Summary&lt;/h3&gt;
-&lt;p&gt;Hopefully this post sheds some light on how type information can affect the performance of dynamic languages.&lt;/p&gt;
-&lt;div class="footnote"&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id="fn:1"&gt;
-&lt;p&gt;The type can be accessible at run time via debug information.  See this Strange Loop 2014 talk: &lt;a href="https://www.youtube.com/watch?v=LwicN2u6Dro"&gt;Liberating the lurking Smalltalk in Unix&lt;/a&gt; &lt;a class="footnote-backref" href="https://markdewing.github.io/blog/posts/why-types-help-performance/#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;↩&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;&lt;/div&gt;</description><category>cython</category><category>julia</category><category>Numba</category><category>python</category><guid>https://markdewing.github.io/blog/posts/why-types-help-performance/</guid><pubDate>Thu, 24 Sep 2015 15:48:00 GMT</pubDate></item></channel></rss>
+&lt;p&gt;See more in the Wikipedia entry on &lt;a href="https://en.wikipedia.org/wiki/Automatic_vectorization"&gt;Automatic vectorization&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;</description><category>vectorization</category><guid>https://markdewing.github.io/blog/posts/two-meanings-of-vectorization/</guid><pubDate>Fri, 02 Oct 2015 03:23:00 GMT</pubDate></item></channel></rss>
