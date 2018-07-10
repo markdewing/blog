@@ -7,7 +7,11 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/ansible.xml</loc>
-  <lastmod>2017-01-02T05:19:00Z</lastmod>
+  <lastmod>2017-01-03T02:56:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/bash.xml</loc>
+  <lastmod>2018-07-10T21:04:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/cmake.xml</loc>
@@ -31,7 +35,7 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/epiphany.xml</loc>
-  <lastmod>2017-01-02T05:19:00Z</lastmod>
+  <lastmod>2017-01-03T02:56:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/integration.xml</loc>
@@ -51,7 +55,7 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/mpi.xml</loc>
-  <lastmod>2017-01-02T05:19:00Z</lastmod>
+  <lastmod>2017-01-03T02:56:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/numba.xml</loc>
@@ -59,7 +63,7 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/parallella.xml</loc>
-  <lastmod>2017-01-02T05:19:00Z</lastmod>
+  <lastmod>2017-01-03T02:56:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/profiling.xml</loc>
@@ -72,6 +76,10 @@
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/python.xml</loc>
   <lastmod>2015-11-13T23:44:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/scripting.xml</loc>
+  <lastmod>2018-07-10T21:04:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/sympy.xml</loc>
@@ -91,14 +99,14 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/zynq.xml</loc>
-  <lastmod>2017-01-02T05:19:00Z</lastmod>
+  <lastmod>2017-01-03T02:56:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/rss.xml</loc>
-  <lastmod>2017-01-02T05:19:00Z</lastmod>
+  <lastmod>2018-07-10T21:04:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/sitemap.xml</loc>
-  <lastmod>2017-01-02T05:19:00Z</lastmod>
+  <lastmod>2018-07-10T21:04:00Z</lastmod>
  </sitemap>
 </sitemapindex>

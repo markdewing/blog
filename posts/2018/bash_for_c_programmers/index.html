@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bash for C programmers | Journey to the Center of the Computer</title>
+<link href="../../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.xml">
+<link rel="canonical" href="https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/">
+<!--[if lt IE 9]><script src="../../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Mark Dewing">
+<link rel="prev" href="../../building-a-parallella-cluster/" title="Building A Parallella Cluster" type="text/html">
+<meta property="og:site_name" content="Journey to the Center of the Computer">
+<meta property="og:title" content="Bash for C programmers">
+<meta property="og:url" content="https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/">
+<meta property="og:description" content="Bash scripting
+Why use Bash?  It is not my preferred language, but it has two big advantages:
+
+Availability - we can safely assume bash is present everywhere.  No need to install additional software.
+">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2018-07-10T16:41:01-05:00">
+<meta property="article:tag" content="bash">
+<meta property="article:tag" content="scripting">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://markdewing.github.io/blog/">
+
+                <span id="blog-title">Journey to the Center of the Computer</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../../archive.html">Archive</a>
+                </li>
+<li>
+<a href="../../../categories/">Tags</a>
+                </li>
+<li>
+<a href="../../../rss.xml">RSS feed</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+    <a href="index.md" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Bash for C programmers</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2018-07-10T16:41:01-05:00" itemprop="datePublished" title="2018-07-10 16:41">2018-07-10 16:41</time></a></p>
+                <p class="commentline">
+        
+    <a href=".#disqus_thread" data-disqus-identifier="cache/posts/2018/bash_for_c_programmers.html">Comments</a>
+
+
+            
+        </p>
+<p class="sourceline"><a href="index.md" id="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<h2>Bash scripting</h2>
+<p>Why use Bash?  It is not my preferred language, but it has two big advantages:</p>
+<ul>
+<li>Availability - we can safely assume bash is present everywhere.  No need to install additional software.</li>
+<li>Ease of starting and incremental building - a script can start as a small list of commands and grow incrementally.</li>
+</ul>
+<p>The rest of this post not a tutorial, but some ways to think about bash scripting in order to avoid common traps when coming from C/C++ or Python.</p>
+<h3>Quick Intro</h3>
+<h4>Whitespace is significant</h4>
+<p>Almost everything in bash is a command with arguments. After all the substitutions and quoting, the basic structure of each line is a command with all its arguments are separated by whitespace.  This makes whitespace significant in ways that can be confusing when coming from other languages.</p>
+<p>One place this shows up is in setting variables - there should be no whitespace on either side of the equal sign.
+The statement <code>a = 1</code> will fail with an error about 'a' not found - the shell interprets it as a command.
+Similarly <code>a= 1</code> will fail with an error about '1' not found.</p>
+<p>Another place significant whitespace appears is in <code>if</code> statements.
+The opening bracket for the test (<code>[</code>) looks like syntax, but it is a command.  (By symmetry you might expect <code>]</code> to be a command, but it's not - it gets passed as an argument to <code>[</code>).</p>
+<pre class="code literal-block"><span class="nv">a</span><span class="o">=</span>0
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$a</span> -eq 0 <span class="o">]</span>; <span class="k">then</span>
+<span class="k">  </span><span class="nb">echo</span> <span class="s2">"a is 0"</span>
+<span class="k">fi</span>
+</pre>
+
+
+<p>Also note the semicolon after the comparison to terminate the command.  As an alternative, the <code>then</code> could be put on the next line</p>
+<pre class="code literal-block"><span class="nv">a</span><span class="o">=</span>0
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$a</span> -eq 0 <span class="o">]</span>
+<span class="k">then</span>
+<span class="k">  </span><span class="nb">echo</span> <span class="s2">"a is 0"</span>
+<span class="k">fi</span>
+</pre>
+
+
+<p>Bash also has a double bracket form of testing that is a built-in, and not an external command.</p>
+<h4>Exit values</h4>
+<p>Exit values from commands are 'success' or 'failure'.  Tests of the exit value, like the 'if' statement or the control operators (<code>&amp;&amp;</code> and <code>||</code>) operate on these exit values (and only exit values).
+Numerically, success maps to 0, whereas failure maps to a non-zero value.
+This numerical mapping is opposite of many other languages, like C/C++ and Python, where 0 is false and non-zero values are true.
+Using multiple values for failure can give some indication of what went wrong with the command.</p>
+<p>The best way to think about this is not to mentally reverse the values, but to think in terms of 'success' and 'failure', and only think about the numerical mapping if necessary.</p>
+<p>Sequencing and control operator idioms:</p>
+<ul>
+<li>
+<code>A;B</code>  Run A and then B, regardless of success of A</li>
+<li>
+<code>A &amp;&amp; B</code> Run B if A succeeded</li>
+<li>
+<code>A || B</code> Run B if A failed</li>
+<li>
+<code>A &amp;</code> Run A in the background</li>
+</ul>
+<p>( from <a href="https://unix.stackexchange.com/questions/24684/confusing-use-of-and-operators">https://unix.stackexchange.com/questions/24684/confusing-use-of-and-operators</a> )</p>
+<h4>Functions</h4>
+<p>Functions start with "<code>function</code> <em>name</em> <code>{</code>" or "<em>name</em>  <code>() {</code>".
+The body is a series of commands, and the function ends with <code>}</code>.
+Once again, whitespace is significant.  The function declaration should be on a line by itself,
+and the closing brace should also be on a line by itself.</p>
+<p>A function call looks like a normal command statement, with the usual space-separated arguments.</p>
+<p>Inside a function, arguments are referenced using <code>$1</code>, <code>$2</code>, etc.  Unset variables are empty.</p>
+<p>There is a syntax for optional arguments:</p>
+<pre class="code literal-block"><span class="nv">var</span><span class="o">=</span><span class="k">${</span><span class="nv">1</span><span class="k">:-</span><span class="nv">default_string_here</span><span class="k">}</span>
+</pre>
+
+
+<h4>Variable replacement</h4>
+<p>Variable replacement occurs <em>before</em> bash breaks the line into a command and arguments based on whitespace.
+Unexpected behavior can happen if a variable contains whitespace and the developer was not expecting it.
+This can happen when the variable holds a directory name, and the script is run using a directory containing a space.</p>
+<pre class="code literal-block"><span class="nv">a</span><span class="o">=</span><span class="s2">"hi there"</span>
+cmd <span class="nv">$a</span>
+</pre>
+
+
+<p>expands to calling <code>cmd</code> with two arguments 'hi' and 'there'.
+Enclose the variable in quotes to keep spaces confined.</p>
+<p>This will call <code>cmd</code> with one argument: 'hi there'.</p>
+<pre class="code literal-block"><span class="nv">a</span><span class="o">=</span><span class="s2">"hi there"</span>
+cmd <span class="s2">"$a"</span>
+</pre>
+
+
+<p>For a gory step-by-step look at how bash processes input, see <a href="https://mywiki.wooledge.org/BashParser">https://mywiki.wooledge.org/BashParser</a></p>
+<h4>Robust bash scripts</h4>
+<p>See <a href="https://www.davidpashley.com/articles/writing-robust-shell-scripts/">https://www.davidpashley.com/articles/writing-robust-shell-scripts/</a> for advice on writing robust scripts.</p>
+<p>Part of the advice is to use these settings</p>
+<ul>
+<li>
+<code>set -o nounset</code>  to detect the use of uninitialized variables</li>
+<li>
+<code>set -o errexit</code>  to exit the script if any statement fails</li>
+</ul>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../../categories/bash/" rel="tag">bash</a></li>
+            <li><a class="tag p-category" href="../../../categories/scripting/" rel="tag">scripting</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../../building-a-parallella-cluster/" rel="prev" title="Building A Parallella Cluster">Previous post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="journeytothecenterofthecomputer",
+            disqus_url="https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/",
+        disqus_title="Bash for C programmers",
+        disqus_identifier="cache/posts/2018/bash_for_c_programmers.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="//disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="//"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2018         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../../assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
+    moment.locale("");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates -->
+</body>
+</html>

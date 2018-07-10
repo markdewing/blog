@@ -58,7 +58,57 @@
             
 
 <div class="postindex">
-    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/why-types-help-performance/" class="u-url">Why Types Help Performance</a></h1>
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/two-meanings-of-vectorization/" class="u-url">Two Meanings of Vectorization</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
+            <p class="dateline"><a href="posts/two-meanings-of-vectorization/" rel="bookmark"><time class="published dt-published" datetime="2015-10-01T22:23:00-05:00" title="2015-10-01 22:23">2015-10-01 22:23</time></a></p>
+                <p class="commentline">
+        
+    <a href="posts/two-meanings-of-vectorization/#disqus_thread" data-disqus-identifier="cache/posts/two-meanings-of-vectorization.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>The term 'vectorize' as used by programmers has at least two separate uses.
+Both uses can have implications for performance, which sometimes leads to confusion.</p>
+<p>One meaning refers to a language syntax to express operations on multiple values - typically an entire array, or a slice of a array.
+This can be a very convenient notation for expressing algorithms.</p>
+<p>Here is a simple example (in Julia) using loop-oriented (devectorized) notation</p>
+<pre class="code literal-block"><span class="n">a</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="c"># allocate space for result</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="p">:</span><span class="mi">10</span>
+    <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="k">end</span>
+</pre>
+
+
+<p>Now compare with using vectorized (array) notation</p>
+<pre class="code literal-block"><span class="n">a</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="c"># space for result automatically allocated</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre>
+
+
+<p>The vectorized notation is more compact.
+Julia and Python/Numpy programmers usually mean this when referring to 'vectorization'.
+See more in the Wikipedia entry on <a href="https://en.wikipedia.org/wiki/Array_programming">Array programming</a></p>
+<p>John Myles White wrote a post discussing the performance implications of <a href="http://www.johnmyleswhite.com/notebook/2013/12/22/the-relationship-between-vectorized-and-devectorized-code/">vectorized and devectorized code</a> in Julia and R.
+Note that Python/Numpy operates similar to R as described in the post - good performance usually requires appropriately vectorized code, because that skips the interpreter and calls higher performing C routines underneath.</p>
+<p>The other meaning of 'vectorization' refers to generating assembly code to make effective use of fine-grained parallelism in hardware SIMD units.
+This is what Fortran or C/C++ programmers (and their compilers) mean by 'vectorization'.
+In Julia, the <code>@simd</code> macro gives hints to the compiler that a given loop can be vectorized.</p>
+<p>See more in the Wikipedia entry on <a href="https://en.wikipedia.org/wiki/Automatic_vectorization">Automatic vectorization</a></p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/why-types-help-performance/" class="u-url">Why Types Help Performance</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
             <p class="dateline"><a href="posts/why-types-help-performance/" rel="bookmark"><time class="published dt-published" datetime="2015-09-24T10:48:00-05:00" title="2015-09-24 10:48">2015-09-24 10:48</time></a></p>
@@ -855,7 +905,7 @@ Science and research topics can be found over at my <a href="http://quantum_mc.b
         <!--End of body content-->
 
         <footer id="footer">
-            Contents © 2017         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2018         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>
