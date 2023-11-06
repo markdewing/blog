@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="description" content="Investigations into hardware and software details">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Journey to the Center of the Computer</title>
 <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
 <meta name="theme-color" content="#5670d4">
 <meta name="generator" content="Nikola (getnikola.com)">
 <link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
@@ -17,29 +17,23 @@
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
 
-<!-- Header and menu bar -->
-<div class="container">
-      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
-          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
-            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
-                
-            </div>
-        </div>
-          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
-            <a class="navbar-brand blog-header-logo text-dark" href=".">
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark
+bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href=".">
 
             <span id="blog-title">Journey to the Center of the Computer</span>
         </a>
-          </div>
-            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
-            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav"></ul></nav>
-</div>
-    </div>
-</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
-            <ul class="navbar-nav nav-fill d-flex w-100">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
 <li class="nav-item">
 <a href="archive.html" class="nav-link">Archive</a>
                 </li>
@@ -52,41 +46,41 @@
                 
             </li>
 </ul>
+<ul class="navbar-nav navbar-right"></ul>
 </div>
 <!-- /.navbar-collapse -->
-</nav>
-</div>
-
-<div class="container" id="content" role="main">
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
     <div class="body-content">
         <!--Body content-->
         
         
         
-    
-        
 
     
-        
-    <div class="postindex">
-            <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/2023/my-github-repos/" class="u-url">Guide to my Github Repositories</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        Mark Dewing
-                    </span></p>
+
+
+    
+<div class="postindex">
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/2023/my-github-repos/" class="u-url">Guide to my Github Repositories</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
             <p class="dateline">
             <a href="posts/2023/my-github-repos/" rel="bookmark">
-            <time class="published dt-published" datetime="2023-10-28T00:08:02-05:00" itemprop="datePublished" title="2023-10-28 00:08">2023-10-28 00:08</time></a>
+            <time class="published dt-published" datetime="2023-11-06T00:08:02-05:00" itemprop="datePublished" title="2023-11-06 00:08">2023-11-06 00:08</time></a>
             </p>
-                        <p class="commentline">
+                <p class="commentline">
     
     <a href="posts/2023/my-github-repos/#disqus_thread" data-disqus-identifier="cache/posts/2023/my-github-repos.html">Comments</a>
 
 
-                </p>
+        </p>
 </div>
-            </header><div class="e-content entry-content">
-                    <p>This post is a short guide to my Github repositories.</p>
+    </header><div class="e-content entry-content">
+    <p>This post is a short guide to my Github repositories.</p>
 <p>Some of them I use as a wiki for keeping information.
 Markdown makes adding and editing text easy, and it can also contain code.</p>
 <p>Other repositories have more code to explore a particular topic.  I should expand on some of these topics in future blog posts. 
@@ -107,25 +101,25 @@ It's used as a base for creating validated unit test data for <a href="https://g
 (the 'silver' part of the repository name comes from Github's initial repository name suggestion)</p>
 <p><a href="https://github.com/markdewing/derivative_code_gen">Symbolic Derivatives with Code Generation</a> Represents scientific computations using Sympy. It can take derivatives symbolically, then code generate the result to Python, Julia or C++.</p>
 <p><a href="https://github.com/markdewing/multitevo">Multitevo</a> Translation of CoMD molecular dynamics miniapp to other languages, such as Python and Julia. And Javascript, should I get it checked-in and pushed.</p>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/2018/bash_for_c_programmers/" class="u-url">Bash for C programmers</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        Mark Dewing
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/2018/bash_for_c_programmers/" class="u-url">Bash for C programmers</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
             <p class="dateline">
             <a href="posts/2018/bash_for_c_programmers/" rel="bookmark">
             <time class="published dt-published" datetime="2018-07-10T16:41:01-05:00" itemprop="datePublished" title="2018-07-10 16:41">2018-07-10 16:41</time></a>
             </p>
-                        <p class="commentline">
+                <p class="commentline">
     
     <a href="posts/2018/bash_for_c_programmers/#disqus_thread" data-disqus-identifier="cache/posts/2018/bash_for_c_programmers.html">Comments</a>
 
 
-                </p>
+        </p>
 </div>
-            </header><div class="e-content entry-content">
-                    <h2>Bash scripting</h2>
+    </header><div class="e-content entry-content">
+    <h2>Bash scripting</h2>
 <p>Why use Bash?  It is not my preferred language, but it has two big advantages:</p>
 <ul>
 <li>Availability - we can safely assume bash is present everywhere.  No need to install additional software.</li>
@@ -210,24 +204,24 @@ cmd<span class="w"> </span><span class="s2">"</span><span class="nv">$a</span><s
 <code>set -o errexit</code>  to exit the script if any statement fails</li>
 </ul>
 </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/building-a-parallella-cluster/" class="u-url">Building A Parallella Cluster</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        Mark Dewing
-                    </span></p>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/building-a-parallella-cluster/" class="u-url">Building A Parallella Cluster</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
             <p class="dateline">
             <a href="posts/building-a-parallella-cluster/" rel="bookmark">
             <time class="published dt-published" datetime="2017-01-02T20:56:00-05:00" itemprop="datePublished" title="2017-01-02 20:56">2017-01-02 20:56</time></a>
             </p>
-                        <p class="commentline">
+                <p class="commentline">
     
     <a href="posts/building-a-parallella-cluster/#disqus_thread" data-disqus-identifier="cache/posts/building-a-parallella-cluster.html">Comments</a>
 
 
-                </p>
+        </p>
 </div>
-            </header><div class="e-content entry-content">
-                    <p>I finally got around to assembling my small pile of Parallella boards into a cluster.</p>
+    </header><div class="e-content entry-content">
+    <p>I finally got around to assembling my small pile of Parallella boards into a cluster.</p>
 <p><a href="2016/parallella_cluster_side_top_lg.jpg"><img alt="Alternate side view" src="2016/parallella_cluster_side_top_sm3.jpg"></a></p>
 <p>This post documents the choices I made about power distribution, mechanical assembly, cooling, software management, etc.
 For background on the individual boards, see my previous post:
@@ -350,25 +344,25 @@ be able to log into each other node (not just head node to other nodes).</p>
 <p><a href="2016/parallella_cluster_side_lg.jpg"><img alt="Side view" src="2016/parallella_cluster_side_sm2.jpg"></a>   
 <a href="2016/parallella_cluster_top_lg.jpg"><img alt="Top view" src="2016/parallella_cluster_top_sm2.jpg"></a>  
 <a href="2016/parallella_cluster_side_top_lg.jpg"><img alt="Alternate side view" src="2016/parallella_cluster_side_top_sm3.jpg"></a></p>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/integration-callbacks/" class="u-url">Integration Callbacks with Sympy and LLVM</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        Mark Dewing
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/integration-callbacks/" class="u-url">Integration Callbacks with Sympy and LLVM</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
             <p class="dateline">
             <a href="posts/integration-callbacks/" rel="bookmark">
             <time class="published dt-published" datetime="2016-07-08T16:37:00-05:00" itemprop="datePublished" title="2016-07-08 16:37">2016-07-08 16:37</time></a>
             </p>
-                        <p class="commentline">
+                <p class="commentline">
     
     <a href="posts/integration-callbacks/#disqus_thread" data-disqus-identifier="cache/posts/integration_callbacks.html">Comments</a>
 
 
-                </p>
+        </p>
 </div>
-            </header><div class="e-content entry-content">
-                    <p>This post explores various packages for multi-dimensional integration along with
+    </header><div class="e-content entry-content">
+    <p>This post explores various packages for multi-dimensional integration along with
 generating callbacks for the integrands from Sympy using an LLVM JIT</p>
 <h3>Problem to integrate</h3>
 <p>The particular problem is using the variational principle to find the ground state energy for atoms.
@@ -448,25 +442,25 @@ Some other approaches can help.  One is Common Subexpression Elimination (CSE), 
 <p>Using an LLVM JIT to create callbacks for integration works fairly well.</p>
 <p>One important question is how to scale the creation of the callbacks to new libraries without explicitly programming them into Sympy.<br>
 The <a href="https://github.com/sympy/sympy/pull/11057">last pull request</a> has expanded the <code>CodeSignature</code> class, which seems like  a starting point for such a more general callback specification.</p>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/notes-on-cmake/" class="u-url">Notes on CMake</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        Mark Dewing
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/notes-on-cmake/" class="u-url">Notes on CMake</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
             <p class="dateline">
             <a href="posts/notes-on-cmake/" rel="bookmark">
             <time class="published dt-published" datetime="2016-02-19T05:05:00-06:00" itemprop="datePublished" title="2016-02-19 05:05">2016-02-19 05:05</time></a>
             </p>
-                        <p class="commentline">
+                <p class="commentline">
     
     <a href="posts/notes-on-cmake/#disqus_thread" data-disqus-identifier="cache/posts/notes-on-cmake.html">Comments</a>
 
 
-                </p>
+        </p>
 </div>
-            </header><div class="e-content entry-content">
-                    <p>Recently I started working on a project that uses CMake.  I've used CMake a little before, but never really
+    </header><div class="e-content entry-content">
+    <p>Recently I started working on a project that uses CMake.  I've used CMake a little before, but never really
 had to dive much into it.
 In particular, I needed to understand the scripting parts of CMake for adding tests for CTest.</p>
 <p>Below are some comments on aspects of CMake.</p>
@@ -552,25 +546,25 @@ It needs to be set as a cache variable, and it needs to be set before the <code>
 </pre></div>
 
 <p>See also this <a href="http://stackoverflow.com/questions/3545598/using-cmake-with-ctest-and-cdash">Stack Overflow post</a></p>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/visualizing-md-data/" class="u-url">Visualizing MD Data</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        Mark Dewing
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/visualizing-md-data/" class="u-url">Visualizing MD Data</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
             <p class="dateline">
             <a href="posts/visualizing-md-data/" rel="bookmark">
             <time class="published dt-published" datetime="2015-12-08T22:14:00-06:00" itemprop="datePublished" title="2015-12-08 22:14">2015-12-08 22:14</time></a>
             </p>
-                        <p class="commentline">
+                <p class="commentline">
     
     <a href="posts/visualizing-md-data/#disqus_thread" data-disqus-identifier="cache/posts/visualizing-md-data.html">Comments</a>
 
 
-                </p>
+        </p>
 </div>
-            </header><div class="e-content entry-content">
-                    <p>Visualizing atomic positions in 3D is useful when working on a molecular dynamics code.</p>
+    </header><div class="e-content entry-content">
+    <p>Visualizing atomic positions in 3D is useful when working on a molecular dynamics code.</p>
 <p>More generally, being able to visualize the structures and algorithms inside a code can help with understanding
 and debugging.
 With all the advances in graphics hardware, it should be possible to quickly create visualizations for various
@@ -618,25 +612,25 @@ Displaying a Sphere at each point would be more accurate, but is much slower.</p
 <p>I'm very pleased with VisPy.  It enabled live, interactive animation of atoms from a molecular dynamics code with
  a small amount code.
 I expect extending this to visualize more complex algorithms and data structures should be be straightforward.</p>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/more-with-numba/" class="u-url">More Performance With Numba</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        Mark Dewing
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/more-with-numba/" class="u-url">More Performance With Numba</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
             <p class="dateline">
             <a href="posts/more-with-numba/" rel="bookmark">
             <time class="published dt-published" datetime="2015-11-13T10:30:00-06:00" itemprop="datePublished" title="2015-11-13 10:30">2015-11-13 10:30</time></a>
             </p>
-                        <p class="commentline">
+                <p class="commentline">
     
     <a href="posts/more-with-numba/#disqus_thread" data-disqus-identifier="cache/posts/more-with-numba.html">Comments</a>
 
 
-                </p>
+        </p>
 </div>
-            </header><div class="e-content entry-content">
-                    <p>Having acquired a shiny new <a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/">profiler</a>, it's time to dig into the performance of the Numba version some more.</p>
+    </header><div class="e-content entry-content">
+    <p>Having acquired a shiny new <a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/">profiler</a>, it's time to dig into the performance of the Numba version some more.</p>
 <p>Picking up from the <a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/">previous optimizations</a>, I can't seem to reproduce the timing (47 μs/atom) in the that table.  Now I get 40 μs/atom.</p>
 <h2>First step</h2>
 <p>Run the profiler (<code>vmprofrun comd.py</code>) and display the results in KCacheGrind (<code>kcachegrind vmprof-20664.out</code>)</p>
@@ -767,25 +761,25 @@ that I would not want to perform on a regular basis.    These transformations ar
 be possible to incorporate them into Numba.  Alternately, if doing so in a safe manner inside the compiler is difficult,
 some sort of automated AST transformation of the source should be possible.</p>
 <p>As the optimization process proceeds on this code, increasing amount of time is being spent in the core routine, computeForce, (as it should), and we will need to move beyond a function-level profiler to look for optimization opportunities.</p>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/updated-performance-with-pypy-40/" class="u-url">Performance Updates with PyPy 4.0</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        Mark Dewing
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/updated-performance-with-pypy-40/" class="u-url">Performance Updates with PyPy 4.0</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
             <p class="dateline">
             <a href="posts/updated-performance-with-pypy-40/" rel="bookmark">
             <time class="published dt-published" datetime="2015-11-04T15:39:00-06:00" itemprop="datePublished" title="2015-11-04 15:39">2015-11-04 15:39</time></a>
             </p>
-                        <p class="commentline">
+                <p class="commentline">
     
     <a href="posts/updated-performance-with-pypy-40/#disqus_thread" data-disqus-identifier="cache/posts/updated-performance-with-pypy-40.html">Comments</a>
 
 
-                </p>
+        </p>
 </div>
-            </header><div class="e-content entry-content">
-                    <p>The PyPy team recently released version <a href="http://morepypy.blogspot.com/2015/10/pypy-400-released-jit-with-simd.html">4.0</a>
+    </header><div class="e-content entry-content">
+    <p>The PyPy team recently released version <a href="http://morepypy.blogspot.com/2015/10/pypy-400-released-jit-with-simd.html">4.0</a>
 (The jump in version number is to reduce confusion with the Python version supported.)
 One of the features is improved performance.</p>
 <p>But first, an issue with reporting accurate timings with this version of CoMD should be addressed. The initial iteration contains overhead from tracing and JIT compilation (Cython and Numba have the same issue).
@@ -809,25 +803,25 @@ Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
 conditionals in the inner loop.</p>
 <p>PyPy 4.0 gives a very good 34x performance improvement over bare Python, and 3x improvement over the previous release (2.6.1).
 PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)</p>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/prototype-for-profiling-python/" class="u-url">Prototype for Profiling Python</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        Mark Dewing
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/prototype-for-profiling-python/" class="u-url">Prototype for Profiling Python</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
             <p class="dateline">
             <a href="posts/prototype-for-profiling-python/" rel="bookmark">
             <time class="published dt-published" datetime="2015-10-12T12:20:00-05:00" itemprop="datePublished" title="2015-10-12 12:20">2015-10-12 12:20</time></a>
             </p>
-                        <p class="commentline">
+                <p class="commentline">
     
     <a href="posts/prototype-for-profiling-python/#disqus_thread" data-disqus-identifier="cache/posts/prototype-for-profiling-python.html">Comments</a>
 
 
-                </p>
+        </p>
 </div>
-            </header><div class="e-content entry-content">
-                    <p><a href="posts/towards-profiling-accelerated-python/">Last post</a> covered some technical background using vmprof to profile Python with compiled or JIT'ed extensions.
+    </header><div class="e-content entry-content">
+    <p><a href="posts/towards-profiling-accelerated-python/">Last post</a> covered some technical background using vmprof to profile Python with compiled or JIT'ed extensions.
 Now I've created a prototype that can convert the output to callgrind format so it can be viewed with <a href="http://kcachegrind.sourceforge.net/html/Home.html">KCachegrind</a>.</p>
 <p>To install the prototype using the Anaconda distribution:</p>
 <ol>
@@ -866,24 +860,24 @@ Finally it runs <code>vmproftocallgrind</code> using these files as input.</p>
 <li>It should work with C extensions and Cython as well.</li>
 </ul>
 </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/towards-profiling-accelerated-python/" class="u-url">Towards Profiling Accelerated Python</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        Mark Dewing
-                    </span></p>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/towards-profiling-accelerated-python/" class="u-url">Towards Profiling Accelerated Python</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
             <p class="dateline">
             <a href="posts/towards-profiling-accelerated-python/" rel="bookmark">
             <time class="published dt-published" datetime="2015-10-07T20:58:00-05:00" itemprop="datePublished" title="2015-10-07 20:58">2015-10-07 20:58</time></a>
             </p>
-                        <p class="commentline">
+                <p class="commentline">
     
     <a href="posts/towards-profiling-accelerated-python/#disqus_thread" data-disqus-identifier="cache/posts/towards-profiling-accelerated-python.html">Comments</a>
 
 
-                </p>
+        </p>
 </div>
-            </header><div class="e-content entry-content">
-                    <p>One of the conclusions from last post is a need for better profiling tools to show where time is spent in the code.
+    </header><div class="e-content entry-content">
+    <p>One of the conclusions from last post is a need for better profiling tools to show where time is spent in the code.
 Profiling Python + JIT'ed code requires dealing with a couple of issues.</p>
 <p>The first issue is collecting stack information at different language levels.
 A native profiler collects a stack for the JIT'ed (or compiled extension) code, but eventually the stack enters the implementation of the Python interpreter loop.
@@ -933,10 +927,10 @@ Filtering and aggregating Numba stacks remains to be done (meaning neither the C
 </li>
 </ol>
 </div>
-                </div>
-            </article>
+    </div>
+    </article>
 </div>
-    
+
         <ul class="pager postindexpager clearfix">
 <li class="next"><a href="index-1.html" rel="next">Older posts</a></li>
         </ul>
