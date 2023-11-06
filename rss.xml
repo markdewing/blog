@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Journey to the Center of the Computer</title><link>https://markdewing.github.io/blog/</link><description>Investigations into hardware and software details</description><atom:link href="https://markdewing.github.io/blog/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Mon, 06 Nov 2023 21:42:04 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Guide to my Github Repositories</title><link>https://markdewing.github.io/blog/posts/2023/my-github-repos/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;This post is a short guide to my Github repositories.&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Journey to the Center of the Computer</title><link>https://markdewing.github.io/blog/</link><description>Investigations into hardware and software details</description><atom:link href="https://markdewing.github.io/blog/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Mon, 06 Nov 2023 21:44:14 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Guide to my Github Repositories</title><link>https://markdewing.github.io/blog/posts/2023/my-github-repos/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;This post is a short guide to my Github repositories.&lt;/p&gt;
 &lt;p&gt;Some of them I use as a wiki for keeping information.
 Markdown makes adding and editing text easy, and it can also contain code.&lt;/p&gt;
 &lt;p&gt;Other repositories have more code to explore a particular topic.  I should expand on some of these topics in future blog posts. 
@@ -19,35 +19,7 @@ It's used as a base for creating validated unit test data for &lt;a href="https:
 &lt;p&gt;&lt;a href="https://github.com/markdewing/silver-floating-point"&gt;Floating point&lt;/a&gt; - Floating point arithmetic.  Particularly for exploring low precision.
 (the 'silver' part of the repository name comes from Github's initial repository name suggestion)&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://github.com/markdewing/derivative_code_gen"&gt;Symbolic Derivatives with Code Generation&lt;/a&gt; Represents scientific computations using Sympy. It can take derivatives symbolically, then code generate the result to Python, Julia or C++.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://github.com/markdewing/multitevo"&gt;Multitevo&lt;/a&gt; Translation of CoMD molecular dynamics miniapp to other languages, such as Python and Julia. And Javascript, should I get it checked-in and pushed.&lt;/p&gt;</description><guid>https://markdewing.github.io/blog/posts/2023/my-github-repos/</guid><pubDate>Sat, 28 Oct 2023 05:08:02 GMT</pubDate></item><item><title>Differentiable Symbolic Programming</title><link>https://markdewing.github.io/blog/posts/2023/differentiable-symbolic-programming/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;Automatic diffentiation is useful, but runs into some limitations.&lt;/p&gt;
-&lt;p&gt;From an aesthetic point of program organization, I would like a format
-the uses symbolic mathematics (or something very close to it) to represent
-the statements.
-Differentation is then performed on those statements, then it is code-generated
-into the target language.&lt;/p&gt;
-&lt;p&gt;From a practical point of view, I want this because autodifferentiation tools
-are not always available for the target platform and language.
-And existing tools don't always work the way I want (or at least I can't figure
- it out)&lt;/p&gt;
-&lt;p&gt;One of the driving test cases involves second derivatives (just the Laplacian,
- don't need the full Hessian), and first derivative against a different
- variable.&lt;/p&gt;
-&lt;p&gt;Really, this is automatic differentiation applied between statements and
- symbolic differentiation applied within a statement.&lt;/p&gt;
-&lt;p&gt;A lot of the issues are bookkeeping.&lt;/p&gt;
-&lt;p&gt;Statements may contain function calls.
-The derivative version of those function calls need to be modified to return additional derivatives.&lt;/p&gt;
-&lt;p&gt;The driving example is the variational calculation of the energy of a helium atom.
-(Insert link)
-It is an integral over 2 3D electron coordinates, resulting a 6 dimensional
- integral.   For this post I'm interested in generaing the integrand,
- and leave the integral evaluation elsewhere.&lt;/p&gt;
-&lt;p&gt;I make progress, and then stall out, drop the project, and then have to
-pick it up when I come back to it.
-I'm hoping being more public about it might force me to push development
-further.&lt;/p&gt;</description><guid>https://markdewing.github.io/blog/posts/2023/differentiable-symbolic-programming/</guid><pubDate>Mon, 19 Jun 2023 05:20:57 GMT</pubDate></item><item><title>Bash Transforms</title><link>https://markdewing.github.io/blog/posts/2018/bash_transforms/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;Working on the idea of programming by transformations (alternately called 2D version control)&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://github.com/markdewing/next_steps_in_programming/blob/master/programming_by_transformations.md"&gt;Programming by transformations&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Bash might be a good test case because the scripts are easy to parse and represent - the simplest being just comments and commands with space separated arguments.&lt;/p&gt;</description><guid>https://markdewing.github.io/blog/posts/2018/bash_transforms/</guid><pubDate>Sun, 15 Jul 2018 04:31:42 GMT</pubDate></item><item><title>Bash for C programmers</title><link>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;h2&gt;Bash scripting&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/multitevo"&gt;Multitevo&lt;/a&gt; Translation of CoMD molecular dynamics miniapp to other languages, such as Python and Julia. And Javascript, should I get it checked-in and pushed.&lt;/p&gt;</description><guid>https://markdewing.github.io/blog/posts/2023/my-github-repos/</guid><pubDate>Sat, 28 Oct 2023 05:08:02 GMT</pubDate></item><item><title>Bash for C programmers</title><link>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;h2&gt;Bash scripting&lt;/h2&gt;
 &lt;p&gt;Why use Bash?  It is not my preferred language, but it has two big advantages:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Availability - we can safely assume bash is present everywhere.  No need to install additional software.&lt;/li&gt;
@@ -610,4 +582,83 @@ Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
 &lt;p&gt;The new release of PyPy also includes some SIMD vectorization support (&lt;code&gt;--jit vec=1&lt;/code&gt; or &lt;code&gt;--jit vec_all=1&lt;/code&gt;).  Neither of these provided any improvement in performance on this code.   Not too surprising given the vectorization support is new, and the code contains
 conditionals in the inner loop.&lt;/p&gt;
 &lt;p&gt;PyPy 4.0 gives a very good 34x performance improvement over bare Python, and 3x improvement over the previous release (2.6.1).
-PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)&lt;/p&gt;</description><category>CoMD</category><category>PyPy</category><guid>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</guid><pubDate>Wed, 04 Nov 2015 21:39:00 GMT</pubDate></item></channel></rss>
+PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)&lt;/p&gt;</description><category>CoMD</category><category>PyPy</category><guid>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</guid><pubDate>Wed, 04 Nov 2015 21:39:00 GMT</pubDate></item><item><title>Prototype for Profiling Python</title><link>https://markdewing.github.io/blog/posts/prototype-for-profiling-python/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/"&gt;Last post&lt;/a&gt; covered some technical background using vmprof to profile Python with compiled or JIT'ed extensions.
+Now I've created a prototype that can convert the output to callgrind format so it can be viewed with &lt;a href="http://kcachegrind.sourceforge.net/html/Home.html"&gt;KCachegrind&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To install the prototype using the Anaconda distribution:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Create a new environment (if you do not use a new environment, these packages may conflict with an existing Numba install): &lt;code&gt;conda create -n profiling python numpy&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Switch to the new environment: &lt;code&gt;source activate profiling&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Install prototype versions of Numba and llvmlite: &lt;code&gt;conda install -c https://conda.anaconda.org/mdewing numba-profiling&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Install prototype version of vmprof: &lt;code&gt;conda install -c https://conda.anaconda.org/mdewing vmprof-numba&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Make sure libunwind is installed.  (On Ubuntu &lt;code&gt;apt-get install libunwind8-dev&lt;/code&gt;.)
+(On Ubuntu, it must be the -dev version.  If not installed, the error message when trying to run vmprof is &lt;code&gt;ImportError: libunwind.so.8: cannot open shared object file: No such file or directory&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Install KCachegrind (On Ubuntu, &lt;code&gt;apt-get install kcachegrind&lt;/code&gt;)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;There is a wrapper (&lt;code&gt;vmprofrun&lt;/code&gt;) that automates the running and processing steps.
+To use it, run &lt;code&gt;vmprofrun &amp;lt;target python script&amp;gt; [arguments to the python script]&lt;/code&gt;. 
+(No need to specify &lt;code&gt;python&lt;/code&gt; - that gets added to the command line automatically.)
+By default it will output &lt;code&gt;vmprof-&amp;lt;pid&amp;gt;.out&lt;/code&gt;, which can be viewed in KCachegrind.&lt;/p&gt;
+&lt;p&gt;Underneath, the &lt;code&gt;vmprofrun&lt;/code&gt; tool saves the vmprof output during the run to &lt;code&gt;out.vmprof&lt;/code&gt;. After the run, it automatically copies the &lt;code&gt;/tmp/perf-&amp;lt;pid&amp;gt;.map&lt;/code&gt; file to the current directory (if running under Numba).
+It moves &lt;code&gt;out.vmprof&lt;/code&gt; to &lt;code&gt;out-&amp;lt;pid&amp;gt;.vmprof&lt;/code&gt;.
+Finally it runs &lt;code&gt;vmproftocallgrind&lt;/code&gt; using these files as input.&lt;/p&gt;
+&lt;h4&gt;Limitations&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;Only works on 64-bit Linux&lt;/li&gt;
+&lt;li&gt;Function-level profiles only - no line information (for either python or native code)&lt;/li&gt;
+&lt;li&gt;Sometimes the profiling hangs during the run - kill the process and try again.&lt;/li&gt;
+&lt;li&gt;Works with Python 2.7 or 3.4&lt;/li&gt;
+&lt;li&gt;Not well validated or tested yet&lt;/li&gt;
+&lt;li&gt;It does not work well yet with the existing vmprof web visualization and CLI tools.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Other notes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The stack dump tool will process the stacks to remove the Python interpreter frames.&lt;/li&gt;
+&lt;li&gt;By default the Numba &lt;code&gt;Dispatcher_call&lt;/code&gt; level is removed.  Otherwise the call graph in KCachegrind gets tangled by all the call paths running through this function.&lt;/li&gt;
+&lt;li&gt;It should work with C extensions and Cython as well.&lt;/li&gt;
+&lt;/ul&gt;</description><category>Numba</category><category>profiling</category><category>python</category><category>vmprof</category><guid>https://markdewing.github.io/blog/posts/prototype-for-profiling-python/</guid><pubDate>Mon, 12 Oct 2015 17:20:00 GMT</pubDate></item><item><title>Towards Profiling Accelerated Python</title><link>https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;One of the conclusions from last post is a need for better profiling tools to show where time is spent in the code.
+Profiling Python + JIT'ed code requires dealing with a couple of issues.&lt;/p&gt;
+&lt;p&gt;The first issue is collecting stack information at different language levels.
+A native profiler collects a stack for the JIT'ed (or compiled extension) code, but eventually the stack enters the implementation of the Python interpreter loop.
+Unless we are trying to optimized the interpreter loop, this is not useful.
+We would rather know what Python code is being executed.
+Python profilers can collect the stack at the Python level, but can't collect native code stacks.&lt;/p&gt;
+&lt;p&gt;The PyPy developers created a solution in &lt;a href="https://vmprof.readthedocs.org/en/latest/"&gt;vmprof&lt;/a&gt;.
+It walks the stack like a native profiler, but also hooks the Python interpreter
+so that it can collect the Python code's file, function, and line number.
+This solution is general to any type of compiled extension (C extensions, Cython, Numba, etc.)
+Read the section in the vmprof docs on &lt;a href="https://vmprof.readthedocs.org/en/latest/#why-a-new-profiler"&gt;Why a new profiler?&lt;/a&gt; for more information.&lt;/p&gt;
+&lt;p&gt;The second issue is particular to JIT'ed code - resolving symbol information after the run.
+For low overhead, native profilers collect a minimum of information at runtime (usually the Instruction Pointer (IP) address at each stack level).
+These IP addresses need to resolved to symbol information after collection.
+Normally this information is kept in debug sections that are generated at compile time.
+However, with JIT compilation, the functions and their address mappings are generated at runtime.&lt;/p&gt;
+&lt;p&gt;LLVM includes an interface to get symbol information at runtime.
+The simplest way to keep it for use after the run is to follow the Linux perf standard (documented &lt;a href="https://github.com/torvalds/linux/blob/master/tools/perf/Documentation/jit-interface.txt"&gt;here&lt;/a&gt;), which stores the address, size, and function name in a file &lt;code&gt;/tmp/perf-&amp;lt;pid&amp;gt;.map&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;To enable Numba with vmprof, I've created a version of llvmlite that is amenable to stack collection, at the &lt;em&gt;perf&lt;/em&gt; branch &lt;a href="https://github.com/markdewing/llvmlite/tree/perf"&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This does two things:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Keep the frame pointer in JIT'ed code, so a backtrace can be taken.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;li&gt;Output a perf-compatible JIT map file (not on by default - need to call &lt;code&gt;enable_jit_events&lt;/code&gt; to turn it on)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;To use this, modify Numba to enable JIT events and frame pointers:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;In  &lt;code&gt;targets\codegen.py&lt;/code&gt;, at the end of the &lt;code&gt;_init&lt;/code&gt; method of &lt;code&gt;BaseCPUCodegen&lt;/code&gt;, add &lt;code&gt;self._engine.enable_jit_events()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;And for good measure, turn on frame pointers for Numba code as well (set &lt;code&gt;CFLAGS=-fno-omit-frame-pointer&lt;/code&gt; before building it)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The next piece is a modified version of vmprof ( in branch &lt;a href="https://github.com/markdewing/vmprof-python/tree/numba"&gt;&lt;em&gt;numba&lt;/em&gt;&lt;/a&gt; ).
+So far all it does is read the perf compatible output and dump raw stacks.
+Filtering and aggregating Numba stacks remains to be done (meaning neither the CLI nor the GUI display work yet).&lt;/p&gt;
+&lt;p&gt;How to use what works, so far:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Run vmprof, using perf-enabled Numba above:  &lt;code&gt;python -m vmprof -o vmprof.out &amp;lt;target python&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Copy map file &lt;code&gt;/tmp/perf-&amp;lt;pid&amp;gt;.map&lt;/code&gt; to some directory.   I usually copy &lt;code&gt;vmprof.out&lt;/code&gt; to something like &lt;code&gt;vmprof-&amp;lt;pid&amp;gt;.out&lt;/code&gt; to remember which files correlate.&lt;/li&gt;
+&lt;li&gt;View raw stacks with &lt;code&gt;vmprofdump vmprof-&amp;lt;pid&amp;gt;.out --perf perf-&amp;lt;pid&amp;gt;.map&lt;/code&gt;.  &lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="footnote"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;With x86_64, it is possible to use DWARF debug information to walk the stack.  I couldn't figure out how to output the appropriate debug information.  LLVM 3.6 has a promising target option named &lt;code&gt;JITEmitDebugInfo&lt;/code&gt;.  However, &lt;code&gt;JITEmitDebugInfo&lt;/code&gt; is a lie!  It's not hooked up to anything, and has been removed in LLVM 3.7. &lt;a class="footnote-backref" href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/#fnref:1" title="Jump back to footnote 1 in the text"&gt;↩&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description><category>Numba</category><category>PyPy</category><category>python</category><category>vmprof</category><guid>https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/</guid><pubDate>Thu, 08 Oct 2015 01:58:00 GMT</pubDate></item></channel></rss>
