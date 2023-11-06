@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (zynq)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/zynq.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Tue, 03 Jan 2017 02:56:17 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Building A Parallella Cluster</title><link>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;I finally got around to assembling my small pile of Parallella boards into a cluster.&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Journey to the Center of the Computer (Posts about zynq)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/zynq.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Sun, 18 Jun 2023 17:08:31 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Building A Parallella Cluster</title><link>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;I finally got around to assembling my small pile of Parallella boards into a cluster.&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_lg.jpg"&gt;&lt;img alt="Alternate side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_sm3.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;This post documents the choices I made about power distribution, mechanical assembly, cooling, software management, etc.
 For background on the individual boards, see my previous post:
@@ -35,46 +35,42 @@ I decided to use &lt;a href="http://docs.ansible.com/ansible/intro_getting_start
 &lt;p&gt;In addition to controlling operations from a PC, it is useful to designate one node as a 'head node' and install Ansible there as well.
 For MPI, it's easier to run MPI programs from the head node than from the PC.
 For setting up configuration files, it can be useful to create or edit the file and make sure it works on one node, and then copy the file to all the other nodes.&lt;/p&gt;
-&lt;p&gt;Ansible and MPI (and general convenience) require setting up &lt;a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/"&gt;passwordless ssh login&lt;/a&gt;.
-&lt;!--Some directions to set up &lt;a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/"&gt;ssh passwordless login&lt;/a&gt;--&gt;&lt;/p&gt;
-&lt;p&gt;Once the keys are set up locally, you can use &lt;code&gt;ssh-copy-id&lt;/code&gt; to copy the credentials.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;id_rsa&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pub&lt;/span&gt; &lt;span class="n"&gt;parallella&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="mf"&gt;10.0.0.145&lt;/span&gt;
-&lt;/pre&gt;
+&lt;p&gt;Ansible and MPI (and general convenience) require setting up &lt;a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/"&gt;passwordless ssh login&lt;/a&gt;.&lt;/p&gt;
+&lt;!--Some directions to set up [ssh passwordless login](http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/)--&gt;
 
+&lt;p&gt;Once the keys are set up locally, you can use &lt;code&gt;ssh-copy-id&lt;/code&gt; to copy the credentials.&lt;/p&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="k"&gt;copy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="kt"&gt;id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;id_rsa&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pub&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;parallella&lt;/span&gt;&lt;span class="mf"&gt;@10.0.0.145&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;I keep a small script that puts this line in the history (named &lt;code&gt;ssh_copy_id&lt;/code&gt;)&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;history&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="s"&gt;"ssh-copy-id -i ~/.ssh/id_rsa.pub parallella@10.0.0.145"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;history&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;"ssh-copy-id -i ~/.ssh/id_rsa.pub parallella@10.0.0.145"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Run the command &lt;code&gt;source ssh_copy_id&lt;/code&gt; to put the command on the history list.
 Use the bash history and line editing features to select the command and update to a new address.&lt;/p&gt;
 &lt;p&gt;Rather than create a new user, I'm using the default 'parallella' user on the nodes.
 The SSH config (in '.ssh/config') can be set up to switch users upon login.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;Host&lt;/span&gt; &lt;span class="mf"&gt;10.0.0.127&lt;/span&gt;
-    &lt;span class="n"&gt;User&lt;/span&gt; &lt;span class="n"&gt;parallella&lt;/span&gt;
-&lt;/pre&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;Host 10.0.0.127
+    User parallella
+&lt;/pre&gt;&lt;/div&gt;
 
+&lt;p&gt;You might wish to &lt;a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/"&gt;set up a apt-cache server&lt;/a&gt; on a local machine to save on download bandwidth when installing software to all the nodes.&lt;/p&gt;
+&lt;!--[Some directions here](http://www.tecmint.com/apt-cache-server-in-ubuntu/)--&gt;
 
-&lt;p&gt;You might wish to &lt;a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/"&gt;set up a apt-cache server&lt;/a&gt; on a local machine to save on download bandwidth when installing software to all the nodes.
-&lt;!--&lt;a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/"&gt;Some directions here&lt;/a&gt;--&gt;&lt;/p&gt;
 &lt;h4&gt;Using Ansible&lt;/h4&gt;
 &lt;p&gt;See the &lt;a href="http://docs.ansible.com/ansible/intro_getting_started.html"&gt;intro docs&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;The inventory file is a list of IP addresses (one per line).     It can be specified on the command line
 with `-i'.  To see if all the nodes work&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;ping&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;ansible -i cluster.ini all -m ping
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;To copy the apt-cache server configuration to all the nodes, use&lt;/p&gt;
-&lt;pre class="code literal-block"&gt; &lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;hosts&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;copy&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"src=/etc/apt/apt.conf.d/02proxy dest=/etc/apt/apt.conf.d/02proxy"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt; ansible -i hosts all --sudo -m copy -a "src=/etc/apt/apt.conf.d/02proxy dest=/etc/apt/apt.conf.d/02proxy"
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;To shutdown all the nodes, use&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;shell&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"shutdown now"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;ansible -i cluster.ini all --sudo -m shell -a "shutdown now"
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3&gt;Compilation&lt;/h3&gt;
 &lt;p&gt;In the &lt;a href="https://markdewing.github.io/blog/posts/introduction-to-parallella/"&gt;introductory post&lt;/a&gt; I talked about cross compiling for the board.
@@ -85,32 +81,27 @@ For instance, one of my project dependencies, HDF, doesn't cross-compile easily 
 &lt;p&gt;The particular software package I'm working with (QMCPACK, which does simulations on atoms, molecules, and solids)
 uses CMake for configuration and build, and builds fine with distcc.&lt;/p&gt;
 &lt;p&gt;Install on all nodes with &lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"apt-get install -y distcc"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;ansible -i cluster.ini all --sudo  -a "apt-get install -y distcc"
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Set the &lt;code&gt;DISTCC_HOSTS&lt;/code&gt; variable to the set of systems to use&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;DISTCC_HOSTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"localhost @10.0.0.144/2 @10.0.0.145/2"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;DISTCC_HOSTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"localhost @10.0.0.144/2 @10.0.0.145/2"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This example shows three hosts. The initial '@' means to use ssh (no daemon required on remote) and the '/2' on the end means to use two threads.&lt;/p&gt;
 &lt;p&gt;Now set the C and C++ compilers to &lt;code&gt;distcc &amp;lt;compiler&amp;gt;&lt;/code&gt; and run the build.&lt;/p&gt;
 &lt;p&gt;For CMake, building a project with MPI, this is&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"distcc mpicc"&lt;/span&gt;
-&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"distcc mpic++"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="k"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"distcc mpicc"&lt;/span&gt;
+&lt;span class="k"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"distcc mpic++"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Then&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;make -j 8
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;You might see an warning message &lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nx"&gt;distccd&lt;/span&gt;&lt;span class="err"&gt;[&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nb"&gt;pid&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="cp"&gt;]&lt;/span&gt; (tcp_cork_sock) Warning: setsockopt(corked=1) failed: Socket operation on non-socket
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;distccd[&amp;lt;pid&amp;gt;] (tcp_cork_sock) Warning: setsockopt(corked=1) failed: Socket operation on non-socket
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This can be ignored.  Or follow some directions to &lt;a href="https://jeffreywildman.wordpress.com/2011/02/11/disable-tcp_cork_sock-warnings-when-using-distcc-over-ssh/"&gt;silence it&lt;/a&gt;.&lt;/p&gt;
 &lt;h3&gt;MPI&lt;/h3&gt;
@@ -130,7 +121,7 @@ be able to log into each other node (not just head node to other nodes).&lt;/p&g
 &lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_back_view_lg.jpg"&gt;&lt;img alt="Back view" src="https://markdewing.github.io/blog/2016/parallella_cluster_back_view_sm2.jpg"&gt;&lt;/a&gt;   &lt;/p&gt;
 &lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_lg.jpg"&gt;&lt;img alt="Side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_sm2.jpg"&gt;&lt;/a&gt;   
 &lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_top_lg.jpg"&gt;&lt;img alt="Top view" src="https://markdewing.github.io/blog/2016/parallella_cluster_top_sm2.jpg"&gt;&lt;/a&gt;  
-&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_lg.jpg"&gt;&lt;img alt="Alternate side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_sm3.jpg"&gt;&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;</description><category>Ansible</category><category>epiphany</category><category>MPI</category><category>parallella</category><category>zynq</category><guid>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</guid><pubDate>Tue, 03 Jan 2017 01:56:00 GMT</pubDate></item><item><title>Introduction to Parallella</title><link>https://markdewing.github.io/blog/posts/introduction-to-parallella/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The Parallella is a single board computer with a dual core ARM and a 16 core Epiphany coprocessor. 
+&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_lg.jpg"&gt;&lt;img alt="Alternate side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_sm3.jpg"&gt;&lt;/a&gt;&lt;/p&gt;</description><category>Ansible</category><category>epiphany</category><category>MPI</category><category>parallella</category><category>zynq</category><guid>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</guid><pubDate>Tue, 03 Jan 2017 01:56:00 GMT</pubDate></item><item><title>Introduction to Parallella</title><link>https://markdewing.github.io/blog/posts/introduction-to-parallella/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;The Parallella is a single board computer with a dual core ARM and a 16 core Epiphany coprocessor. 
 I've had some boards sitting around after backing the Kickstarter, and now I've finally started to play with them.&lt;/p&gt;
 &lt;p&gt;The main purpose of the board is to highlight the Ephiphany coprocessor, but it has other interesting
 resources as well.  I'd like to look into how to use each of them.&lt;/p&gt;
@@ -174,13 +165,12 @@ However, setting up projects for cross-compiliation can be more challenging.&lt;
 &lt;h3&gt;Clang&lt;/h3&gt;
 &lt;p&gt;Compiling with clang needs at least the include and lib files from the 'libc6-*-armhf-cross' packages.&lt;/p&gt;
 &lt;p&gt;Assuming the version of clang is built to output the 'arm' target, the following should work&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;clang -target arm-linux-guneabihf -I /usr/arm-linux-gnueabihf/include hello.cpp
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;clang&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;target&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;arm&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;linux&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;guneabihf&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;I&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nv"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nv"&gt;arm&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;linux&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;gnueabihf&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;include&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;hello&lt;/span&gt;.&lt;span class="nv"&gt;cpp&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;Cross compiling to Epiphany&lt;/h2&gt;
 &lt;p&gt;These are the tools in the ESDK.&lt;/p&gt;
 &lt;p&gt;If using the ARM as a host, the ESDK is already in the microSD images and the tools are in the path (&lt;code&gt;\opt\adapteva\esdk\tools\e-gnu\bin&lt;/code&gt;)
 The tools are prefixed with &lt;code&gt;e-&lt;/code&gt;.  Use &lt;code&gt;e-gcc&lt;/code&gt; to invoke the compiler.&lt;/p&gt;
 &lt;p&gt;For a Linux host, download and install the ESDK from the website (under &lt;code&gt;Software -&amp;gt; Pre-built -&amp;gt; Epiphany SDK&lt;/code&gt;)(&lt;a href="ftp://ftp.parallella.org/esdk"&gt;direct link&lt;/a&gt;).  Look for 'linux_x86_64' in the file name.&lt;/p&gt;
-&lt;p&gt;The ESDK has examples you can compile and run.  Sometime later I want to take a closer look at how the Epiphany files are loaded to the coprocessor and run.&lt;/p&gt;&lt;/div&gt;</description><category>epiphany</category><category>parallella</category><category>zynq</category><guid>https://markdewing.github.io/blog/posts/introduction-to-parallella/</guid><pubDate>Thu, 20 Aug 2015 20:08:00 GMT</pubDate></item></channel></rss>
+&lt;p&gt;The ESDK has examples you can compile and run.  Sometime later I want to take a closer look at how the Epiphany files are loaded to the coprocessor and run.&lt;/p&gt;</description><category>epiphany</category><category>parallella</category><category>zynq</category><guid>https://markdewing.github.io/blog/posts/introduction-to-parallella/</guid><pubDate>Thu, 20 Aug 2015 20:08:00 GMT</pubDate></item></channel></rss>

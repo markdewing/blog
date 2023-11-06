@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (llvm)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/llvm.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 08 Jul 2016 21:41:16 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Integration Callbacks with Sympy and LLVM</title><link>https://markdewing.github.io/blog/posts/integration-callbacks/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;This post explores various packages for multi-dimensional integration along with
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Journey to the Center of the Computer (Posts about llvm)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/llvm.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Sun, 18 Jun 2023 17:08:31 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Integration Callbacks with Sympy and LLVM</title><link>https://markdewing.github.io/blog/posts/integration-callbacks/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;This post explores various packages for multi-dimensional integration along with
 generating callbacks for the integrands from Sympy using an LLVM JIT&lt;/p&gt;
 &lt;h3&gt;Problem to integrate&lt;/h3&gt;
 &lt;p&gt;The particular problem is using the variational principle to find the ground state energy for atoms.
@@ -41,30 +41,30 @@ One disadvantage is that it does not leverage existing compilers (Numba or C++),
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th align="left"&gt;Integrator  &lt;/th&gt;
-&lt;th align="right"&gt;Time (seconds)&lt;/th&gt;
+&lt;th style="text-align: left;"&gt;Integrator  &lt;/th&gt;
+&lt;th style="text-align: right;"&gt;Time (seconds)&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td align="left"&gt;Cubature&lt;/td&gt;
-&lt;td align="right"&gt;171&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;Cubature&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;171&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td align="left"&gt;Cubature w/CSE&lt;/td&gt;
-&lt;td align="right"&gt;141&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;Cubature w/CSE&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;141&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td align="left"&gt;Cubature w/CSE and multiple evals&lt;/td&gt;
-&lt;td align="right"&gt;100&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;Cubature w/CSE and multiple evals&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;100&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td align="left"&gt;Cuba (Vegas)&lt;/td&gt;
-&lt;td align="right"&gt;29&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;Cuba (Vegas)&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;29&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td align="left"&gt;Cuba (Cuhre)&lt;/td&gt;
-&lt;td align="right"&gt;22&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;Cuba (Cuhre)&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;22&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -79,4 +79,4 @@ Some other approaches can help.  One is Common Subexpression Elimination (CSE), 
 &lt;h3&gt;Conclusions and future work&lt;/h3&gt;
 &lt;p&gt;Using an LLVM JIT to create callbacks for integration works fairly well.&lt;/p&gt;
 &lt;p&gt;One important question is how to scale the creation of the callbacks to new libraries without explicitly programming them into Sympy.&lt;br&gt;
-The &lt;a href="https://github.com/sympy/sympy/pull/11057"&gt;last pull request&lt;/a&gt; has expanded the &lt;code&gt;CodeSignature&lt;/code&gt; class, which seems like  a starting point for such a more general callback specification.&lt;/p&gt;&lt;/div&gt;</description><category>cubature</category><category>integration</category><category>llvm</category><category>sympy</category><guid>https://markdewing.github.io/blog/posts/integration-callbacks/</guid><pubDate>Fri, 08 Jul 2016 21:37:00 GMT</pubDate></item></channel></rss>
+The &lt;a href="https://github.com/sympy/sympy/pull/11057"&gt;last pull request&lt;/a&gt; has expanded the &lt;code&gt;CodeSignature&lt;/code&gt; class, which seems like  a starting point for such a more general callback specification.&lt;/p&gt;</description><category>cubature</category><category>integration</category><category>llvm</category><category>sympy</category><guid>https://markdewing.github.io/blog/posts/integration-callbacks/</guid><pubDate>Fri, 08 Jul 2016 21:37:00 GMT</pubDate></item></channel></rss>

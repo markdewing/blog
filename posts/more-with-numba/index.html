@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>More Performance With Numba | Journey to the Center of the Computer</title>
 <link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/posts/more-with-numba/">
 <!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Mark Dewing">
 <link rel="prev" href="../updated-performance-with-pypy-40/" title="Performance Updates with PyPy 4.0" type="text/html">
@@ -24,74 +27,83 @@ Picking up from the previous optimizations, I can't seem to reproduce the timing
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
 
-<!-- Menubar -->
-
-<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
-<!-- This keeps the margins nice -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="https://markdewing.github.io/blog/">
-
-                <span id="blog-title">Journey to the Center of the Computer</span>
-            </a>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
         </div>
-<!-- /.navbar-header -->
-        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
-            <ul class="nav navbar-nav">
-<li>
-<a href="../../archive.html">Archive</a>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href="../../">
+
+            <span id="blog-title">Journey to the Center of the Computer</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav">
+<li class="nav-item">
+    <a href="index.md" id="sourcelink" class="nav-link">Source</a>
+    </li>
+
+
+                    
+            </ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
                 </li>
-<li>
-<a href="../../categories/">Tags</a>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
                 </li>
-<li>
-<a href="../../rss.xml">RSS feed</a>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS feed</a>
 
                 
             </li>
 </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-    <a href="index.md" id="sourcelink">Source</a>
-    </li>
-
-                
-            </ul>
 </div>
 <!-- /.navbar-collapse -->
-    </div>
-<!-- /.container -->
-</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
     <div class="body-content">
         <!--Body content-->
-        <div class="row">
-            
-            
+        
+        
+        
 <article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">More Performance With Numba</a></h1>
 
         <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2015-11-13T10:30:00-06:00" itemprop="datePublished" title="2015-11-13 10:30">2015-11-13 10:30</time></a></p>
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    Mark Dewing
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2015-11-13T10:30:00-06:00" itemprop="datePublished" title="2015-11-13 10:30">2015-11-13 10:30</time></a>
+            </p>
                 <p class="commentline">
-        
-    <a href=".#disqus_thread" data-disqus-identifier="cache/posts/more-with-numba.html">Comments</a>
+    
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/more-with-numba.html">Comments</a>
 
 
             
         </p>
-<p class="sourceline"><a href="index.md" id="sourcelink">Source</a></p>
+<p class="sourceline"><a href="index.md" class="sourcelink">Source</a></p>
 
         </div>
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<p>Having acquired a shiny new <a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/">profiler</a>, it's time to dig into the performance of the Numba version some more.</p>
+    <p>Having acquired a shiny new <a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/">profiler</a>, it's time to dig into the performance of the Numba version some more.</p>
 <p>Picking up from the <a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/">previous optimizations</a>, I can't seem to reproduce the timing (47 μs/atom) in the that table.  Now I get 40 μs/atom.</p>
 <h2>First step</h2>
 <p>Run the profiler (<code>vmprofrun comd.py</code>) and display the results in KCacheGrind (<code>kcachegrind vmprof-20664.out</code>)</p>
@@ -101,34 +113,30 @@ Picking up from the previous optimizations, I can't seem to reproduce the timing
 <p><img alt="KCachegrind screenshot of call graph" src="../../2015/profile1_call_graph_sm.png"></p>
 <p>To improve performance here, convert <code>getBoxFromCoord</code> to a free function and put all the attribute references into function arguments.</p>
 <p>Before:</p>
-<pre class="code literal-block">    <span class="k">def</span> <span class="nf">getBoxFromCoord</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+<div class="code"><pre class="code literal-block">    <span class="k">def</span> <span class="nf">getBoxFromCoord</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
         <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
         <span class="n">iz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBoxFromTuple</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">iz</span><span class="p">)</span>
-</pre>
-
+</pre></div>
 
 <p>After:</p>
-<pre class="code literal-block"><span class="nd">@numba.njit</span>
+<div class="code"><pre class="code literal-block"><span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span>
 <span class="k">def</span> <span class="nf">getBoxFromCoordInner</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">invBoxSize</span><span class="p">,</span> <span class="n">nLocalBoxes</span><span class="p">,</span> <span class="n">gs</span><span class="p">):</span>
     <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
     <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
     <span class="n">iz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">z</span><span class="o">*</span><span class="n">invBoxSize</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
     <span class="k">return</span> <span class="n">getBoxFromTupleInner</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">iz</span><span class="p">,</span> <span class="n">nLocalBoxes</span><span class="p">,</span> <span class="n">gs</span><span class="p">)</span>
-</pre>
-
+</pre></div>
 
 <p>(Changing the parameter <code>r</code> to individual components was not strictly necessary.)</p>
 <p>And the call sites change (for example) from</p>
-<pre class="code literal-block">        <span class="n">iBox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBoxFromCoord</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
-</pre>
-
+<div class="code"><pre class="code literal-block">        <span class="n">iBox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBoxFromCoord</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+</pre></div>
 
 <p>to</p>
-<pre class="code literal-block">        <span class="n">iBox</span> <span class="o">=</span> <span class="n">getBoxFromCoordInner</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">invBoxSize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nLocalBoxes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">)</span>
-</pre>
-
+<div class="code"><pre class="code literal-block">        <span class="n">iBox</span> <span class="o">=</span> <span class="n">getBoxFromCoordInner</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">invBoxSize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nLocalBoxes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">)</span>
+</pre></div>
 
 <p>This improves performance to 20 μs/atom.</p>
 <p>Repeating the same transformation for putAtomInBox gives 18.4 μs/atom.</p>
@@ -157,51 +165,51 @@ performance is now 10.2 μs/atom.</p>
 <thead><tr>
 <th>Language/compiler  </th>
 <th>Version   </th>
-<th align="right">Initial time</th>
-<th align="right">  Final time</th>
+<th style="text-align: right;">Initial time</th>
+<th style="text-align: right;">  Final time</th>
 <th></th>
 </tr></thead>
 <tbody>
 <tr>
 <td>Python</td>
 <td>2.7.10</td>
-<td align="right">1014</td>
-<td align="right">1014</td>
+<td style="text-align: right;">1014</td>
+<td style="text-align: right;">1014</td>
 <td></td>
 </tr>
 <tr>
 <td>PyPy</td>
 <td>4.0</td>
-<td align="right">30</td>
-<td align="right">30</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">30</td>
 <td></td>
 </tr>
 <tr>
 <td>Cython</td>
 <td>0.23.3</td>
-<td align="right">729</td>
-<td align="right">13</td>
+<td style="text-align: right;">729</td>
+<td style="text-align: right;">13</td>
 <td></td>
 </tr>
 <tr>
 <td>Julia</td>
 <td>0.4.0-rc3</td>
-<td align="right">87</td>
-<td align="right">6.1</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: right;">6.1</td>
 <td></td>
 </tr>
 <tr>
 <td>Numba</td>
 <td>0.22.1</td>
-<td align="right">867</td>
-<td align="right">2.9</td>
+<td style="text-align: right;">867</td>
+<td style="text-align: right;">2.9</td>
 <td>    New result</td>
 </tr>
 <tr>
 <td>C (clang)</td>
 <td>3.7</td>
-<td align="right">2.2</td>
-<td align="right">2.2</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">2.2</td>
 <td></td>
 </tr>
 </tbody>
@@ -215,7 +223,8 @@ The 'Initial Time' column results from the minimal amount of code changes to get
 <br>
 The 'Final Time' is the time after tuning.
 </div>
-<br><p>Do note that the Cython, Julia, and Numba results reflect the amount of effort put into optimization.
+<p><br></p>
+<p>Do note that the Cython, Julia, and Numba results reflect the amount of effort put into optimization.
 Cython and Julia still need to be improved with the assistance of a profiler (or in Julia's case, a better viewer
 for existing profile data).</p>
 <h2>Summary</h2>
@@ -225,7 +234,6 @@ that I would not want to perform on a regular basis.    These transformations ar
 be possible to incorporate them into Numba.  Alternately, if doing so in a safe manner inside the compiler is difficult,
 some sort of automated AST transformation of the source should be possible.</p>
 <p>As the optimization process proceeds on this code, increasing amount of time is being spent in the core routine, computeForce, (as it should), and we will need to move beyond a function-level profiler to look for optimization opportunities.</p>
-</div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/comd/" rel="tag">CoMD</a></li>
@@ -241,7 +249,7 @@ some sort of automated AST transformation of the source should be possible.</p>
             </li>
         </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
         
-        
+    
         <div id="disqus_thread"></div>
         <script>
         var disqus_shortname ="journeytothecenterofthecomputer",
@@ -253,29 +261,27 @@ some sort of automated AST transformation of the source should be possible.</p>
         };
         (function() {
             var dsq = document.createElement('script'); dsq.async = true;
-            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
         })();
-    </script><noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
 </noscript>
-    <a href="//disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
-        </section></article><script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="//"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
-</div>
-        <!--End of body content-->
-
-        <footer id="footer">
-            Contents © 2018         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+        </section></article><script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><!--End of body content--><footer id="footer">
+            Contents © 2023         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
             
         </footer>
 </div>
 </div>
 
 
-            <script src="../../assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
-    moment.locale("");
-    fancydates(0, "YYYY-MM-DD HH:mm");
-    </script><!-- end fancy dates -->
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
 </body>
 </html>

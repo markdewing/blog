@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Integration Callbacks with Sympy and LLVM | Journey to the Center of the Computer</title>
 <link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/posts/integration-callbacks/">
 <!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Mark Dewing">
 <link rel="prev" href="../notes-on-cmake/" title="Notes on CMake" type="text/html">
@@ -27,74 +30,83 @@ The particular problem is usi">
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
 
-<!-- Menubar -->
-
-<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
-<!-- This keeps the margins nice -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="https://markdewing.github.io/blog/">
-
-                <span id="blog-title">Journey to the Center of the Computer</span>
-            </a>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
         </div>
-<!-- /.navbar-header -->
-        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
-            <ul class="nav navbar-nav">
-<li>
-<a href="../../archive.html">Archive</a>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href="../../">
+
+            <span id="blog-title">Journey to the Center of the Computer</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav">
+<li class="nav-item">
+    <a href="index.md" id="sourcelink" class="nav-link">Source</a>
+    </li>
+
+
+                    
+            </ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
                 </li>
-<li>
-<a href="../../categories/">Tags</a>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
                 </li>
-<li>
-<a href="../../rss.xml">RSS feed</a>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS feed</a>
 
                 
             </li>
 </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-    <a href="index.md" id="sourcelink">Source</a>
-    </li>
-
-                
-            </ul>
 </div>
 <!-- /.navbar-collapse -->
-    </div>
-<!-- /.container -->
-</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
     <div class="body-content">
         <!--Body content-->
-        <div class="row">
-            
-            
+        
+        
+        
 <article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Integration Callbacks with Sympy and LLVM</a></h1>
 
         <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2016-07-08T16:37:00-05:00" itemprop="datePublished" title="2016-07-08 16:37">2016-07-08 16:37</time></a></p>
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    Mark Dewing
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2016-07-08T16:37:00-05:00" itemprop="datePublished" title="2016-07-08 16:37">2016-07-08 16:37</time></a>
+            </p>
                 <p class="commentline">
-        
-    <a href=".#disqus_thread" data-disqus-identifier="cache/posts/integration_callbacks.html">Comments</a>
+    
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/integration_callbacks.html">Comments</a>
 
 
             
         </p>
-<p class="sourceline"><a href="index.md" id="sourcelink">Source</a></p>
+<p class="sourceline"><a href="index.md" class="sourcelink">Source</a></p>
 
         </div>
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<p>This post explores various packages for multi-dimensional integration along with
+    <p>This post explores various packages for multi-dimensional integration along with
 generating callbacks for the integrands from Sympy using an LLVM JIT</p>
 <h3>Problem to integrate</h3>
 <p>The particular problem is using the variational principle to find the ground state energy for atoms.
@@ -136,29 +148,29 @@ One disadvantage is that it does not leverage existing compilers (Numba or C++),
 <p>For the helium atom, the integration times are reported in the table below</p>
 <table>
 <thead><tr>
-<th align="left">Integrator  </th>
-<th align="right">Time (seconds)</th>
+<th style="text-align: left;">Integrator  </th>
+<th style="text-align: right;">Time (seconds)</th>
 </tr></thead>
 <tbody>
 <tr>
-<td align="left">Cubature</td>
-<td align="right">171</td>
+<td style="text-align: left;">Cubature</td>
+<td style="text-align: right;">171</td>
 </tr>
 <tr>
-<td align="left">Cubature w/CSE</td>
-<td align="right">141</td>
+<td style="text-align: left;">Cubature w/CSE</td>
+<td style="text-align: right;">141</td>
 </tr>
 <tr>
-<td align="left">Cubature w/CSE and multiple evals</td>
-<td align="right">100</td>
+<td style="text-align: left;">Cubature w/CSE and multiple evals</td>
+<td style="text-align: right;">100</td>
 </tr>
 <tr>
-<td align="left">Cuba (Vegas)</td>
-<td align="right">29</td>
+<td style="text-align: left;">Cuba (Vegas)</td>
+<td style="text-align: right;">29</td>
 </tr>
 <tr>
-<td align="left">Cuba (Cuhre)</td>
-<td align="right">22</td>
+<td style="text-align: left;">Cuba (Cuhre)</td>
+<td style="text-align: right;">22</td>
 </tr>
 </tbody>
 </table>
@@ -174,7 +186,6 @@ Some other approaches can help.  One is Common Subexpression Elimination (CSE), 
 <p>Using an LLVM JIT to create callbacks for integration works fairly well.</p>
 <p>One important question is how to scale the creation of the callbacks to new libraries without explicitly programming them into Sympy.<br>
 The <a href="https://github.com/sympy/sympy/pull/11057">last pull request</a> has expanded the <code>CodeSignature</code> class, which seems like  a starting point for such a more general callback specification.</p>
-</div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/cubature/" rel="tag">cubature</a></li>
@@ -191,7 +202,7 @@ The <a href="https://github.com/sympy/sympy/pull/11057">last pull request</a> ha
             </li>
         </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
         
-        
+    
         <div id="disqus_thread"></div>
         <script>
         var disqus_shortname ="journeytothecenterofthecomputer",
@@ -203,29 +214,27 @@ The <a href="https://github.com/sympy/sympy/pull/11057">last pull request</a> ha
         };
         (function() {
             var dsq = document.createElement('script'); dsq.async = true;
-            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
         })();
-    </script><noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
 </noscript>
-    <a href="//disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
-        </section></article><script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="//"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
-</div>
-        <!--End of body content-->
-
-        <footer id="footer">
-            Contents © 2018         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+        </section></article><script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><!--End of body content--><footer id="footer">
+            Contents © 2023         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
             
         </footer>
 </div>
 </div>
 
 
-            <script src="../../assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
-    moment.locale("");
-    fancydates(0, "YYYY-MM-DD HH:mm");
-    </script><!-- end fancy dates -->
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
 </body>
 </html>

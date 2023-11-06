@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (bash)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/bash.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Tue, 10 Jul 2018 21:45:13 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Bash for C programmers</title><link>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;h2&gt;Bash scripting&lt;/h2&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Journey to the Center of the Computer (Posts about bash)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/bash.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Sun, 18 Jun 2023 17:08:31 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Bash for C programmers</title><link>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;h2&gt;Bash scripting&lt;/h2&gt;
 &lt;p&gt;Why use Bash?  It is not my preferred language, but it has two big advantages:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Availability - we can safely assume bash is present everywhere.  No need to install additional software.&lt;/li&gt;
@@ -14,21 +14,19 @@ The statement &lt;code&gt;a = 1&lt;/code&gt; will fail with an error about 'a' n
 Similarly &lt;code&gt;a= 1&lt;/code&gt; will fail with an error about '1' not found.&lt;/p&gt;
 &lt;p&gt;Another place significant whitespace appears is in &lt;code&gt;if&lt;/code&gt; statements.
 The opening bracket for the test (&lt;code&gt;[&lt;/code&gt;) looks like syntax, but it is a command.  (By symmetry you might expect &lt;code&gt;]&lt;/code&gt; to be a command, but it's not - it gets passed as an argument to &lt;code&gt;[&lt;/code&gt;).&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;0
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;$a&lt;/span&gt; -eq 0 &lt;span class="o"&gt;]&lt;/span&gt;; &lt;span class="k"&gt;then&lt;/span&gt;
-&lt;span class="k"&gt;  &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;"a is 0"&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$a&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-eq&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;then&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"a is 0"&lt;/span&gt;
 &lt;span class="k"&gt;fi&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Also note the semicolon after the comparison to terminate the command.  As an alternative, the &lt;code&gt;then&lt;/code&gt; could be put on the next line&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;0
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;$a&lt;/span&gt; -eq 0 &lt;span class="o"&gt;]&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$a&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-eq&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
 &lt;span class="k"&gt;then&lt;/span&gt;
-&lt;span class="k"&gt;  &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;"a is 0"&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"a is 0"&lt;/span&gt;
 &lt;span class="k"&gt;fi&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Bash also has a double bracket form of testing that is a built-in, and not an external command.&lt;/p&gt;
 &lt;h4&gt;Exit values&lt;/h4&gt;
@@ -53,26 +51,23 @@ and the closing brace should also be on a line by itself.&lt;/p&gt;
 &lt;p&gt;A function call looks like a normal command statement, with the usual space-separated arguments.&lt;/p&gt;
 &lt;p&gt;Inside a function, arguments are referenced using &lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;, etc.  Unset variables are empty.&lt;/p&gt;
 &lt;p&gt;There is a syntax for optional arguments:&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;var&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;1&lt;/span&gt;&lt;span class="k"&gt;:-&lt;/span&gt;&lt;span class="nv"&gt;default_string_here&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;var&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;1&lt;/span&gt;&lt;span class="k"&gt;:-&lt;/span&gt;&lt;span class="nv"&gt;default_string_here&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h4&gt;Variable replacement&lt;/h4&gt;
 &lt;p&gt;Variable replacement occurs &lt;em&gt;before&lt;/em&gt; bash breaks the line into a command and arguments based on whitespace.
 Unexpected behavior can happen if a variable contains whitespace and the developer was not expecting it.
 This can happen when the variable holds a directory name, and the script is run using a directory containing a space.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"hi there"&lt;/span&gt;
-cmd &lt;span class="nv"&gt;$a&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"hi there"&lt;/span&gt;
+cmd&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$a&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;expands to calling &lt;code&gt;cmd&lt;/code&gt; with two arguments 'hi' and 'there'.
 Enclose the variable in quotes to keep spaces confined.&lt;/p&gt;
 &lt;p&gt;This will call &lt;code&gt;cmd&lt;/code&gt; with one argument: 'hi there'.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"hi there"&lt;/span&gt;
-cmd &lt;span class="s2"&gt;"$a"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"hi there"&lt;/span&gt;
+cmd&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="nv"&gt;$a&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;For a gory step-by-step look at how bash processes input, see &lt;a href="https://mywiki.wooledge.org/BashParser"&gt;https://mywiki.wooledge.org/BashParser&lt;/a&gt;&lt;/p&gt;
 &lt;h4&gt;Robust bash scripts&lt;/h4&gt;
@@ -81,4 +76,4 @@ cmd &lt;span class="s2"&gt;"$a"&lt;/span&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;set -o nounset&lt;/code&gt;  to detect the use of uninitialized variables&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;set -o errexit&lt;/code&gt;  to exit the script if any statement fails&lt;/li&gt;
-&lt;/ul&gt;&lt;/div&gt;</description><category>bash</category><category>scripting</category><guid>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</guid><pubDate>Tue, 10 Jul 2018 21:41:01 GMT</pubDate></item></channel></rss>
+&lt;/ul&gt;</description><category>bash</category><category>scripting</category><guid>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</guid><pubDate>Tue, 10 Jul 2018 21:41:01 GMT</pubDate></item></channel></rss>

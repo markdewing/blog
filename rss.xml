@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer</title><link>https://markdewing.github.io/blog/</link><description>Investigations into hardware and software details</description><atom:link href="https://markdewing.github.io/blog/rss.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Tue, 10 Jul 2018 21:45:13 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Bash for C programmers</title><link>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;h2&gt;Bash scripting&lt;/h2&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Journey to the Center of the Computer</title><link>https://markdewing.github.io/blog/</link><description>Investigations into hardware and software details</description><atom:link href="https://markdewing.github.io/blog/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Mon, 06 Nov 2023 21:42:04 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Guide to my Github Repositories</title><link>https://markdewing.github.io/blog/posts/2023/my-github-repos/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;This post is a short guide to my Github repositories.&lt;/p&gt;
+&lt;p&gt;Some of them I use as a wiki for keeping information.
+Markdown makes adding and editing text easy, and it can also contain code.&lt;/p&gt;
+&lt;p&gt;Other repositories have more code to explore a particular topic.  I should expand on some of these topics in future blog posts. 
+(Especially the contents and use of the "QMC Algorithms" repository.
+It's used as a base for creating validated unit test data for &lt;a href="https://github.com/QMCPACK/qmcpack"&gt;QMCPACK&lt;/a&gt;, and it's a direction I think more projects should move towards.)&lt;/p&gt;
+&lt;h3&gt;Wiki-like Information&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/GPU_internals"&gt;GPU Internals&lt;/a&gt; - Documentation on how GPUs work and programming models&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/ML_in_scientific_computation"&gt;ML in scientific computation&lt;/a&gt; - Machine learning and scientific computation&lt;/p&gt;
+&lt;h3&gt;Programming Ideas&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/next_steps_in_programming"&gt;Next Steps in Programming&lt;/a&gt; - Ideas on programming scientific applications.  Includes a focus on code changes a first class/primary object in programming.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/programming_tutorial_maker"&gt;Programming Tutorial Maker&lt;/a&gt; - Attempt at a tool to make writing incremental tutorials easier.&lt;/p&gt;
+&lt;h3&gt;Scientific Computing&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/qmc_algorithms"&gt;QMC Algorithms&lt;/a&gt; - Scripts, Jupyter notebooks, Sympy derivations, and code generation to support validating QMC codes. (Also &lt;a href="https://github.com/QMCPACK/qmc_algorithms"&gt;here&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/qmc_kernels"&gt;QMC Kernels&lt;/a&gt; - Kernels used in Quantum Monte Carlo in general, and QMCPACK in particular.  Also some simple kernels used to explore GPU offload programming models.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/small_molecules"&gt;Small Molecules&lt;/a&gt; - Example input files for quantum chemistry packages and information on various small molecules.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/crispy-quadrature"&gt;Quadrature&lt;/a&gt; - Multidimensional quadrature algorithms. (Technically "cubature").  In addition to notes and links, this has some implementations.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/silver-floating-point"&gt;Floating point&lt;/a&gt; - Floating point arithmetic.  Particularly for exploring low precision.
+(the 'silver' part of the repository name comes from Github's initial repository name suggestion)&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/derivative_code_gen"&gt;Symbolic Derivatives with Code Generation&lt;/a&gt; Represents scientific computations using Sympy. It can take derivatives symbolically, then code generate the result to Python, Julia or C++.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/multitevo"&gt;Multitevo&lt;/a&gt; Translation of CoMD molecular dynamics miniapp to other languages, such as Python and Julia. And Javascript, should I get it checked-in and pushed.&lt;/p&gt;</description><guid>https://markdewing.github.io/blog/posts/2023/my-github-repos/</guid><pubDate>Sat, 28 Oct 2023 05:08:02 GMT</pubDate></item><item><title>Differentiable Symbolic Programming</title><link>https://markdewing.github.io/blog/posts/2023/differentiable-symbolic-programming/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;Automatic diffentiation is useful, but runs into some limitations.&lt;/p&gt;
+&lt;p&gt;From an aesthetic point of program organization, I would like a format
+the uses symbolic mathematics (or something very close to it) to represent
+the statements.
+Differentation is then performed on those statements, then it is code-generated
+into the target language.&lt;/p&gt;
+&lt;p&gt;From a practical point of view, I want this because autodifferentiation tools
+are not always available for the target platform and language.
+And existing tools don't always work the way I want (or at least I can't figure
+ it out)&lt;/p&gt;
+&lt;p&gt;One of the driving test cases involves second derivatives (just the Laplacian,
+ don't need the full Hessian), and first derivative against a different
+ variable.&lt;/p&gt;
+&lt;p&gt;Really, this is automatic differentiation applied between statements and
+ symbolic differentiation applied within a statement.&lt;/p&gt;
+&lt;p&gt;A lot of the issues are bookkeeping.&lt;/p&gt;
+&lt;p&gt;Statements may contain function calls.
+The derivative version of those function calls need to be modified to return additional derivatives.&lt;/p&gt;
+&lt;p&gt;The driving example is the variational calculation of the energy of a helium atom.
+(Insert link)
+It is an integral over 2 3D electron coordinates, resulting a 6 dimensional
+ integral.   For this post I'm interested in generaing the integrand,
+ and leave the integral evaluation elsewhere.&lt;/p&gt;
+&lt;p&gt;I make progress, and then stall out, drop the project, and then have to
+pick it up when I come back to it.
+I'm hoping being more public about it might force me to push development
+further.&lt;/p&gt;</description><guid>https://markdewing.github.io/blog/posts/2023/differentiable-symbolic-programming/</guid><pubDate>Mon, 19 Jun 2023 05:20:57 GMT</pubDate></item><item><title>Bash Transforms</title><link>https://markdewing.github.io/blog/posts/2018/bash_transforms/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;Working on the idea of programming by transformations (alternately called 2D version control)&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/markdewing/next_steps_in_programming/blob/master/programming_by_transformations.md"&gt;Programming by transformations&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Bash might be a good test case because the scripts are easy to parse and represent - the simplest being just comments and commands with space separated arguments.&lt;/p&gt;</description><guid>https://markdewing.github.io/blog/posts/2018/bash_transforms/</guid><pubDate>Sun, 15 Jul 2018 04:31:42 GMT</pubDate></item><item><title>Bash for C programmers</title><link>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;h2&gt;Bash scripting&lt;/h2&gt;
 &lt;p&gt;Why use Bash?  It is not my preferred language, but it has two big advantages:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Availability - we can safely assume bash is present everywhere.  No need to install additional software.&lt;/li&gt;
@@ -14,21 +62,19 @@ The statement &lt;code&gt;a = 1&lt;/code&gt; will fail with an error about 'a' n
 Similarly &lt;code&gt;a= 1&lt;/code&gt; will fail with an error about '1' not found.&lt;/p&gt;
 &lt;p&gt;Another place significant whitespace appears is in &lt;code&gt;if&lt;/code&gt; statements.
 The opening bracket for the test (&lt;code&gt;[&lt;/code&gt;) looks like syntax, but it is a command.  (By symmetry you might expect &lt;code&gt;]&lt;/code&gt; to be a command, but it's not - it gets passed as an argument to &lt;code&gt;[&lt;/code&gt;).&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;0
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;$a&lt;/span&gt; -eq 0 &lt;span class="o"&gt;]&lt;/span&gt;; &lt;span class="k"&gt;then&lt;/span&gt;
-&lt;span class="k"&gt;  &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;"a is 0"&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$a&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-eq&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;then&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"a is 0"&lt;/span&gt;
 &lt;span class="k"&gt;fi&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Also note the semicolon after the comparison to terminate the command.  As an alternative, the &lt;code&gt;then&lt;/code&gt; could be put on the next line&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;0
-&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;$a&lt;/span&gt; -eq 0 &lt;span class="o"&gt;]&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$a&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-eq&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
 &lt;span class="k"&gt;then&lt;/span&gt;
-&lt;span class="k"&gt;  &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;"a is 0"&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"a is 0"&lt;/span&gt;
 &lt;span class="k"&gt;fi&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Bash also has a double bracket form of testing that is a built-in, and not an external command.&lt;/p&gt;
 &lt;h4&gt;Exit values&lt;/h4&gt;
@@ -53,26 +99,23 @@ and the closing brace should also be on a line by itself.&lt;/p&gt;
 &lt;p&gt;A function call looks like a normal command statement, with the usual space-separated arguments.&lt;/p&gt;
 &lt;p&gt;Inside a function, arguments are referenced using &lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;, etc.  Unset variables are empty.&lt;/p&gt;
 &lt;p&gt;There is a syntax for optional arguments:&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;var&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;1&lt;/span&gt;&lt;span class="k"&gt;:-&lt;/span&gt;&lt;span class="nv"&gt;default_string_here&lt;/span&gt;&lt;span class="k"&gt;}&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;var&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;1&lt;/span&gt;&lt;span class="k"&gt;:-&lt;/span&gt;&lt;span class="nv"&gt;default_string_here&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h4&gt;Variable replacement&lt;/h4&gt;
 &lt;p&gt;Variable replacement occurs &lt;em&gt;before&lt;/em&gt; bash breaks the line into a command and arguments based on whitespace.
 Unexpected behavior can happen if a variable contains whitespace and the developer was not expecting it.
 This can happen when the variable holds a directory name, and the script is run using a directory containing a space.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"hi there"&lt;/span&gt;
-cmd &lt;span class="nv"&gt;$a&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"hi there"&lt;/span&gt;
+cmd&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$a&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;expands to calling &lt;code&gt;cmd&lt;/code&gt; with two arguments 'hi' and 'there'.
 Enclose the variable in quotes to keep spaces confined.&lt;/p&gt;
 &lt;p&gt;This will call &lt;code&gt;cmd&lt;/code&gt; with one argument: 'hi there'.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"hi there"&lt;/span&gt;
-cmd &lt;span class="s2"&gt;"$a"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nv"&gt;a&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"hi there"&lt;/span&gt;
+cmd&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="nv"&gt;$a&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;For a gory step-by-step look at how bash processes input, see &lt;a href="https://mywiki.wooledge.org/BashParser"&gt;https://mywiki.wooledge.org/BashParser&lt;/a&gt;&lt;/p&gt;
 &lt;h4&gt;Robust bash scripts&lt;/h4&gt;
@@ -81,7 +124,7 @@ cmd &lt;span class="s2"&gt;"$a"&lt;/span&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;set -o nounset&lt;/code&gt;  to detect the use of uninitialized variables&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;set -o errexit&lt;/code&gt;  to exit the script if any statement fails&lt;/li&gt;
-&lt;/ul&gt;&lt;/div&gt;</description><category>bash</category><category>scripting</category><guid>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</guid><pubDate>Tue, 10 Jul 2018 21:41:01 GMT</pubDate></item><item><title>Building A Parallella Cluster</title><link>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;I finally got around to assembling my small pile of Parallella boards into a cluster.&lt;/p&gt;
+&lt;/ul&gt;</description><category>bash</category><category>scripting</category><guid>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</guid><pubDate>Tue, 10 Jul 2018 21:41:01 GMT</pubDate></item><item><title>Building A Parallella Cluster</title><link>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;I finally got around to assembling my small pile of Parallella boards into a cluster.&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_lg.jpg"&gt;&lt;img alt="Alternate side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_sm3.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;This post documents the choices I made about power distribution, mechanical assembly, cooling, software management, etc.
 For background on the individual boards, see my previous post:
@@ -117,46 +160,42 @@ I decided to use &lt;a href="http://docs.ansible.com/ansible/intro_getting_start
 &lt;p&gt;In addition to controlling operations from a PC, it is useful to designate one node as a 'head node' and install Ansible there as well.
 For MPI, it's easier to run MPI programs from the head node than from the PC.
 For setting up configuration files, it can be useful to create or edit the file and make sure it works on one node, and then copy the file to all the other nodes.&lt;/p&gt;
-&lt;p&gt;Ansible and MPI (and general convenience) require setting up &lt;a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/"&gt;passwordless ssh login&lt;/a&gt;.
-&lt;!--Some directions to set up &lt;a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/"&gt;ssh passwordless login&lt;/a&gt;--&gt;&lt;/p&gt;
-&lt;p&gt;Once the keys are set up locally, you can use &lt;code&gt;ssh-copy-id&lt;/code&gt; to copy the credentials.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;id_rsa&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pub&lt;/span&gt; &lt;span class="n"&gt;parallella&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="mf"&gt;10.0.0.145&lt;/span&gt;
-&lt;/pre&gt;
+&lt;p&gt;Ansible and MPI (and general convenience) require setting up &lt;a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/"&gt;passwordless ssh login&lt;/a&gt;.&lt;/p&gt;
+&lt;!--Some directions to set up [ssh passwordless login](http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/)--&gt;
 
+&lt;p&gt;Once the keys are set up locally, you can use &lt;code&gt;ssh-copy-id&lt;/code&gt; to copy the credentials.&lt;/p&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="k"&gt;copy&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="kt"&gt;id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;id_rsa&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pub&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;parallella&lt;/span&gt;&lt;span class="mf"&gt;@10.0.0.145&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;I keep a small script that puts this line in the history (named &lt;code&gt;ssh_copy_id&lt;/code&gt;)&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;history&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="s"&gt;"ssh-copy-id -i ~/.ssh/id_rsa.pub parallella@10.0.0.145"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;history&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;"ssh-copy-id -i ~/.ssh/id_rsa.pub parallella@10.0.0.145"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Run the command &lt;code&gt;source ssh_copy_id&lt;/code&gt; to put the command on the history list.
 Use the bash history and line editing features to select the command and update to a new address.&lt;/p&gt;
 &lt;p&gt;Rather than create a new user, I'm using the default 'parallella' user on the nodes.
 The SSH config (in '.ssh/config') can be set up to switch users upon login.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;Host&lt;/span&gt; &lt;span class="mf"&gt;10.0.0.127&lt;/span&gt;
-    &lt;span class="n"&gt;User&lt;/span&gt; &lt;span class="n"&gt;parallella&lt;/span&gt;
-&lt;/pre&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;Host 10.0.0.127
+    User parallella
+&lt;/pre&gt;&lt;/div&gt;
 
+&lt;p&gt;You might wish to &lt;a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/"&gt;set up a apt-cache server&lt;/a&gt; on a local machine to save on download bandwidth when installing software to all the nodes.&lt;/p&gt;
+&lt;!--[Some directions here](http://www.tecmint.com/apt-cache-server-in-ubuntu/)--&gt;
 
-&lt;p&gt;You might wish to &lt;a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/"&gt;set up a apt-cache server&lt;/a&gt; on a local machine to save on download bandwidth when installing software to all the nodes.
-&lt;!--&lt;a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/"&gt;Some directions here&lt;/a&gt;--&gt;&lt;/p&gt;
 &lt;h4&gt;Using Ansible&lt;/h4&gt;
 &lt;p&gt;See the &lt;a href="http://docs.ansible.com/ansible/intro_getting_started.html"&gt;intro docs&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;The inventory file is a list of IP addresses (one per line).     It can be specified on the command line
 with `-i'.  To see if all the nodes work&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;ping&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;ansible -i cluster.ini all -m ping
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;To copy the apt-cache server configuration to all the nodes, use&lt;/p&gt;
-&lt;pre class="code literal-block"&gt; &lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;hosts&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;copy&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"src=/etc/apt/apt.conf.d/02proxy dest=/etc/apt/apt.conf.d/02proxy"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt; ansible -i hosts all --sudo -m copy -a "src=/etc/apt/apt.conf.d/02proxy dest=/etc/apt/apt.conf.d/02proxy"
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;To shutdown all the nodes, use&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;shell&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"shutdown now"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;ansible -i cluster.ini all --sudo -m shell -a "shutdown now"
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3&gt;Compilation&lt;/h3&gt;
 &lt;p&gt;In the &lt;a href="https://markdewing.github.io/blog/posts/introduction-to-parallella/"&gt;introductory post&lt;/a&gt; I talked about cross compiling for the board.
@@ -167,32 +206,27 @@ For instance, one of my project dependencies, HDF, doesn't cross-compile easily 
 &lt;p&gt;The particular software package I'm working with (QMCPACK, which does simulations on atoms, molecules, and solids)
 uses CMake for configuration and build, and builds fine with distcc.&lt;/p&gt;
 &lt;p&gt;Install on all nodes with &lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;ansible&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;cluster&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ini&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;"apt-get install -y distcc"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;ansible -i cluster.ini all --sudo  -a "apt-get install -y distcc"
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Set the &lt;code&gt;DISTCC_HOSTS&lt;/code&gt; variable to the set of systems to use&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;DISTCC_HOSTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"localhost @10.0.0.144/2 @10.0.0.145/2"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;DISTCC_HOSTS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"localhost @10.0.0.144/2 @10.0.0.145/2"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This example shows three hosts. The initial '@' means to use ssh (no daemon required on remote) and the '/2' on the end means to use two threads.&lt;/p&gt;
 &lt;p&gt;Now set the C and C++ compilers to &lt;code&gt;distcc &amp;lt;compiler&amp;gt;&lt;/code&gt; and run the build.&lt;/p&gt;
 &lt;p&gt;For CMake, building a project with MPI, this is&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"distcc mpicc"&lt;/span&gt;
-&lt;span class="n"&gt;export&lt;/span&gt; &lt;span class="n"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;"distcc mpic++"&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="k"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"distcc mpicc"&lt;/span&gt;
+&lt;span class="k"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"distcc mpic++"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Then&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;make -j 8
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;You might see an warning message &lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nx"&gt;distccd&lt;/span&gt;&lt;span class="err"&gt;[&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nb"&gt;pid&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="cp"&gt;]&lt;/span&gt; (tcp_cork_sock) Warning: setsockopt(corked=1) failed: Socket operation on non-socket
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;distccd[&amp;lt;pid&amp;gt;] (tcp_cork_sock) Warning: setsockopt(corked=1) failed: Socket operation on non-socket
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This can be ignored.  Or follow some directions to &lt;a href="https://jeffreywildman.wordpress.com/2011/02/11/disable-tcp_cork_sock-warnings-when-using-distcc-over-ssh/"&gt;silence it&lt;/a&gt;.&lt;/p&gt;
 &lt;h3&gt;MPI&lt;/h3&gt;
@@ -212,7 +246,7 @@ be able to log into each other node (not just head node to other nodes).&lt;/p&g
 &lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_back_view_lg.jpg"&gt;&lt;img alt="Back view" src="https://markdewing.github.io/blog/2016/parallella_cluster_back_view_sm2.jpg"&gt;&lt;/a&gt;   &lt;/p&gt;
 &lt;p&gt;&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_lg.jpg"&gt;&lt;img alt="Side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_sm2.jpg"&gt;&lt;/a&gt;   
 &lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_top_lg.jpg"&gt;&lt;img alt="Top view" src="https://markdewing.github.io/blog/2016/parallella_cluster_top_sm2.jpg"&gt;&lt;/a&gt;  
-&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_lg.jpg"&gt;&lt;img alt="Alternate side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_sm3.jpg"&gt;&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;</description><category>Ansible</category><category>epiphany</category><category>MPI</category><category>parallella</category><category>zynq</category><guid>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</guid><pubDate>Tue, 03 Jan 2017 01:56:00 GMT</pubDate></item><item><title>Integration Callbacks with Sympy and LLVM</title><link>https://markdewing.github.io/blog/posts/integration-callbacks/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;This post explores various packages for multi-dimensional integration along with
+&lt;a href="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_lg.jpg"&gt;&lt;img alt="Alternate side view" src="https://markdewing.github.io/blog/2016/parallella_cluster_side_top_sm3.jpg"&gt;&lt;/a&gt;&lt;/p&gt;</description><category>Ansible</category><category>epiphany</category><category>MPI</category><category>parallella</category><category>zynq</category><guid>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</guid><pubDate>Tue, 03 Jan 2017 01:56:00 GMT</pubDate></item><item><title>Integration Callbacks with Sympy and LLVM</title><link>https://markdewing.github.io/blog/posts/integration-callbacks/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;This post explores various packages for multi-dimensional integration along with
 generating callbacks for the integrands from Sympy using an LLVM JIT&lt;/p&gt;
 &lt;h3&gt;Problem to integrate&lt;/h3&gt;
 &lt;p&gt;The particular problem is using the variational principle to find the ground state energy for atoms.
@@ -254,30 +288,30 @@ One disadvantage is that it does not leverage existing compilers (Numba or C++),
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th align="left"&gt;Integrator  &lt;/th&gt;
-&lt;th align="right"&gt;Time (seconds)&lt;/th&gt;
+&lt;th style="text-align: left;"&gt;Integrator  &lt;/th&gt;
+&lt;th style="text-align: right;"&gt;Time (seconds)&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td align="left"&gt;Cubature&lt;/td&gt;
-&lt;td align="right"&gt;171&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;Cubature&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;171&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td align="left"&gt;Cubature w/CSE&lt;/td&gt;
-&lt;td align="right"&gt;141&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;Cubature w/CSE&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;141&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td align="left"&gt;Cubature w/CSE and multiple evals&lt;/td&gt;
-&lt;td align="right"&gt;100&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;Cubature w/CSE and multiple evals&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;100&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td align="left"&gt;Cuba (Vegas)&lt;/td&gt;
-&lt;td align="right"&gt;29&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;Cuba (Vegas)&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;29&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td align="left"&gt;Cuba (Cuhre)&lt;/td&gt;
-&lt;td align="right"&gt;22&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;Cuba (Cuhre)&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;22&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -292,58 +326,52 @@ Some other approaches can help.  One is Common Subexpression Elimination (CSE), 
 &lt;h3&gt;Conclusions and future work&lt;/h3&gt;
 &lt;p&gt;Using an LLVM JIT to create callbacks for integration works fairly well.&lt;/p&gt;
 &lt;p&gt;One important question is how to scale the creation of the callbacks to new libraries without explicitly programming them into Sympy.&lt;br&gt;
-The &lt;a href="https://github.com/sympy/sympy/pull/11057"&gt;last pull request&lt;/a&gt; has expanded the &lt;code&gt;CodeSignature&lt;/code&gt; class, which seems like  a starting point for such a more general callback specification.&lt;/p&gt;&lt;/div&gt;</description><category>cubature</category><category>integration</category><category>llvm</category><category>sympy</category><guid>https://markdewing.github.io/blog/posts/integration-callbacks/</guid><pubDate>Fri, 08 Jul 2016 21:37:00 GMT</pubDate></item><item><title>Notes on CMake</title><link>https://markdewing.github.io/blog/posts/notes-on-cmake/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Recently I started working on a project that uses CMake.  I've used CMake a little before, but never really
+The &lt;a href="https://github.com/sympy/sympy/pull/11057"&gt;last pull request&lt;/a&gt; has expanded the &lt;code&gt;CodeSignature&lt;/code&gt; class, which seems like  a starting point for such a more general callback specification.&lt;/p&gt;</description><category>cubature</category><category>integration</category><category>llvm</category><category>sympy</category><guid>https://markdewing.github.io/blog/posts/integration-callbacks/</guid><pubDate>Fri, 08 Jul 2016 21:37:00 GMT</pubDate></item><item><title>Notes on CMake</title><link>https://markdewing.github.io/blog/posts/notes-on-cmake/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;Recently I started working on a project that uses CMake.  I've used CMake a little before, but never really
 had to dive much into it.
 In particular, I needed to understand the scripting parts of CMake for adding tests for CTest.&lt;/p&gt;
 &lt;p&gt;Below are some comments on aspects of CMake.&lt;/p&gt;
 &lt;h3&gt;Variables and variable substitution&lt;/h3&gt;
 &lt;p&gt;Variables names are strings.  Substitution occurs when the variable is dereferenced with &lt;code&gt;${}&lt;/code&gt;.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;var,&lt;/span&gt; &lt;span class="s"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;var,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="nb"&gt;MESSAGE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"var = ${var}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;produces&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;var&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Nested substitutions are possible&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;var,&lt;/span&gt; &lt;span class="s"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;a,&lt;/span&gt; &lt;span class="s"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;var,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;a,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="nb"&gt;MESSAGE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"var = ${var}  ${${var}}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;will produce 
 &lt;code&gt;var = a b&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;Variable names can be composed during substitution&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;var,&lt;/span&gt; &lt;span class="s"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;a_one,&lt;/span&gt; &lt;span class="s"&gt;apple&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;var,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;a_one,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;apple&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="nb"&gt;MESSAGE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"var =  ${${var}_one}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;will produce &lt;code&gt;var = apple&lt;/code&gt;&lt;/p&gt;
 &lt;h3&gt;Variables and functions&lt;/h3&gt;
 &lt;p&gt;Variable references act a little like pointers, but without a type system to enforce (and guide) how many indirections should be performed.&lt;/p&gt;
 &lt;p&gt;Example of using a variable inside a function:&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;FUNCTION&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;MY_FUNC&lt;/span&gt; &lt;span class="s"&gt;arg1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="nb"&gt;MESSAGE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"arg1 = ${arg1}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;FUNCTION&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;MY_FUNC&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;arg1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;MESSAGE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"arg1 = ${arg1}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="nb"&gt;ENDFUNCTION&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
 &lt;span class="nb"&gt;MY_FUNC&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;hello&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;var,&lt;/span&gt; &lt;span class="s"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="nb"&gt;MY_FUNC&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;var&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c"&gt;# arg1 is set to 'var'&lt;/span&gt;
-&lt;span class="nb"&gt;MY_FUNC&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;var&lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c"&gt;# arg1 is set to 'a' - this is usually what you want&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;var,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;MY_FUNC&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;var&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# arg1 is set to 'var'&lt;/span&gt;
+&lt;span class="nb"&gt;MY_FUNC&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;var&lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c"&gt;# arg1 is set to 'a' - this is usually what you want&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;produces&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;arg1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;var&lt;/span&gt;
-&lt;span class="n"&gt;arg1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="n"&gt;arg1&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;
+&lt;span class="n"&gt;arg1&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3&gt;Return values from functions&lt;/h3&gt;
 &lt;p&gt;There is no built-in notion of a return value from a function.   To get values out of a function, write to one of the arguments.&lt;/p&gt;
@@ -353,19 +381,18 @@ inside the function.  To affect the value in the parent, the &lt;code&gt;PARENT_
 Otherwise a variable with the name used in the function will be set in the parent, which can work by accident
 if the variables have the same name.&lt;/p&gt;
 &lt;p&gt;Example:&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;FUNCTION&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;MY_FUNC_WITH_RET&lt;/span&gt; &lt;span class="s"&gt;ret&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="c"&gt;# The following line works by accident if the name of variable in the parent&lt;/span&gt;
-    &lt;span class="c"&gt;# is the same as in the function&lt;/span&gt;
-    &lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;ret&lt;/span&gt; &lt;span class="s2"&gt;"in function"&lt;/span&gt; &lt;span class="s"&gt;PARENT_SCOPE&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-    &lt;span class="c"&gt;# This is the correct way to get the variable name passed to the function&lt;/span&gt;
-    &lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;ret&lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="s2"&gt;"in function"&lt;/span&gt; &lt;span class="s"&gt;PARENT_SCOPE&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;FUNCTION&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;MY_FUNC_WITH_RET&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;ret&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="c"&gt;# The following line works by accident if the name of variable in the parent&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="c"&gt;# is the same as in the function&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;ret&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"in function"&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;PARENT_SCOPE&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="c"&gt;# This is the correct way to get the variable name passed to the function&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;ret&lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"in function"&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;PARENT_SCOPE&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="nb"&gt;ENDFUNCTION&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
-&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;ret&lt;/span&gt; &lt;span class="s2"&gt;"before function"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;ret&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"before function"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="nb"&gt;MY_FUNC_WITH_RET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;ret&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="nb"&gt;MESSAGE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"output from function = ${ret}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;will produce &lt;code&gt;output from function = in function&lt;/code&gt;&lt;/p&gt;
 &lt;h3&gt;Data structures&lt;/h3&gt;
@@ -381,11 +408,10 @@ The &lt;a href="https://cmake.org/cmake/help/v3.3/manual/cmake-language.7.html#l
 &lt;p&gt;The default timeout per test is 1500 seconds (25 minutes).&lt;/p&gt;
 &lt;p&gt;To increase this, adjust the value of &lt;code&gt;DART_TESTING_TIMEOUT&lt;/code&gt;.
 It needs to be set as a cache variable, and it needs to be set before the &lt;code&gt;enable_testing()&lt;/code&gt; or &lt;code&gt;include(CTest)&lt;/code&gt; is specified.&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt; &lt;span class="s"&gt;DART_TESTING_TIMEOUT&lt;/span&gt; &lt;span class="s"&gt;3600&lt;/span&gt; &lt;span class="s"&gt;CACHE&lt;/span&gt; &lt;span class="s"&gt;STRING&lt;/span&gt; &lt;span class="s2"&gt;"Maximum time for one test"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nb"&gt;SET&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;DART_TESTING_TIMEOUT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;3600&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;CACHE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;STRING&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;"Maximum time for one test"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
-
-&lt;p&gt;See also this &lt;a href="http://stackoverflow.com/questions/3545598/using-cmake-with-ctest-and-cdash"&gt;Stack Overflow post&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;</description><category>cmake</category><category>ctest</category><guid>https://markdewing.github.io/blog/posts/notes-on-cmake/</guid><pubDate>Fri, 19 Feb 2016 11:05:00 GMT</pubDate></item><item><title>Visualizing MD Data</title><link>https://markdewing.github.io/blog/posts/visualizing-md-data/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Visualizing atomic positions in 3D is useful when working on a molecular dynamics code.&lt;/p&gt;
+&lt;p&gt;See also this &lt;a href="http://stackoverflow.com/questions/3545598/using-cmake-with-ctest-and-cdash"&gt;Stack Overflow post&lt;/a&gt;&lt;/p&gt;</description><category>cmake</category><category>ctest</category><guid>https://markdewing.github.io/blog/posts/notes-on-cmake/</guid><pubDate>Fri, 19 Feb 2016 11:05:00 GMT</pubDate></item><item><title>Visualizing MD Data</title><link>https://markdewing.github.io/blog/posts/visualizing-md-data/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;Visualizing atomic positions in 3D is useful when working on a molecular dynamics code.&lt;/p&gt;
 &lt;p&gt;More generally, being able to visualize the structures and algorithms inside a code can help with understanding
 and debugging.
 With all the advances in graphics hardware, it should be possible to quickly create visualizations for various
@@ -429,7 +455,7 @@ Displaying a Sphere at each point would be more accurate, but is much slower.&lt
 &lt;h3&gt;Summary&lt;/h3&gt;
 &lt;p&gt;I'm very pleased with VisPy.  It enabled live, interactive animation of atoms from a molecular dynamics code with
  a small amount code.
-I expect extending this to visualize more complex algorithms and data structures should be be straightforward.&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>vispy</category><guid>https://markdewing.github.io/blog/posts/visualizing-md-data/</guid><pubDate>Wed, 09 Dec 2015 04:14:00 GMT</pubDate></item><item><title>More Performance With Numba</title><link>https://markdewing.github.io/blog/posts/more-with-numba/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Having acquired a shiny new &lt;a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/"&gt;profiler&lt;/a&gt;, it's time to dig into the performance of the Numba version some more.&lt;/p&gt;
+I expect extending this to visualize more complex algorithms and data structures should be be straightforward.&lt;/p&gt;</description><category>CoMD</category><category>vispy</category><guid>https://markdewing.github.io/blog/posts/visualizing-md-data/</guid><pubDate>Wed, 09 Dec 2015 04:14:00 GMT</pubDate></item><item><title>More Performance With Numba</title><link>https://markdewing.github.io/blog/posts/more-with-numba/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;Having acquired a shiny new &lt;a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/"&gt;profiler&lt;/a&gt;, it's time to dig into the performance of the Numba version some more.&lt;/p&gt;
 &lt;p&gt;Picking up from the &lt;a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/"&gt;previous optimizations&lt;/a&gt;, I can't seem to reproduce the timing (47 μs/atom) in the that table.  Now I get 40 μs/atom.&lt;/p&gt;
 &lt;h2&gt;First step&lt;/h2&gt;
 &lt;p&gt;Run the profiler (&lt;code&gt;vmprofrun comd.py&lt;/code&gt;) and display the results in KCacheGrind (&lt;code&gt;kcachegrind vmprof-20664.out&lt;/code&gt;)&lt;/p&gt;
@@ -439,34 +465,30 @@ I expect extending this to visualize more complex algorithms and data structures
 &lt;p&gt;&lt;img alt="KCachegrind screenshot of call graph" src="https://markdewing.github.io/blog/2015/profile1_call_graph_sm.png"&gt;&lt;/p&gt;
 &lt;p&gt;To improve performance here, convert &lt;code&gt;getBoxFromCoord&lt;/code&gt; to a free function and put all the attribute references into function arguments.&lt;/p&gt;
 &lt;p&gt;Before:&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;getBoxFromCoord&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;getBoxFromCoord&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
         &lt;span class="n"&gt;ix&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
         &lt;span class="n"&gt;iy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
         &lt;span class="n"&gt;iz&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
         &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBoxFromTuple&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ix&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iy&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iz&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;After:&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nd"&gt;@numba.njit&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nd"&gt;@numba&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;njit&lt;/span&gt;
 &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;getBoxFromCoordInner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;nLocalBoxes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gs&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="n"&gt;ix&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
     &lt;span class="n"&gt;iy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
     &lt;span class="n"&gt;iz&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;getBoxFromTupleInner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ix&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iy&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iz&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;nLocalBoxes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;(Changing the parameter &lt;code&gt;r&lt;/code&gt; to individual components was not strictly necessary.)&lt;/p&gt;
 &lt;p&gt;And the call sites change (for example) from&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;        &lt;span class="n"&gt;iBox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBoxFromCoord&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;        &lt;span class="n"&gt;iBox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBoxFromCoord&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;to&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;        &lt;span class="n"&gt;iBox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;getBoxFromCoordInner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nLocalBoxes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gridSize&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;        &lt;span class="n"&gt;iBox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;getBoxFromCoordInner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nLocalBoxes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gridSize&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This improves performance to 20 μs/atom.&lt;/p&gt;
 &lt;p&gt;Repeating the same transformation for putAtomInBox gives 18.4 μs/atom.&lt;/p&gt;
@@ -496,8 +518,8 @@ performance is now 10.2 μs/atom.&lt;/p&gt;
 &lt;tr&gt;
 &lt;th&gt;Language/compiler  &lt;/th&gt;
 &lt;th&gt;Version   &lt;/th&gt;
-&lt;th align="right"&gt;Initial time&lt;/th&gt;
-&lt;th align="right"&gt;  Final time&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;Initial time&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;  Final time&lt;/th&gt;
 &lt;th&gt;&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
@@ -505,49 +527,49 @@ performance is now 10.2 μs/atom.&lt;/p&gt;
 &lt;tr&gt;
 &lt;td&gt;Python&lt;/td&gt;
 &lt;td&gt;2.7.10&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;1014&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;1014&lt;/td&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;PyPy&lt;/td&gt;
 &lt;td&gt;4.0&lt;/td&gt;
-&lt;td align="right"&gt;30&lt;/td&gt;
-&lt;td align="right"&gt;30&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;30&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;30&lt;/td&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Cython&lt;/td&gt;
 &lt;td&gt;0.23.3&lt;/td&gt;
-&lt;td align="right"&gt;729&lt;/td&gt;
-&lt;td align="right"&gt;13&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;729&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;13&lt;/td&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Julia&lt;/td&gt;
 &lt;td&gt;0.4.0-rc3&lt;/td&gt;
-&lt;td align="right"&gt;87&lt;/td&gt;
-&lt;td align="right"&gt;6.1&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;87&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;6.1&lt;/td&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Numba&lt;/td&gt;
 &lt;td&gt;0.22.1&lt;/td&gt;
-&lt;td align="right"&gt;867&lt;/td&gt;
-&lt;td align="right"&gt;2.9&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;867&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.9&lt;/td&gt;
 &lt;td&gt;    New result&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;C (clang)&lt;/td&gt;
 &lt;td&gt;3.7&lt;/td&gt;
-&lt;td align="right"&gt;2.2&lt;/td&gt;
-&lt;td align="right"&gt;2.2&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.2&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.2&lt;/td&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;br&gt;
-&lt;/p&gt;&lt;div style="font-size:80%"&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;div style="font-size:80%"&gt;
 Times are all in μs/atom. System size is 4000 atoms.
 Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
 &lt;br&gt;
@@ -555,7 +577,7 @@ The 'Initial Time' column results from the minimal amount of code changes to get
 &lt;br&gt;
 The 'Final Time' is the time after tuning.
 &lt;/div&gt;
-&lt;br&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;p&gt;Do note that the Cython, Julia, and Numba results reflect the amount of effort put into optimization.
 Cython and Julia still need to be improved with the assistance of a profiler (or in Julia's case, a better viewer
 for existing profile data).&lt;/p&gt;
@@ -565,67 +587,22 @@ for existing profile data).&lt;/p&gt;
 that I would not want to perform on a regular basis.    These transformations are fairly regular, so it should
 be possible to incorporate them into Numba.  Alternately, if doing so in a safe manner inside the compiler is difficult,
 some sort of automated AST transformation of the source should be possible.&lt;/p&gt;
-&lt;p&gt;As the optimization process proceeds on this code, increasing amount of time is being spent in the core routine, computeForce, (as it should), and we will need to move beyond a function-level profiler to look for optimization opportunities.&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>Numba</category><category>python</category><guid>https://markdewing.github.io/blog/posts/more-with-numba/</guid><pubDate>Fri, 13 Nov 2015 16:30:00 GMT</pubDate></item><item><title>Performance Updates with PyPy 4.0</title><link>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The PyPy team recently released version &lt;a href="http://morepypy.blogspot.com/2015/10/pypy-400-released-jit-with-simd.html"&gt;4.0&lt;/a&gt;
+&lt;p&gt;As the optimization process proceeds on this code, increasing amount of time is being spent in the core routine, computeForce, (as it should), and we will need to move beyond a function-level profiler to look for optimization opportunities.&lt;/p&gt;</description><category>CoMD</category><category>Numba</category><category>python</category><guid>https://markdewing.github.io/blog/posts/more-with-numba/</guid><pubDate>Fri, 13 Nov 2015 16:30:00 GMT</pubDate></item><item><title>Performance Updates with PyPy 4.0</title><link>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;The PyPy team recently released version &lt;a href="http://morepypy.blogspot.com/2015/10/pypy-400-released-jit-with-simd.html"&gt;4.0&lt;/a&gt;
 (The jump in version number is to reduce confusion with the Python version supported.)
 One of the features is improved performance.&lt;/p&gt;
 &lt;p&gt;But first, an issue with reporting accurate timings with this version of CoMD should be addressed. The initial iteration contains overhead from tracing and JIT compilation (Cython and Numba have the same issue).
 For this example we are concerned with the steady-state timing, so the time for the first iteration should be excluded.
 I've added a '--skip' parameter to the CoMD code (default: 1) that skips the first &lt;code&gt;printRate&lt;/code&gt; steps (default: 10) in computing the overall average update rate at the end.&lt;/p&gt;
 &lt;p&gt;Now the table with the most recent performance numbers  (from &lt;a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/"&gt;this post&lt;/a&gt; ), updated with PyPy 4.0 results:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Language/compiler  &lt;/th&gt;
-&lt;th&gt;Version   &lt;/th&gt;
-&lt;th align="right"&gt;Time&lt;/th&gt;
-&lt;th align="right"&gt;&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Python&lt;/td&gt;
-&lt;td&gt;2.7.10&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;PyPy&lt;/td&gt;
-&lt;td&gt;2.6.1&lt;/td&gt;
-&lt;td align="right"&gt;96&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Numba&lt;/td&gt;
-&lt;td&gt;0.21.0&lt;/td&gt;
-&lt;td align="right"&gt;47&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;PyPy&lt;/td&gt;
-&lt;td&gt;4.0&lt;/td&gt;
-&lt;td align="right"&gt;30&lt;/td&gt;
-&lt;td align="right"&gt;    New result&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Cython&lt;/td&gt;
-&lt;td&gt;0.23.3&lt;/td&gt;
-&lt;td align="right"&gt;13&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Julia&lt;/td&gt;
-&lt;td&gt;0.4.0-rc3&lt;/td&gt;
-&lt;td align="right"&gt;6.1&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;C&lt;/td&gt;
-&lt;td&gt;4.8.2&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
+&lt;p&gt;| Language/compiler   | Version   | Time|
+|-------------------|--------------|--------------:|------------:|
+| Python            | 2.7.10       |  1014          | |
+| PyPy              | 2.6.1        |    96         | |
+| Numba             | 0.21.0       |     47     | |
+| PyPy              | 4.0          |    30         |      New result |
+| Cython            | 0.23.3       |     13     | |
+| Julia             | 0.4.0-rc3    |    6.1     | |
+| C                 | 4.8.2        |    2.3          | |&lt;/p&gt;
 &lt;p&gt;&lt;br&gt;
 Times are all in μs/atom. System size is 4000 atoms.
 Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
@@ -633,194 +610,4 @@ Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
 &lt;p&gt;The new release of PyPy also includes some SIMD vectorization support (&lt;code&gt;--jit vec=1&lt;/code&gt; or &lt;code&gt;--jit vec_all=1&lt;/code&gt;).  Neither of these provided any improvement in performance on this code.   Not too surprising given the vectorization support is new, and the code contains
 conditionals in the inner loop.&lt;/p&gt;
 &lt;p&gt;PyPy 4.0 gives a very good 34x performance improvement over bare Python, and 3x improvement over the previous release (2.6.1).
-PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>PyPy</category><guid>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</guid><pubDate>Wed, 04 Nov 2015 21:39:00 GMT</pubDate></item><item><title>Prototype for Profiling Python</title><link>https://markdewing.github.io/blog/posts/prototype-for-profiling-python/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;a href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/"&gt;Last post&lt;/a&gt; covered some technical background using vmprof to profile Python with compiled or JIT'ed extensions.
-Now I've created a prototype that can convert the output to callgrind format so it can be viewed with &lt;a href="http://kcachegrind.sourceforge.net/html/Home.html"&gt;KCachegrind&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;To install the prototype using the Anaconda distribution:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Create a new environment (if you do not use a new environment, these packages may conflict with an existing Numba install): &lt;code&gt;conda create -n profiling python numpy&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Switch to the new environment: &lt;code&gt;source activate profiling&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Install prototype versions of Numba and llvmlite: &lt;code&gt;conda install -c https://conda.anaconda.org/mdewing numba-profiling&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Install prototype version of vmprof: &lt;code&gt;conda install -c https://conda.anaconda.org/mdewing vmprof-numba&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Make sure libunwind is installed.  (On Ubuntu &lt;code&gt;apt-get install libunwind8-dev&lt;/code&gt;.)
-(On Ubuntu, it must be the -dev version.  If not installed, the error message when trying to run vmprof is &lt;code&gt;ImportError: libunwind.so.8: cannot open shared object file: No such file or directory&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;Install KCachegrind (On Ubuntu, &lt;code&gt;apt-get install kcachegrind&lt;/code&gt;)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;There is a wrapper (&lt;code&gt;vmprofrun&lt;/code&gt;) that automates the running and processing steps.
-To use it, run &lt;code&gt;vmprofrun &amp;lt;target python script&amp;gt; [arguments to the python script]&lt;/code&gt;. 
-(No need to specify &lt;code&gt;python&lt;/code&gt; - that gets added to the command line automatically.)
-By default it will output &lt;code&gt;vmprof-&amp;lt;pid&amp;gt;.out&lt;/code&gt;, which can be viewed in KCachegrind.&lt;/p&gt;
-&lt;p&gt;Underneath, the &lt;code&gt;vmprofrun&lt;/code&gt; tool saves the vmprof output during the run to &lt;code&gt;out.vmprof&lt;/code&gt;. After the run, it automatically copies the &lt;code&gt;/tmp/perf-&amp;lt;pid&amp;gt;.map&lt;/code&gt; file to the current directory (if running under Numba).
-It moves &lt;code&gt;out.vmprof&lt;/code&gt; to &lt;code&gt;out-&amp;lt;pid&amp;gt;.vmprof&lt;/code&gt;.
-Finally it runs &lt;code&gt;vmproftocallgrind&lt;/code&gt; using these files as input.&lt;/p&gt;
-&lt;h4&gt;Limitations&lt;/h4&gt;
-&lt;ol&gt;
-&lt;li&gt;Only works on 64-bit Linux&lt;/li&gt;
-&lt;li&gt;Function-level profiles only - no line information (for either python or native code)&lt;/li&gt;
-&lt;li&gt;Sometimes the profiling hangs during the run - kill the process and try again.&lt;/li&gt;
-&lt;li&gt;Works with Python 2.7 or 3.4&lt;/li&gt;
-&lt;li&gt;Not well validated or tested yet&lt;/li&gt;
-&lt;li&gt;It does not work well yet with the existing vmprof web visualization and CLI tools.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Other notes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The stack dump tool will process the stacks to remove the Python interpreter frames.&lt;/li&gt;
-&lt;li&gt;By default the Numba &lt;code&gt;Dispatcher_call&lt;/code&gt; level is removed.  Otherwise the call graph in KCachegrind gets tangled by all the call paths running through this function.&lt;/li&gt;
-&lt;li&gt;It should work with C extensions and Cython as well.&lt;/li&gt;
-&lt;/ul&gt;&lt;/div&gt;</description><category>Numba</category><category>profiling</category><category>python</category><category>vmprof</category><guid>https://markdewing.github.io/blog/posts/prototype-for-profiling-python/</guid><pubDate>Mon, 12 Oct 2015 17:20:00 GMT</pubDate></item><item><title>Towards Profiling Accelerated Python</title><link>https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;One of the conclusions from last post is a need for better profiling tools to show where time is spent in the code.
-Profiling Python + JIT'ed code requires dealing with a couple of issues.&lt;/p&gt;
-&lt;p&gt;The first issue is collecting stack information at different language levels.
-A native profiler collects a stack for the JIT'ed (or compiled extension) code, but eventually the stack enters the implementation of the Python interpreter loop.
-Unless we are trying to optimized the interpreter loop, this is not useful.
-We would rather know what Python code is being executed.
-Python profilers can collect the stack at the Python level, but can't collect native code stacks.&lt;/p&gt;
-&lt;p&gt;The PyPy developers created a solution in &lt;a href="https://vmprof.readthedocs.org/en/latest/"&gt;vmprof&lt;/a&gt;.
-It walks the stack like a native profiler, but also hooks the Python interpreter
-so that it can collect the Python code's file, function, and line number.
-This solution is general to any type of compiled extension (C extensions, Cython, Numba, etc.)
-Read the section in the vmprof docs on &lt;a href="https://vmprof.readthedocs.org/en/latest/#why-a-new-profiler"&gt;Why a new profiler?&lt;/a&gt; for more information.&lt;/p&gt;
-&lt;p&gt;The second issue is particular to JIT'ed code - resolving symbol information after the run.
-For low overhead, native profilers collect a minimum of information at runtime (usually the Instruction Pointer (IP) address at each stack level).
-These IP addresses need to resolved to symbol information after collection.
-Normally this information is kept in debug sections that are generated at compile time.
-However, with JIT compilation, the functions and their address mappings are generated at runtime.&lt;/p&gt;
-&lt;p&gt;LLVM includes an interface to get symbol information at runtime.
-The simplest way to keep it for use after the run is to follow the Linux perf standard (documented &lt;a href="https://github.com/torvalds/linux/blob/master/tools/perf/Documentation/jit-interface.txt"&gt;here&lt;/a&gt;), which stores the address, size, and function name in a file &lt;code&gt;/tmp/perf-&amp;lt;pid&amp;gt;.map&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;To enable Numba with vmprof, I've created a version of llvmlite that is amenable to stack collection, at the &lt;em&gt;perf&lt;/em&gt; branch &lt;a href="https://github.com/markdewing/llvmlite/tree/perf"&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;This does two things:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Keep the frame pointer in JIT'ed code, so a backtrace can be taken.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
-&lt;li&gt;Output a perf-compatible JIT map file (not on by default - need to call &lt;code&gt;enable_jit_events&lt;/code&gt; to turn it on)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;To use this, modify Numba to enable JIT events and frame pointers:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;In  &lt;code&gt;targets\codegen.py&lt;/code&gt;, at the end of the &lt;code&gt;_init&lt;/code&gt; method of &lt;code&gt;BaseCPUCodegen&lt;/code&gt;, add &lt;code&gt;self._engine.enable_jit_events()&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;And for good measure, turn on frame pointers for Numba code as well (set &lt;code&gt;CFLAGS=-fno-omit-frame-pointer&lt;/code&gt; before building it)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;The next piece is a modified version of vmprof ( in branch &lt;a href="https://github.com/markdewing/vmprof-python/tree/numba"&gt;&lt;em&gt;numba&lt;/em&gt;&lt;/a&gt; ).
-So far all it does is read the perf compatible output and dump raw stacks.
-Filtering and aggregating Numba stacks remains to be done (meaning neither the CLI nor the GUI display work yet).&lt;/p&gt;
-&lt;p&gt;How to use what works, so far:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Run vmprof, using perf-enabled Numba above:  &lt;code&gt;python -m vmprof -o vmprof.out &amp;lt;target python&amp;gt;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Copy map file &lt;code&gt;/tmp/perf-&amp;lt;pid&amp;gt;.map&lt;/code&gt; to some directory.   I usually copy &lt;code&gt;vmprof.out&lt;/code&gt; to something like &lt;code&gt;vmprof-&amp;lt;pid&amp;gt;.out&lt;/code&gt; to remember which files correlate.&lt;/li&gt;
-&lt;li&gt;View raw stacks with &lt;code&gt;vmprofdump vmprof-&amp;lt;pid&amp;gt;.out --perf perf-&amp;lt;pid&amp;gt;.map&lt;/code&gt;.  &lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class="footnote"&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id="fn:1"&gt;
-&lt;p&gt;With x86_64, it is possible to use DWARF debug information to walk the stack.  I couldn't figure out how to output the appropriate debug information.  LLVM 3.6 has a promising target option named &lt;code&gt;JITEmitDebugInfo&lt;/code&gt;.  However, &lt;code&gt;JITEmitDebugInfo&lt;/code&gt; is a lie!  It's not hooked up to anything, and has been removed in LLVM 3.7. &lt;a class="footnote-backref" href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;↩&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;&lt;/div&gt;</description><category>Numba</category><category>PyPy</category><category>python</category><category>vmprof</category><guid>https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/</guid><pubDate>Thu, 08 Oct 2015 01:58:00 GMT</pubDate></item><item><title>Improvements in CoMD Cell Method Performance</title><link>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;A &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements/"&gt;previous post&lt;/a&gt; showed some performance improvements with the &lt;em&gt;nsquared&lt;/em&gt; version of the code.
-This post will tackle the &lt;em&gt;cell&lt;/em&gt; version of the code.
-In the &lt;em&gt;nsquared&lt;/em&gt; version the time-consuming inner loop had no function calls.
-The &lt;em&gt;cell&lt;/em&gt; version does call other functions, which may complicate optimization.&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Language/compiler  &lt;/th&gt;
-&lt;th&gt;Version   &lt;/th&gt;
-&lt;th align="right"&gt;Initial time&lt;/th&gt;
-&lt;th align="right"&gt;  Final time&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;C&lt;/td&gt;
-&lt;td&gt;4.8.2&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Python&lt;/td&gt;
-&lt;td&gt;2.7.10&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;PyPy&lt;/td&gt;
-&lt;td&gt;2.6.1&lt;/td&gt;
-&lt;td align="right"&gt;96&lt;/td&gt;
-&lt;td align="right"&gt;96&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Julia&lt;/td&gt;
-&lt;td&gt;0.4.0-rc3&lt;/td&gt;
-&lt;td align="right"&gt;87&lt;/td&gt;
-&lt;td align="right"&gt;6.1&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Cython&lt;/td&gt;
-&lt;td&gt;0.23.3&lt;/td&gt;
-&lt;td align="right"&gt;729&lt;/td&gt;
-&lt;td align="right"&gt;13&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Numba&lt;/td&gt;
-&lt;td&gt;0.21.0&lt;/td&gt;
-&lt;td align="right"&gt;867&lt;/td&gt;
-&lt;td align="right"&gt;47&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;&lt;br&gt;
-Times are all in μs/atom. System size is 4000 atoms.
-Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
-&lt;br&gt;
-The 'Initial Time' column results from the minimal amount of code changes to get the compiler working.
-&lt;br&gt;
-The 'Final Time' is the time after the tuning in this post.&lt;/p&gt;
-&lt;h3&gt;Julia&lt;/h3&gt;
-&lt;p&gt;The &lt;em&gt;cell&lt;/em&gt; version contains the same issue with array operations as the &lt;em&gt;nsquared&lt;/em&gt; version - the computation of &lt;code&gt;dd&lt;/code&gt; allocates a temporary to hold the results every time through the loop.&lt;/p&gt;
-&lt;p&gt;The &lt;a href="https://github.com/lindahua/Devectorize.jl"&gt;Devectorize&lt;/a&gt; package can automatically convert array notation
-to a loop.  If we add the &lt;code&gt;@devec&lt;/code&gt; annotation, the time drops to 43 μs/atom.
-Unfortunately, the allocation to hold the result must still be performed, and it remains inside the inner particle loop.
-If we manually create the loop and hoist the allocation out of the loop, time is 27 μs/atom.&lt;/p&gt;
-&lt;p&gt;The code uses &lt;code&gt;dot&lt;/code&gt; to compute the vector norm.  This calls a routine (&lt;code&gt;julia_dot&lt;/code&gt;) to perform the
-dot product.
-For long vectors calling an optimized linear algebra routine is beneficial, but for a vector of length 3 this adds overhead.
-Replacing &lt;code&gt;dot&lt;/code&gt; with the equivalent loop reduces the time to 23 μs/atom.&lt;/p&gt;
-&lt;p&gt;Looking through the memory allocation output (&lt;code&gt;--track-allocation=user&lt;/code&gt;) shows some vector operations
-when the force array is zeroed and accumulated.
-Also in &lt;code&gt;putAtomInBox&lt;/code&gt; in &lt;code&gt;linkcell.jl&lt;/code&gt;.
- These spots are also visible in the profile output, but the profile output is less convenient because it is not shown with source.
-The &lt;code&gt;@devec&lt;/code&gt; macro does work here, and the performance is now 7.7 μs/atom.   Explicit loops
-give a slightly better time of 7.3 μs/atom.&lt;/p&gt;
-&lt;p&gt;Profiling shows even more opportunities for devectorization in &lt;code&gt;advanceVelocity&lt;/code&gt; and &lt;code&gt;advancePosition&lt;/code&gt; in &lt;code&gt;simflat.jl&lt;/code&gt;  Time is now 6.4 μs/atom.&lt;/p&gt;
-&lt;p&gt;The Julia executable has a &lt;code&gt;-O&lt;/code&gt; switch for more time-intensive optimizations (it adds more LLVM optimization passes).   This improves the time to 6.2 μs/atom.&lt;/p&gt;
-&lt;p&gt;The &lt;code&gt;@fastmath&lt;/code&gt; macro improves the time a little more, to 6.1 μs/atom.
-The &lt;code&gt;@inbounds&lt;/code&gt; macro to skip the bounds checks did not seem to improve the time.&lt;/p&gt;
-&lt;p&gt;The final Julia time is now within a factor of 3 of the C time.  The code is &lt;a href="https://gist.github.com/markdewing/54709a0fd6a17348a7cb"&gt;here&lt;/a&gt;.  It's not clear where the remaining time overhead comes from. &lt;/p&gt;
-&lt;h3&gt;PyPy&lt;/h3&gt;
-&lt;p&gt;The PyPy approach to JIT compilation is very general, but that also makes it difficult to target what code
-changes might improve performance.
-The &lt;a href="https://bitbucket.org/pypy/jitviewer"&gt;Jitviewer&lt;/a&gt; tool is nice, but not helpful at a cursory glance.
-The &lt;a href="https://vmprof.readthedocs.org/en/latest/"&gt;vmprof&lt;/a&gt; profiler solves an important problem by collecting the native code stack plus the python stack. 
-In this particular case, it reports at the function level, and the bulk of the time was spent in &lt;code&gt;computeForce&lt;/code&gt;.
-I hope to write more about vmprof in a future post, as it could help with integrated profiling of Python + native code (either compiled or JIT-ed).&lt;/p&gt;
-&lt;h3&gt;Cython&lt;/h3&gt;
-&lt;p&gt;The simplest step is to add an initialization line and move some &lt;code&gt;.py&lt;/code&gt; files to &lt;code&gt;.pyx&lt;/code&gt; files.  This gives 729 μs/atom.
-Adding types to the computeForce function and assigning a few attribute lookups to local variables so the types can be assigned (playing a game of 'remove the yellow' in the Cython annotation output) gives 30 μs/atom.&lt;/p&gt;
-&lt;p&gt;Adding types and removing bounds checks more routines  (in  &lt;code&gt;halo.py&lt;/code&gt;, &lt;code&gt;linkcell.py&lt;/code&gt;, &lt;code&gt;simflat.py&lt;/code&gt;) gives 13 μs/atom.&lt;/p&gt;
-&lt;p&gt;Code is &lt;a href="https://gist.github.com/markdewing/3688c6eebc0a88081e07"&gt;here&lt;/a&gt;.
-Further progress needs deeper investigation with profiling tools.&lt;/p&gt;
-&lt;h3&gt;Numba&lt;/h3&gt;
-&lt;p&gt;Starting with adding &lt;code&gt;@numba.jit&lt;/code&gt; decorators to &lt;code&gt;computeForce&lt;/code&gt;, and the functions it calls gives the
-initial time of 867 μs/atom.
-Extracting all the attribute lookups (including the function call to &lt;code&gt;getNeighborBoxes&lt;/code&gt;) gives 722 μs/atom.&lt;/p&gt;
-&lt;p&gt;We should ensure the call to &lt;code&gt;getNeighborBoxes&lt;/code&gt; is properly JIT-ed.  Unfortunately, this requires more involved
-code restructuring.  Functions need to be split into a wrapper that performs any needed attribute lookups, and
-an inner function that gets JIT-ed.  Loop lifting automatically performs this transformation on functions
-  with loops.  On functions without loops, however, it needs to be done manually.
-Once this is done, the time improves dramatically to 47 μs/atom.&lt;/p&gt;
-&lt;p&gt;Hopefully the upcoming "JIT Classes" feature will make this easier, and require less code restructuring. &lt;/p&gt;
-&lt;p&gt;Code is &lt;a href="https://gist.github.com/markdewing/89cce577f5b8625cc776"&gt;here&lt;/a&gt;&lt;/p&gt;
-&lt;h3&gt;Summary&lt;/h3&gt;
-&lt;p&gt;Julia is leading in terms of getting the best performance on this example.  Many of these projects are rapidly improving, so this is just a snapshot at their current state.&lt;/p&gt;
-&lt;p&gt;All these projects need better profiling tools to show the user where code is slow and to give feedback on why the code is slow.
-The Cython annotated output is probably the the best - it highlights which lines need attention. 
-However it is not integrated with profiler output, so in a project of any size, it's not clear where a user should spend time adding types.  &lt;/p&gt;
-&lt;p&gt;Julia has some useful collection and feedback tools, but they would be much more helpful if combined.  The memory allocation output is bytes allocated.
-It's useful for finding allocations where none were expected, or for allocations in known hot loops, but it's less clear which other allocations are impacting performance.
-Ideally this could be integrated with profiler output and weighted by time spent to show which allocations are actually affecting execution time.&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>cython</category><category>julia</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</guid><pubDate>Fri, 02 Oct 2015 18:56:00 GMT</pubDate></item></channel></rss>
+PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)&lt;/p&gt;</description><category>CoMD</category><category>PyPy</category><guid>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</guid><pubDate>Wed, 04 Nov 2015 21:39:00 GMT</pubDate></item></channel></rss>

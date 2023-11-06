@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (CoMD)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/comd.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Wed, 09 Dec 2015 04:16:47 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Visualizing MD Data</title><link>https://markdewing.github.io/blog/posts/visualizing-md-data/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Visualizing atomic positions in 3D is useful when working on a molecular dynamics code.&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Journey to the Center of the Computer (Posts about CoMD)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/comd.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Sun, 18 Jun 2023 17:08:31 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Visualizing MD Data</title><link>https://markdewing.github.io/blog/posts/visualizing-md-data/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;Visualizing atomic positions in 3D is useful when working on a molecular dynamics code.&lt;/p&gt;
 &lt;p&gt;More generally, being able to visualize the structures and algorithms inside a code can help with understanding
 and debugging.
 With all the advances in graphics hardware, it should be possible to quickly create visualizations for various
@@ -43,7 +43,7 @@ Displaying a Sphere at each point would be more accurate, but is much slower.&lt
 &lt;h3&gt;Summary&lt;/h3&gt;
 &lt;p&gt;I'm very pleased with VisPy.  It enabled live, interactive animation of atoms from a molecular dynamics code with
  a small amount code.
-I expect extending this to visualize more complex algorithms and data structures should be be straightforward.&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>vispy</category><guid>https://markdewing.github.io/blog/posts/visualizing-md-data/</guid><pubDate>Wed, 09 Dec 2015 04:14:00 GMT</pubDate></item><item><title>More Performance With Numba</title><link>https://markdewing.github.io/blog/posts/more-with-numba/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;Having acquired a shiny new &lt;a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/"&gt;profiler&lt;/a&gt;, it's time to dig into the performance of the Numba version some more.&lt;/p&gt;
+I expect extending this to visualize more complex algorithms and data structures should be be straightforward.&lt;/p&gt;</description><category>CoMD</category><category>vispy</category><guid>https://markdewing.github.io/blog/posts/visualizing-md-data/</guid><pubDate>Wed, 09 Dec 2015 04:14:00 GMT</pubDate></item><item><title>More Performance With Numba</title><link>https://markdewing.github.io/blog/posts/more-with-numba/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;Having acquired a shiny new &lt;a href="http://markdewing.github.io/blog/posts/prototype-for-profiling-python/"&gt;profiler&lt;/a&gt;, it's time to dig into the performance of the Numba version some more.&lt;/p&gt;
 &lt;p&gt;Picking up from the &lt;a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/"&gt;previous optimizations&lt;/a&gt;, I can't seem to reproduce the timing (47 μs/atom) in the that table.  Now I get 40 μs/atom.&lt;/p&gt;
 &lt;h2&gt;First step&lt;/h2&gt;
 &lt;p&gt;Run the profiler (&lt;code&gt;vmprofrun comd.py&lt;/code&gt;) and display the results in KCacheGrind (&lt;code&gt;kcachegrind vmprof-20664.out&lt;/code&gt;)&lt;/p&gt;
@@ -53,34 +53,30 @@ I expect extending this to visualize more complex algorithms and data structures
 &lt;p&gt;&lt;img alt="KCachegrind screenshot of call graph" src="https://markdewing.github.io/blog/2015/profile1_call_graph_sm.png"&gt;&lt;/p&gt;
 &lt;p&gt;To improve performance here, convert &lt;code&gt;getBoxFromCoord&lt;/code&gt; to a free function and put all the attribute references into function arguments.&lt;/p&gt;
 &lt;p&gt;Before:&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;getBoxFromCoord&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;getBoxFromCoord&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
         &lt;span class="n"&gt;ix&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
         &lt;span class="n"&gt;iy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
         &lt;span class="n"&gt;iz&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
         &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBoxFromTuple&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ix&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iy&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iz&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;After:&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;&lt;span class="nd"&gt;@numba.njit&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;&lt;span class="nd"&gt;@numba&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;njit&lt;/span&gt;
 &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;getBoxFromCoordInner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;nLocalBoxes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gs&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="n"&gt;ix&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
     &lt;span class="n"&gt;iy&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
     &lt;span class="n"&gt;iz&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;math&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;getBoxFromTupleInner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ix&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iy&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;iz&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;nLocalBoxes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;(Changing the parameter &lt;code&gt;r&lt;/code&gt; to individual components was not strictly necessary.)&lt;/p&gt;
 &lt;p&gt;And the call sites change (for example) from&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;        &lt;span class="n"&gt;iBox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBoxFromCoord&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;        &lt;span class="n"&gt;iBox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBoxFromCoord&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;to&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;        &lt;span class="n"&gt;iBox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;getBoxFromCoordInner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nLocalBoxes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gridSize&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;
-
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;        &lt;span class="n"&gt;iBox&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;getBoxFromCoordInner&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;z&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;invBoxSize&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nLocalBoxes&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gridSize&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This improves performance to 20 μs/atom.&lt;/p&gt;
 &lt;p&gt;Repeating the same transformation for putAtomInBox gives 18.4 μs/atom.&lt;/p&gt;
@@ -110,8 +106,8 @@ performance is now 10.2 μs/atom.&lt;/p&gt;
 &lt;tr&gt;
 &lt;th&gt;Language/compiler  &lt;/th&gt;
 &lt;th&gt;Version   &lt;/th&gt;
-&lt;th align="right"&gt;Initial time&lt;/th&gt;
-&lt;th align="right"&gt;  Final time&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;Initial time&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;  Final time&lt;/th&gt;
 &lt;th&gt;&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
@@ -119,49 +115,49 @@ performance is now 10.2 μs/atom.&lt;/p&gt;
 &lt;tr&gt;
 &lt;td&gt;Python&lt;/td&gt;
 &lt;td&gt;2.7.10&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;1014&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;1014&lt;/td&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;PyPy&lt;/td&gt;
 &lt;td&gt;4.0&lt;/td&gt;
-&lt;td align="right"&gt;30&lt;/td&gt;
-&lt;td align="right"&gt;30&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;30&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;30&lt;/td&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Cython&lt;/td&gt;
 &lt;td&gt;0.23.3&lt;/td&gt;
-&lt;td align="right"&gt;729&lt;/td&gt;
-&lt;td align="right"&gt;13&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;729&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;13&lt;/td&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Julia&lt;/td&gt;
 &lt;td&gt;0.4.0-rc3&lt;/td&gt;
-&lt;td align="right"&gt;87&lt;/td&gt;
-&lt;td align="right"&gt;6.1&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;87&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;6.1&lt;/td&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Numba&lt;/td&gt;
 &lt;td&gt;0.22.1&lt;/td&gt;
-&lt;td align="right"&gt;867&lt;/td&gt;
-&lt;td align="right"&gt;2.9&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;867&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.9&lt;/td&gt;
 &lt;td&gt;    New result&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;C (clang)&lt;/td&gt;
 &lt;td&gt;3.7&lt;/td&gt;
-&lt;td align="right"&gt;2.2&lt;/td&gt;
-&lt;td align="right"&gt;2.2&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.2&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.2&lt;/td&gt;
 &lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;br&gt;
-&lt;/p&gt;&lt;div style="font-size:80%"&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;div style="font-size:80%"&gt;
 Times are all in μs/atom. System size is 4000 atoms.
 Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
 &lt;br&gt;
@@ -169,7 +165,7 @@ The 'Initial Time' column results from the minimal amount of code changes to get
 &lt;br&gt;
 The 'Final Time' is the time after tuning.
 &lt;/div&gt;
-&lt;br&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;p&gt;Do note that the Cython, Julia, and Numba results reflect the amount of effort put into optimization.
 Cython and Julia still need to be improved with the assistance of a profiler (or in Julia's case, a better viewer
 for existing profile data).&lt;/p&gt;
@@ -179,67 +175,22 @@ for existing profile data).&lt;/p&gt;
 that I would not want to perform on a regular basis.    These transformations are fairly regular, so it should
 be possible to incorporate them into Numba.  Alternately, if doing so in a safe manner inside the compiler is difficult,
 some sort of automated AST transformation of the source should be possible.&lt;/p&gt;
-&lt;p&gt;As the optimization process proceeds on this code, increasing amount of time is being spent in the core routine, computeForce, (as it should), and we will need to move beyond a function-level profiler to look for optimization opportunities.&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>Numba</category><category>python</category><guid>https://markdewing.github.io/blog/posts/more-with-numba/</guid><pubDate>Fri, 13 Nov 2015 16:30:00 GMT</pubDate></item><item><title>Performance Updates with PyPy 4.0</title><link>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The PyPy team recently released version &lt;a href="http://morepypy.blogspot.com/2015/10/pypy-400-released-jit-with-simd.html"&gt;4.0&lt;/a&gt;
+&lt;p&gt;As the optimization process proceeds on this code, increasing amount of time is being spent in the core routine, computeForce, (as it should), and we will need to move beyond a function-level profiler to look for optimization opportunities.&lt;/p&gt;</description><category>CoMD</category><category>Numba</category><category>python</category><guid>https://markdewing.github.io/blog/posts/more-with-numba/</guid><pubDate>Fri, 13 Nov 2015 16:30:00 GMT</pubDate></item><item><title>Performance Updates with PyPy 4.0</title><link>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;The PyPy team recently released version &lt;a href="http://morepypy.blogspot.com/2015/10/pypy-400-released-jit-with-simd.html"&gt;4.0&lt;/a&gt;
 (The jump in version number is to reduce confusion with the Python version supported.)
 One of the features is improved performance.&lt;/p&gt;
 &lt;p&gt;But first, an issue with reporting accurate timings with this version of CoMD should be addressed. The initial iteration contains overhead from tracing and JIT compilation (Cython and Numba have the same issue).
 For this example we are concerned with the steady-state timing, so the time for the first iteration should be excluded.
 I've added a '--skip' parameter to the CoMD code (default: 1) that skips the first &lt;code&gt;printRate&lt;/code&gt; steps (default: 10) in computing the overall average update rate at the end.&lt;/p&gt;
 &lt;p&gt;Now the table with the most recent performance numbers  (from &lt;a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/"&gt;this post&lt;/a&gt; ), updated with PyPy 4.0 results:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Language/compiler  &lt;/th&gt;
-&lt;th&gt;Version   &lt;/th&gt;
-&lt;th align="right"&gt;Time&lt;/th&gt;
-&lt;th align="right"&gt;&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Python&lt;/td&gt;
-&lt;td&gt;2.7.10&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;PyPy&lt;/td&gt;
-&lt;td&gt;2.6.1&lt;/td&gt;
-&lt;td align="right"&gt;96&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Numba&lt;/td&gt;
-&lt;td&gt;0.21.0&lt;/td&gt;
-&lt;td align="right"&gt;47&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;PyPy&lt;/td&gt;
-&lt;td&gt;4.0&lt;/td&gt;
-&lt;td align="right"&gt;30&lt;/td&gt;
-&lt;td align="right"&gt;    New result&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Cython&lt;/td&gt;
-&lt;td&gt;0.23.3&lt;/td&gt;
-&lt;td align="right"&gt;13&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Julia&lt;/td&gt;
-&lt;td&gt;0.4.0-rc3&lt;/td&gt;
-&lt;td align="right"&gt;6.1&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;C&lt;/td&gt;
-&lt;td&gt;4.8.2&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
+&lt;p&gt;| Language/compiler   | Version   | Time|
+|-------------------|--------------|--------------:|------------:|
+| Python            | 2.7.10       |  1014          | |
+| PyPy              | 2.6.1        |    96         | |
+| Numba             | 0.21.0       |     47     | |
+| PyPy              | 4.0          |    30         |      New result |
+| Cython            | 0.23.3       |     13     | |
+| Julia             | 0.4.0-rc3    |    6.1     | |
+| C                 | 4.8.2        |    2.3          | |&lt;/p&gt;
 &lt;p&gt;&lt;br&gt;
 Times are all in μs/atom. System size is 4000 atoms.
 Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
@@ -247,7 +198,7 @@ Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
 &lt;p&gt;The new release of PyPy also includes some SIMD vectorization support (&lt;code&gt;--jit vec=1&lt;/code&gt; or &lt;code&gt;--jit vec_all=1&lt;/code&gt;).  Neither of these provided any improvement in performance on this code.   Not too surprising given the vectorization support is new, and the code contains
 conditionals in the inner loop.&lt;/p&gt;
 &lt;p&gt;PyPy 4.0 gives a very good 34x performance improvement over bare Python, and 3x improvement over the previous release (2.6.1).
-PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>PyPy</category><guid>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</guid><pubDate>Wed, 04 Nov 2015 21:39:00 GMT</pubDate></item><item><title>Improvements in CoMD Cell Method Performance</title><link>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;A &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements/"&gt;previous post&lt;/a&gt; showed some performance improvements with the &lt;em&gt;nsquared&lt;/em&gt; version of the code.
+PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)&lt;/p&gt;</description><category>CoMD</category><category>PyPy</category><guid>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</guid><pubDate>Wed, 04 Nov 2015 21:39:00 GMT</pubDate></item><item><title>Improvements in CoMD Cell Method Performance</title><link>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;A &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements/"&gt;previous post&lt;/a&gt; showed some performance improvements with the &lt;em&gt;nsquared&lt;/em&gt; version of the code.
 This post will tackle the &lt;em&gt;cell&lt;/em&gt; version of the code.
 In the &lt;em&gt;nsquared&lt;/em&gt; version the time-consuming inner loop had no function calls.
 The &lt;em&gt;cell&lt;/em&gt; version does call other functions, which may complicate optimization.&lt;/p&gt;
@@ -256,46 +207,46 @@ The &lt;em&gt;cell&lt;/em&gt; version does call other functions, which may compl
 &lt;tr&gt;
 &lt;th&gt;Language/compiler  &lt;/th&gt;
 &lt;th&gt;Version   &lt;/th&gt;
-&lt;th align="right"&gt;Initial time&lt;/th&gt;
-&lt;th align="right"&gt;  Final time&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;Initial time&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;  Final time&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;C&lt;/td&gt;
 &lt;td&gt;4.8.2&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.3&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.3&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Python&lt;/td&gt;
 &lt;td&gt;2.7.10&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;1014&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;1014&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;PyPy&lt;/td&gt;
 &lt;td&gt;2.6.1&lt;/td&gt;
-&lt;td align="right"&gt;96&lt;/td&gt;
-&lt;td align="right"&gt;96&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;96&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;96&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Julia&lt;/td&gt;
 &lt;td&gt;0.4.0-rc3&lt;/td&gt;
-&lt;td align="right"&gt;87&lt;/td&gt;
-&lt;td align="right"&gt;6.1&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;87&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;6.1&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Cython&lt;/td&gt;
 &lt;td&gt;0.23.3&lt;/td&gt;
-&lt;td align="right"&gt;729&lt;/td&gt;
-&lt;td align="right"&gt;13&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;729&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;13&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Numba&lt;/td&gt;
 &lt;td&gt;0.21.0&lt;/td&gt;
-&lt;td align="right"&gt;867&lt;/td&gt;
-&lt;td align="right"&gt;47&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;867&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;47&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -358,7 +309,7 @@ The Cython annotated output is probably the the best - it highlights which lines
 However it is not integrated with profiler output, so in a project of any size, it's not clear where a user should spend time adding types.  &lt;/p&gt;
 &lt;p&gt;Julia has some useful collection and feedback tools, but they would be much more helpful if combined.  The memory allocation output is bytes allocated.
 It's useful for finding allocations where none were expected, or for allocations in known hot loops, but it's less clear which other allocations are impacting performance.
-Ideally this could be integrated with profiler output and weighted by time spent to show which allocations are actually affecting execution time.&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>cython</category><category>julia</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</guid><pubDate>Fri, 02 Oct 2015 18:56:00 GMT</pubDate></item><item><title>Comparing languages with miniapps</title><link>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The &lt;a href="https://mantevo.org/"&gt;Mantevo project&lt;/a&gt; provides a collection of miniapps, which are simplified versions
+Ideally this could be integrated with profiler output and weighted by time spent to show which allocations are actually affecting execution time.&lt;/p&gt;</description><category>CoMD</category><category>cython</category><category>julia</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</guid><pubDate>Fri, 02 Oct 2015 18:56:00 GMT</pubDate></item><item><title>Comparing languages with miniapps</title><link>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;The &lt;a href="https://mantevo.org/"&gt;Mantevo project&lt;/a&gt; provides a collection of miniapps, which are simplified versions
 of real scientific applications that make it easier to explore performance, scaling, languages, programming models, etc.
 I want to focus on the language aspect and port some apps to new languages to see how they compare. &lt;/p&gt;
 &lt;p&gt;The first miniapp I started with is &lt;a href="http://www.exmatex.org/comd.html"&gt;CoMD&lt;/a&gt;, a molecular dynamics code in C.&lt;/p&gt;
@@ -424,40 +375,40 @@ The ultimate goal is near C/Fortran speeds using a higher-level language to expr
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;Language/Compiler  &lt;/th&gt;
-&lt;th align="left"&gt;Version&lt;/th&gt;
-&lt;th align="right"&gt;Time/atom (microseconds)&lt;/th&gt;
+&lt;th style="text-align: left;"&gt;Version&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;Time/atom (microseconds)&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;C - gcc&lt;/td&gt;
-&lt;td align="left"&gt;4.8.2&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;4.8.2&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.3&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Julia&lt;/td&gt;
-&lt;td align="left"&gt;0.3.11&lt;/td&gt;
-&lt;td align="right"&gt;153.0&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;0.3.11&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;153.0&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Julia&lt;/td&gt;
-&lt;td align="left"&gt;0.4.0-dev+6990&lt;/td&gt;
-&lt;td align="right"&gt;88.8&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;0.4.0-dev+6990&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;88.8&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Python&lt;/td&gt;
-&lt;td align="left"&gt;2.7.10 (from Anaconda)  &lt;/td&gt;
-&lt;td align="right"&gt;941.0&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;2.7.10 (from Anaconda)  &lt;/td&gt;
+&lt;td style="text-align: right;"&gt;941.0&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Numba&lt;/td&gt;
-&lt;td align="left"&gt;0.20.0&lt;/td&gt;
-&lt;td align="right"&gt;789.0&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;0.20.0&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;789.0&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Pypy&lt;/td&gt;
-&lt;td align="left"&gt;2.6.1&lt;/td&gt;
-&lt;td align="right"&gt;98.4&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;2.6.1&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;98.4&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -477,4 +428,4 @@ under these two systems in the next few posts.&lt;/p&gt;
 &lt;!--
 Julia and Numba have similar stages (infer types, convert to LLVM IR, convert to native code), and so I hope to look
 at them in parallel going forward.  
---&gt;&lt;/div&gt;</description><category>CoMD</category><category>julia</category><category>Mantevo</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</guid><pubDate>Wed, 02 Sep 2015 16:18:50 GMT</pubDate></item></channel></rss>
+--&gt;</description><category>CoMD</category><category>julia</category><category>Mantevo</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</guid><pubDate>Wed, 02 Sep 2015 16:18:50 GMT</pubDate></item></channel></rss>

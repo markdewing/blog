@@ -6,96 +6,305 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Journey to the Center of the Computer (old posts, page 1) | Journey to the Center of the Computer</title>
 <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/index-1.html">
-<link rel="prev" href="." type="text/html">
+<link rel="prev" href="index-2.html" type="text/html">
 <!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]-->
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
 
-<!-- Menubar -->
-
-<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
-<!-- This keeps the margins nice -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="https://markdewing.github.io/blog/">
-
-                <span id="blog-title">Journey to the Center of the Computer</span>
-            </a>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
         </div>
-<!-- /.navbar-header -->
-        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
-            <ul class="nav navbar-nav">
-<li>
-<a href="archive.html">Archive</a>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href=".">
+
+            <span id="blog-title">Journey to the Center of the Computer</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav"></ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="archive.html" class="nav-link">Archive</a>
                 </li>
-<li>
-<a href="categories/">Tags</a>
+<li class="nav-item">
+<a href="categories/" class="nav-link">Tags</a>
                 </li>
-<li>
-<a href="rss.xml">RSS feed</a>
+<li class="nav-item">
+<a href="rss.xml" class="nav-link">RSS feed</a>
 
                 
             </li>
 </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
 </div>
 <!-- /.navbar-collapse -->
-    </div>
-<!-- /.container -->
-</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
     <div class="body-content">
         <!--Body content-->
-        <div class="row">
-            
-            
-
-<div class="postindex">
-    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/two-meanings-of-vectorization/" class="u-url">Two Meanings of Vectorization</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/two-meanings-of-vectorization/" rel="bookmark"><time class="published dt-published" datetime="2015-10-01T22:23:00-05:00" title="2015-10-01 22:23">2015-10-01 22:23</time></a></p>
-                <p class="commentline">
         
+        
+        
+    
+        
+
+    
+        
+    <div class="postindex">
+            <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/towards-profiling-accelerated-python/" class="u-url">Towards Profiling Accelerated Python</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        Mark Dewing
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/towards-profiling-accelerated-python/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-10-07T20:58:00-05:00" itemprop="datePublished" title="2015-10-07 20:58">2015-10-07 20:58</time></a>
+            </p>
+                        <p class="commentline">
+    
+    <a href="posts/towards-profiling-accelerated-python/#disqus_thread" data-disqus-identifier="cache/posts/towards-profiling-accelerated-python.html">Comments</a>
+
+
+                </p>
+</div>
+            </header><div class="e-content entry-content">
+                    <p>One of the conclusions from last post is a need for better profiling tools to show where time is spent in the code.
+Profiling Python + JIT'ed code requires dealing with a couple of issues.</p>
+<p>The first issue is collecting stack information at different language levels.
+A native profiler collects a stack for the JIT'ed (or compiled extension) code, but eventually the stack enters the implementation of the Python interpreter loop.
+Unless we are trying to optimized the interpreter loop, this is not useful.
+We would rather know what Python code is being executed.
+Python profilers can collect the stack at the Python level, but can't collect native code stacks.</p>
+<p>The PyPy developers created a solution in <a href="https://vmprof.readthedocs.org/en/latest/">vmprof</a>.
+It walks the stack like a native profiler, but also hooks the Python interpreter
+so that it can collect the Python code's file, function, and line number.
+This solution is general to any type of compiled extension (C extensions, Cython, Numba, etc.)
+Read the section in the vmprof docs on <a href="https://vmprof.readthedocs.org/en/latest/#why-a-new-profiler">Why a new profiler?</a> for more information.</p>
+<p>The second issue is particular to JIT'ed code - resolving symbol information after the run.
+For low overhead, native profilers collect a minimum of information at runtime (usually the Instruction Pointer (IP) address at each stack level).
+These IP addresses need to resolved to symbol information after collection.
+Normally this information is kept in debug sections that are generated at compile time.
+However, with JIT compilation, the functions and their address mappings are generated at runtime.</p>
+<p>LLVM includes an interface to get symbol information at runtime.
+The simplest way to keep it for use after the run is to follow the Linux perf standard (documented <a href="https://github.com/torvalds/linux/blob/master/tools/perf/Documentation/jit-interface.txt">here</a>), which stores the address, size, and function name in a file <code>/tmp/perf-&lt;pid&gt;.map</code>.</p>
+<p>To enable Numba with vmprof, I've created a version of llvmlite that is amenable to stack collection, at the <em>perf</em> branch <a href="https://github.com/markdewing/llvmlite/tree/perf">here</a>.</p>
+<p>This does two things:</p>
+<ol>
+<li>Keep the frame pointer in JIT'ed code, so a backtrace can be taken.<sup id="fnref:1"><a class="footnote-ref" href="posts/towards-profiling-accelerated-python/#fn:1">1</a></sup>
+</li>
+<li>Output a perf-compatible JIT map file (not on by default - need to call <code>enable_jit_events</code> to turn it on)</li>
+</ol>
+<p>To use this, modify Numba to enable JIT events and frame pointers:</p>
+<ol>
+<li>In  <code>targets\codegen.py</code>, at the end of the <code>_init</code> method of <code>BaseCPUCodegen</code>, add <code>self._engine.enable_jit_events()</code>
+</li>
+<li>And for good measure, turn on frame pointers for Numba code as well (set <code>CFLAGS=-fno-omit-frame-pointer</code> before building it)</li>
+</ol>
+<p>The next piece is a modified version of vmprof ( in branch <a href="https://github.com/markdewing/vmprof-python/tree/numba"><em>numba</em></a> ).
+So far all it does is read the perf compatible output and dump raw stacks.
+Filtering and aggregating Numba stacks remains to be done (meaning neither the CLI nor the GUI display work yet).</p>
+<p>How to use what works, so far:</p>
+<ol>
+<li>Run vmprof, using perf-enabled Numba above:  <code>python -m vmprof -o vmprof.out &lt;target python&gt;</code>
+</li>
+<li>Copy map file <code>/tmp/perf-&lt;pid&gt;.map</code> to some directory.   I usually copy <code>vmprof.out</code> to something like <code>vmprof-&lt;pid&gt;.out</code> to remember which files correlate.</li>
+<li>View raw stacks with <code>vmprofdump vmprof-&lt;pid&gt;.out --perf perf-&lt;pid&gt;.map</code>.  </li>
+</ol>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn:1">
+<p>With x86_64, it is possible to use DWARF debug information to walk the stack.  I couldn't figure out how to output the appropriate debug information.  LLVM 3.6 has a promising target option named <code>JITEmitDebugInfo</code>.  However, <code>JITEmitDebugInfo</code> is a lie!  It's not hooked up to anything, and has been removed in LLVM 3.7. <a class="footnote-backref" href="posts/towards-profiling-accelerated-python/#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
+</li>
+</ol>
+</div>
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/improvements-in-comd-cell-method-performance/" class="u-url">Improvements in CoMD Cell Method Performance</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        Mark Dewing
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/improvements-in-comd-cell-method-performance/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-10-02T13:56:00-05:00" itemprop="datePublished" title="2015-10-02 13:56">2015-10-02 13:56</time></a>
+            </p>
+                        <p class="commentline">
+    
+    <a href="posts/improvements-in-comd-cell-method-performance/#disqus_thread" data-disqus-identifier="cache/posts/improvements-in-cell-method-performance.html">Comments</a>
+
+
+                </p>
+</div>
+            </header><div class="e-content entry-content">
+                    <p>A <a href="http://markdewing.github.io/blog/posts/first-performance-improvements/">previous post</a> showed some performance improvements with the <em>nsquared</em> version of the code.
+This post will tackle the <em>cell</em> version of the code.
+In the <em>nsquared</em> version the time-consuming inner loop had no function calls.
+The <em>cell</em> version does call other functions, which may complicate optimization.</p>
+<table>
+<thead><tr>
+<th>Language/compiler  </th>
+<th>Version   </th>
+<th style="text-align: right;">Initial time</th>
+<th style="text-align: right;">  Final time</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>C</td>
+<td>4.8.2</td>
+<td style="text-align: right;">2.3</td>
+<td style="text-align: right;">2.3</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>2.7.10</td>
+<td style="text-align: right;">1014</td>
+<td style="text-align: right;">1014</td>
+</tr>
+<tr>
+<td>PyPy</td>
+<td>2.6.1</td>
+<td style="text-align: right;">96</td>
+<td style="text-align: right;">96</td>
+</tr>
+<tr>
+<td>Julia</td>
+<td>0.4.0-rc3</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: right;">6.1</td>
+</tr>
+<tr>
+<td>Cython</td>
+<td>0.23.3</td>
+<td style="text-align: right;">729</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>0.21.0</td>
+<td style="text-align: right;">867</td>
+<td style="text-align: right;">47</td>
+</tr>
+</tbody>
+</table>
+<p><br>
+Times are all in μs/atom. System size is 4000 atoms.
+Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
+<br>
+The 'Initial Time' column results from the minimal amount of code changes to get the compiler working.
+<br>
+The 'Final Time' is the time after the tuning in this post.</p>
+<h3>Julia</h3>
+<p>The <em>cell</em> version contains the same issue with array operations as the <em>nsquared</em> version - the computation of <code>dd</code> allocates a temporary to hold the results every time through the loop.</p>
+<p>The <a href="https://github.com/lindahua/Devectorize.jl">Devectorize</a> package can automatically convert array notation
+to a loop.  If we add the <code>@devec</code> annotation, the time drops to 43 μs/atom.
+Unfortunately, the allocation to hold the result must still be performed, and it remains inside the inner particle loop.
+If we manually create the loop and hoist the allocation out of the loop, time is 27 μs/atom.</p>
+<p>The code uses <code>dot</code> to compute the vector norm.  This calls a routine (<code>julia_dot</code>) to perform the
+dot product.
+For long vectors calling an optimized linear algebra routine is beneficial, but for a vector of length 3 this adds overhead.
+Replacing <code>dot</code> with the equivalent loop reduces the time to 23 μs/atom.</p>
+<p>Looking through the memory allocation output (<code>--track-allocation=user</code>) shows some vector operations
+when the force array is zeroed and accumulated.
+Also in <code>putAtomInBox</code> in <code>linkcell.jl</code>.
+ These spots are also visible in the profile output, but the profile output is less convenient because it is not shown with source.
+The <code>@devec</code> macro does work here, and the performance is now 7.7 μs/atom.   Explicit loops
+give a slightly better time of 7.3 μs/atom.</p>
+<p>Profiling shows even more opportunities for devectorization in <code>advanceVelocity</code> and <code>advancePosition</code> in <code>simflat.jl</code>  Time is now 6.4 μs/atom.</p>
+<p>The Julia executable has a <code>-O</code> switch for more time-intensive optimizations (it adds more LLVM optimization passes).   This improves the time to 6.2 μs/atom.</p>
+<p>The <code>@fastmath</code> macro improves the time a little more, to 6.1 μs/atom.
+The <code>@inbounds</code> macro to skip the bounds checks did not seem to improve the time.</p>
+<p>The final Julia time is now within a factor of 3 of the C time.  The code is <a href="https://gist.github.com/markdewing/54709a0fd6a17348a7cb">here</a>.  It's not clear where the remaining time overhead comes from. </p>
+<h3>PyPy</h3>
+<p>The PyPy approach to JIT compilation is very general, but that also makes it difficult to target what code
+changes might improve performance.
+The <a href="https://bitbucket.org/pypy/jitviewer">Jitviewer</a> tool is nice, but not helpful at a cursory glance.
+The <a href="https://vmprof.readthedocs.org/en/latest/">vmprof</a> profiler solves an important problem by collecting the native code stack plus the python stack. 
+In this particular case, it reports at the function level, and the bulk of the time was spent in <code>computeForce</code>.
+I hope to write more about vmprof in a future post, as it could help with integrated profiling of Python + native code (either compiled or JIT-ed).</p>
+<h3>Cython</h3>
+<p>The simplest step is to add an initialization line and move some <code>.py</code> files to <code>.pyx</code> files.  This gives 729 μs/atom.
+Adding types to the computeForce function and assigning a few attribute lookups to local variables so the types can be assigned (playing a game of 'remove the yellow' in the Cython annotation output) gives 30 μs/atom.</p>
+<p>Adding types and removing bounds checks more routines  (in  <code>halo.py</code>, <code>linkcell.py</code>, <code>simflat.py</code>) gives 13 μs/atom.</p>
+<p>Code is <a href="https://gist.github.com/markdewing/3688c6eebc0a88081e07">here</a>.
+Further progress needs deeper investigation with profiling tools.</p>
+<h3>Numba</h3>
+<p>Starting with adding <code>@numba.jit</code> decorators to <code>computeForce</code>, and the functions it calls gives the
+initial time of 867 μs/atom.
+Extracting all the attribute lookups (including the function call to <code>getNeighborBoxes</code>) gives 722 μs/atom.</p>
+<p>We should ensure the call to <code>getNeighborBoxes</code> is properly JIT-ed.  Unfortunately, this requires more involved
+code restructuring.  Functions need to be split into a wrapper that performs any needed attribute lookups, and
+an inner function that gets JIT-ed.  Loop lifting automatically performs this transformation on functions
+  with loops.  On functions without loops, however, it needs to be done manually.
+Once this is done, the time improves dramatically to 47 μs/atom.</p>
+<p>Hopefully the upcoming "JIT Classes" feature will make this easier, and require less code restructuring. </p>
+<p>Code is <a href="https://gist.github.com/markdewing/89cce577f5b8625cc776">here</a></p>
+<h3>Summary</h3>
+<p>Julia is leading in terms of getting the best performance on this example.  Many of these projects are rapidly improving, so this is just a snapshot at their current state.</p>
+<p>All these projects need better profiling tools to show the user where code is slow and to give feedback on why the code is slow.
+The Cython annotated output is probably the the best - it highlights which lines need attention. 
+However it is not integrated with profiler output, so in a project of any size, it's not clear where a user should spend time adding types.  </p>
+<p>Julia has some useful collection and feedback tools, but they would be much more helpful if combined.  The memory allocation output is bytes allocated.
+It's useful for finding allocations where none were expected, or for allocations in known hot loops, but it's less clear which other allocations are impacting performance.
+Ideally this could be integrated with profiler output and weighted by time spent to show which allocations are actually affecting execution time.</p>
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/two-meanings-of-vectorization/" class="u-url">Two Meanings of Vectorization</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        Mark Dewing
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/two-meanings-of-vectorization/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-10-01T22:23:00-05:00" itemprop="datePublished" title="2015-10-01 22:23">2015-10-01 22:23</time></a>
+            </p>
+                        <p class="commentline">
+    
     <a href="posts/two-meanings-of-vectorization/#disqus_thread" data-disqus-identifier="cache/posts/two-meanings-of-vectorization.html">Comments</a>
 
 
-        </p>
+                </p>
 </div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>The term 'vectorize' as used by programmers has at least two separate uses.
+            </header><div class="e-content entry-content">
+                    <p>The term 'vectorize' as used by programmers has at least two separate uses.
 Both uses can have implications for performance, which sometimes leads to confusion.</p>
 <p>One meaning refers to a language syntax to express operations on multiple values - typically an entire array, or a slice of a array.
 This can be a very convenient notation for expressing algorithms.</p>
 <p>Here is a simple example (in Julia) using loop-oriented (devectorized) notation</p>
-<pre class="code literal-block"><span class="n">a</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<div class="code"><pre class="code literal-block"><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
+<span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
 <span class="c"># allocate space for result</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="p">:</span><span class="mi">10</span>
-    <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">10</span>
+<span class="w">    </span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="k">end</span>
-</pre>
-
+</pre></div>
 
 <p>Now compare with using vectorized (array) notation</p>
-<pre class="code literal-block"><span class="n">a</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<div class="code"><pre class="code literal-block"><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
+<span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ones</span><span class="p">(</span><span class="kt">Float64</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
 
 <span class="c"># space for result automatically allocated</span>
 
-<span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
-</pre>
-
+<span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
+</pre></div>
 
 <p>The vectorized notation is more compact.
 Julia and Python/Numpy programmers usually mean this when referring to 'vectorization'.
@@ -106,36 +315,38 @@ Note that Python/Numpy operates similar to R as described in the post - good per
 This is what Fortran or C/C++ programmers (and their compilers) mean by 'vectorization'.
 In Julia, the <code>@simd</code> macro gives hints to the compiler that a given loop can be vectorized.</p>
 <p>See more in the Wikipedia entry on <a href="https://en.wikipedia.org/wiki/Automatic_vectorization">Automatic vectorization</a></p>
-</div>
-    </div>
-    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/why-types-help-performance/" class="u-url">Why Types Help Performance</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/why-types-help-performance/" rel="bookmark"><time class="published dt-published" datetime="2015-09-24T10:48:00-05:00" title="2015-09-24 10:48">2015-09-24 10:48</time></a></p>
-                <p class="commentline">
-        
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/why-types-help-performance/" class="u-url">Why Types Help Performance</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        Mark Dewing
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/why-types-help-performance/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-09-24T10:48:00-05:00" itemprop="datePublished" title="2015-09-24 10:48">2015-09-24 10:48</time></a>
+            </p>
+                        <p class="commentline">
+    
     <a href="posts/why-types-help-performance/#disqus_thread" data-disqus-identifier="cache/posts/why-types-help-performance.html">Comments</a>
 
 
-        </p>
+                </p>
 </div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>In <a href="http://markdewing.github.io/blog/posts/first-performance-improvements">previous</a> <a href="http://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/">posts</a>, we've seen that adding type information can help the performance of the code generated by dynamic language compilers.
+            </header><div class="e-content entry-content">
+                    <p>In <a href="http://markdewing.github.io/blog/posts/first-performance-improvements">previous</a> <a href="http://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/">posts</a>, we've seen that adding type information can help the performance of the code generated by dynamic language compilers.
 The documentation for Cython annotations talks of 'Python interaction', and Numba has 'object' mode and 'nopython' modes.
 In post I will look more at what these mean, and how they affect performance.</p>
 <p>To start, consider how values are represented in a computer, such as a simple integer ('int' type in C).
 The bare value takes 4 bytes in memory, and no additional information about it is stored,
 such as its type or how much space it occupies.
-This information is all implicit at run time <sup id="fnref:1"><a class="footnote-ref" href="posts/why-types-help-performance/#fn:1" rel="footnote">1</a></sup>.
+This information is all implicit at run time <sup id="fnref:1"><a class="footnote-ref" href="posts/why-types-help-performance/#fn:1">1</a></sup>.
 That it takes 4-bytes and is interpreted as an integer is determined at compile time.</p>
 <p>In dynamic languages, this extra information can be queried at run-time.
 For example:</p>
-<pre class="code literal-block"><span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span>
+<div class="code"><pre class="code literal-block"><span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="o">&lt;</span><span class="nb">type</span> <span class="s">'int'</span><span class="o">&gt;</span>
-</pre>
-
+<span class="o">&lt;</span><span class="nb">type</span> <span class="s1">'int'</span><span class="o">&gt;</span>
+</pre></div>
 
 <p>The value stored in <code>a</code> has type <code>int</code>, Python's integer type.
 This extra information must be stored somewhere, and languages often solve this by wrapping
@@ -151,24 +362,22 @@ always determine the type of a value.
 If we look a layer down, as would be needed to integrate with C, these values are accessed through the Python API.
 The base type of any object is PyObject.  For our simple example, integers are stored as PyIntObject.</p>
 <p>For example, consider the following Python code.</p>
-<pre class="code literal-block">  <span class="k">def</span> <span class="nf">add</span><span class="p">():</span>
+<div class="code"><pre class="code literal-block">  <span class="k">def</span> <span class="nf">add</span><span class="p">():</span>
     <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
-</pre>
-
+</pre></div>
 
 <p>One way to see what calls the interpreter would make is to compile with Cython.
 The following C is the result (simplified - reference counting pieces to the Python API are omitted.)</p>
-<pre class="code literal-block"><span class="n">PyObject</span> <span class="o">*</span><span class="nf">add</span><span class="p">()</span>
+<div class="code"><pre class="code literal-block"><span class="n">PyObject</span><span class="w"> </span><span class="o">*</span><span class="nf">add</span><span class="p">()</span>
 <span class="p">{</span>
-  <span class="n">PyObject</span> <span class="o">*</span><span class="n">pyx_int_1</span> <span class="o">=</span> <span class="n">PyInt_FromLong</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-  <span class="n">PyObject</span> <span class="o">*</span><span class="n">pyx_int_2</span> <span class="o">=</span> <span class="n">PyInt_FromLong</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-  <span class="n">PyObject</span> <span class="o">*</span><span class="n">pyx_tmp</span> <span class="o">=</span> <span class="n">PyNumber_Add</span><span class="p">(</span><span class="n">pyx_int_1</span><span class="p">,</span> <span class="n">pyx_int_2</span><span class="p">);</span>
-  <span class="k">return</span> <span class="n">pyx_tmp</span><span class="p">;</span>
+<span class="w">  </span><span class="n">PyObject</span><span class="w"> </span><span class="o">*</span><span class="n">pyx_int_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PyInt_FromLong</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">PyObject</span><span class="w"> </span><span class="o">*</span><span class="n">pyx_int_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PyInt_FromLong</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="w">  </span><span class="n">PyObject</span><span class="w"> </span><span class="o">*</span><span class="n">pyx_tmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PyNumber_Add</span><span class="p">(</span><span class="n">pyx_int_1</span><span class="p">,</span><span class="w"> </span><span class="n">pyx_int_2</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">pyx_tmp</span><span class="p">;</span>
 <span class="p">}</span>
-</pre>
-
+</pre></div>
 
 <p>Without type information, Cython basically unrolls the interpreter loop, and makes
 a sequence of Python API calls.
@@ -176,24 +385,22 @@ The HTML annotation output highlights lines with Python interaction, and can be 
 the generated code.   This gives feedback on where and what types need to be added to avoid
 the Python API calls.</p>
 <p>Add some Cython annotations and the example becomes</p>
-<pre class="code literal-block"> <span class="n">cdef</span> <span class="nb">int</span> <span class="n">add</span><span class="p">():</span>
+<div class="code"><pre class="code literal-block"> <span class="n">cdef</span> <span class="nb">int</span> <span class="n">add</span><span class="p">():</span>
     <span class="n">cdef</span> <span class="nb">int</span> <span class="n">a</span>
     <span class="n">cdef</span> <span class="nb">int</span> <span class="n">b</span>
     <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
-</pre>
-
+</pre></div>
 
 <p>Now the following code is generated</p>
-<pre class="code literal-block"> <span class="kt">int</span> <span class="nf">add</span><span class="p">()</span>
- <span class="p">{</span>
-  <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-  <span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">;</span>
- <span class="p">}</span>
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">add</span><span class="p">()</span>
+<span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">;</span>
+<span class="w"> </span><span class="p">}</span>
+</pre></div>
 
 <p>The add of the two integers is done directly (and runs much faster), rather than going through the Python API call.</p>
 <h3>Numba</h3>
@@ -209,31 +416,29 @@ documentation for more about Julia objects.</p>
 <p>Julia's type inference only happens inside functions.
 This is why composite types (structures) need type annotations for good performance.</p>
 <p>This example demonstrates the issue</p>
-<pre class="code literal-block"><span class="k">type</span><span class="nc"> Example</span>
-    <span class="n">val</span>
+<div class="code"><pre class="code literal-block"><span class="n">type</span><span class="w"> </span><span class="n">Example</span>
+<span class="w">    </span><span class="n">val</span>
 <span class="k">end</span>
 
-<span class="k">function</span><span class="nf"> add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">val</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">val</span>
+<span class="k">function</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="o">.</span><span class="n">val</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="o">.</span><span class="n">val</span>
 <span class="k">end</span>
 
-<span class="n">v1</span> <span class="o">=</span> <span class="n">Example</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">v2</span> <span class="o">=</span> <span class="n">Example</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Example</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">v2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Example</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="p">@</span><span class="n">code_llvm</span> <span class="n">add</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>  <span class="c"># The @code_llvm macro prints the LLVM IR.  </span>
-<span class="n">t</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
+<span class="nd">@code_llvm</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="w"> </span><span class="n">v2</span><span class="p">)</span><span class="w">  </span><span class="c"># The @code_llvm macro prints the LLVM IR.  </span>
+<span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="w"> </span><span class="n">v2</span><span class="p">)</span>
 <span class="n">println</span><span class="p">(</span><span class="s">"res = "</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
-</pre>
-
+</pre></div>
 
 <p>Since the type of the 'val' element is not known, the code operates on a generic object type <code>jl_value_t</code> and eventually calls <code>jl_apply_generic</code>, which looks up the right method and dispatches to it at execution time.
 (The LLVM IR is not shown here - run the example to see it.)  Doing all this at execution time is slow.</p>
 <p>Now add the type annotation</p>
-<pre class="code literal-block"><span class="k">type</span><span class="nc"> Example</span>
-    <span class="n">val</span><span class="p">::</span><span class="kt">Int</span>
+<div class="code"><pre class="code literal-block"><span class="n">type</span><span class="w"> </span><span class="n">Example</span>
+<span class="w">    </span><span class="n">val</span><span class="o">::</span><span class="kt">Int</span>
 <span class="k">end</span>
-</pre>
-
+</pre></div>
 
 <p>The resulting LLVM IR (also not shown here) is much shorter in that it adds two integers directly and
 returns the result as an integer.
@@ -247,26 +452,29 @@ the resulting code.</p>
 <hr>
 <ol>
 <li id="fn:1">
-<p>The type can be accessible at run time via debug information.  See this Strange Loop 2014 talk: <a href="https://www.youtube.com/watch?v=LwicN2u6Dro">Liberating the lurking Smalltalk in Unix</a> <a class="footnote-backref" href="posts/why-types-help-performance/#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">↩</a></p>
+<p>The type can be accessible at run time via debug information.  See this Strange Loop 2014 talk: <a href="https://www.youtube.com/watch?v=LwicN2u6Dro">Liberating the lurking Smalltalk in Unix</a> <a class="footnote-backref" href="posts/why-types-help-performance/#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
 </li>
 </ol>
 </div>
-</div>
-    </div>
-    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/first-performance-improvements/" class="u-url">First Performance Improvements</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/first-performance-improvements/" rel="bookmark"><time class="published dt-published" datetime="2015-09-17T23:48:00-05:00" title="2015-09-17 23:48">2015-09-17 23:48</time></a></p>
-                <p class="commentline">
-        
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/first-performance-improvements/" class="u-url">First Performance Improvements</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        Mark Dewing
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/first-performance-improvements/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-09-17T23:48:00-05:00" itemprop="datePublished" title="2015-09-17 23:48">2015-09-17 23:48</time></a>
+            </p>
+                        <p class="commentline">
+    
     <a href="posts/first-performance-improvements/#disqus_thread" data-disqus-identifier="cache/posts/first-performance-improvements.html">Comments</a>
 
 
-        </p>
+                </p>
 </div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>The <a href="http://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/">previous post</a> introduced the CoMD miniapp in Python and Julia.
+            </header><div class="e-content entry-content">
+                    <p>The <a href="http://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/">previous post</a> introduced the CoMD miniapp in Python and Julia.
 This post will look a little deeper into the performance of Julia and various Python compilers.
 I will use the nsquared version of the code for simplicity.</p>
 <p>The <code>computeForce</code> function in <code>ljforce</code> takes almost all the time, and it is here we should focus.
@@ -274,50 +482,49 @@ In the nsquared version there are no further function calls inside this loop, wh
 easier to analyze and improve the performance.</p>
 <p>The summary performance table (all times are in microseconds/atom, the system is the smallest size at 256 atoms)</p>
 <!-- from laptop -->
-
 <table>
 <thead><tr>
 <th>Language/compiler  </th>
 <th>version   </th>
-<th align="right">Initial time</th>
-<th align="right">  Final time</th>
+<th style="text-align: right;">Initial time</th>
+<th style="text-align: right;">  Final time</th>
 </tr></thead>
 <tbody>
 <tr>
 <td>Python</td>
 <td>2.7.10</td>
-<td align="right">560</td>
-<td align="right"></td>
+<td style="text-align: right;">560</td>
+<td style="text-align: right;"></td>
 </tr>
 <tr>
 <td>PyPy</td>
 <td>2.6.1</td>
-<td align="right">98</td>
-<td align="right"></td>
+<td style="text-align: right;">98</td>
+<td style="text-align: right;"></td>
 </tr>
 <tr>
 <td>HOPE</td>
 <td>0.4.0</td>
-<td align="right">8</td>
-<td align="right"></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;"></td>
 </tr>
 <tr>
 <td>Cython</td>
 <td>0.23.1</td>
-<td align="right">335</td>
-<td align="right">8.3</td>
+<td style="text-align: right;">335</td>
+<td style="text-align: right;">8.3</td>
 </tr>
 <tr>
 <td>Numba</td>
 <td>0.21.0</td>
-<td align="right">450</td>
-<td align="right">8.3</td>
+<td style="text-align: right;">450</td>
+<td style="text-align: right;">8.3</td>
 </tr>
 <tr>
 <td>Julia</td>
 <td>0.5.0-dev+50</td>
-<td align="right">44</td>
-<td align="right">7.1</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">7.1</td>
 </tr>
 </tbody>
 </table>
@@ -355,19 +562,18 @@ This transformation enables effective compilation of the loop.</p>
 <!--Loop-lifting is a way for Numba to extract a loop into a separate function in order to compile the loop.-->
 
 <p>The beginning of the function now looks like</p>
-<pre class="code literal-block">    <span class="nd">@numba.jit</span>
+<div class="code"><pre class="code literal-block">    <span class="nd">@numba</span><span class="o">.</span><span class="n">jit</span>
     <span class="k">def</span> <span class="nf">computeForce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">,</span> <span class="n">sim</span><span class="p">):</span>
-        <span class="c"># hoist the attribute lookups of these values</span>
+        <span class="c1"># hoist the attribute lookups of these values</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">f</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">r</span>
         <span class="n">bounds</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">bounds</span>
         <span class="n">nAtoms</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">nAtoms</span>
         <span class="n">epsilon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span>
 
-        <span class="c"># rest of original function</span>
-        <span class="c"># ...</span>
-</pre>
-
+        <span class="c1"># rest of original function</span>
+        <span class="c1"># ...</span>
+</pre></div>
 
 <p>Now Numba can compile the time consuming loop, and this gives about 9 μs/atom.</p>
 <p>The loop that zeros the force can be slightly improved by either looping over the last dimension
@@ -380,7 +586,7 @@ This initial time (335 μs/atom) gives a 40% improvement over regular python, bu
 In order to do this we need to hoist the attribute lookups and assign to temporary variables, as in the Numba version.
 At this step, we add types for the same variables as the Numba version.
 The beginning of the function looks like this:</p>
-<pre class="code literal-block">    <span class="k">def</span> <span class="nf">computeForce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">):</span>
+<div class="code"><pre class="code literal-block">    <span class="k">def</span> <span class="nf">computeForce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">):</span>
         <span class="n">cdef</span> <span class="nb">int</span> <span class="n">nAtoms</span>
         <span class="n">cdef</span> <span class="n">double</span> <span class="n">epsilon</span>
         <span class="n">cdef</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double_t</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span> <span class="n">f</span>
@@ -393,10 +599,9 @@ The beginning of the function looks like this:</p>
         <span class="n">nAtoms</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">nAtoms</span>
         <span class="n">epsilon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span>
 
-        <span class="c"># rest of original function</span>
-        <span class="c"># ...</span>
-</pre>
-
+        <span class="c1"># rest of original function</span>
+        <span class="c1"># ...</span>
+</pre></div>
 
 <p>The time for this change about 54 μs/atom.</p>
 <p>Cython has a convenient feature that creates an annotated HTML file highlighting lines in the 
@@ -427,21 +632,24 @@ discovering what changes need to be made and where to make them.</p>
 <li>How well does the final assembly utilize the hardware. How to use hardware sampling for analysis.</li>
 </ul>
 </div>
-    </div>
-    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/comparing-languages-with-miniapps/" class="u-url">Comparing languages with miniapps</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/comparing-languages-with-miniapps/" rel="bookmark"><time class="published dt-published" datetime="2015-09-02T11:18:50-05:00" title="2015-09-02 11:18">2015-09-02 11:18</time></a></p>
-                <p class="commentline">
-        
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/comparing-languages-with-miniapps/" class="u-url">Comparing languages with miniapps</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        Mark Dewing
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/comparing-languages-with-miniapps/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-09-02T11:18:50-05:00" itemprop="datePublished" title="2015-09-02 11:18">2015-09-02 11:18</time></a>
+            </p>
+                        <p class="commentline">
+    
     <a href="posts/comparing-languages-with-miniapps/#disqus_thread" data-disqus-identifier="cache/posts/comparing-languages-with-miniapps.html">Comments</a>
 
 
-        </p>
+                </p>
 </div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>The <a href="https://mantevo.org/">Mantevo project</a> provides a collection of miniapps, which are simplified versions
+            </header><div class="e-content entry-content">
+                    <p>The <a href="https://mantevo.org/">Mantevo project</a> provides a collection of miniapps, which are simplified versions
 of real scientific applications that make it easier to explore performance, scaling, languages, programming models, etc.
 I want to focus on the language aspect and port some apps to new languages to see how they compare. </p>
 <p>The first miniapp I started with is <a href="http://www.exmatex.org/comd.html">CoMD</a>, a molecular dynamics code in C.</p>
@@ -506,39 +714,39 @@ The ultimate goal is near C/Fortran speeds using a higher-level language to expr
 <table>
 <thead><tr>
 <th>Language/Compiler  </th>
-<th align="left">Version</th>
-<th align="right">Time/atom (microseconds)</th>
+<th style="text-align: left;">Version</th>
+<th style="text-align: right;">Time/atom (microseconds)</th>
 </tr></thead>
 <tbody>
 <tr>
 <td>C - gcc</td>
-<td align="left">4.8.2</td>
-<td align="right">2.3</td>
+<td style="text-align: left;">4.8.2</td>
+<td style="text-align: right;">2.3</td>
 </tr>
 <tr>
 <td>Julia</td>
-<td align="left">0.3.11</td>
-<td align="right">153.0</td>
+<td style="text-align: left;">0.3.11</td>
+<td style="text-align: right;">153.0</td>
 </tr>
 <tr>
 <td>Julia</td>
-<td align="left">0.4.0-dev+6990</td>
-<td align="right">88.8</td>
+<td style="text-align: left;">0.4.0-dev+6990</td>
+<td style="text-align: right;">88.8</td>
 </tr>
 <tr>
 <td>Python</td>
-<td align="left">2.7.10 (from Anaconda)  </td>
-<td align="right">941.0</td>
+<td style="text-align: left;">2.7.10 (from Anaconda)  </td>
+<td style="text-align: right;">941.0</td>
 </tr>
 <tr>
 <td>Numba</td>
-<td align="left">0.20.0</td>
-<td align="right">789.0</td>
+<td style="text-align: left;">0.20.0</td>
+<td style="text-align: right;">789.0</td>
 </tr>
 <tr>
 <td>Pypy</td>
-<td align="left">2.6.1</td>
-<td align="right">98.4</td>
+<td style="text-align: left;">2.6.1</td>
+<td style="text-align: right;">98.4</td>
 </tr>
 </tbody>
 </table>
@@ -559,22 +767,25 @@ under these two systems in the next few posts.</p>
 Julia and Numba have similar stages (infer types, convert to LLVM IR, convert to native code), and so I hope to look
 at them in parallel going forward.  
 -->
-</div>
-    </div>
-    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/running-programs-on-epiphany/" class="u-url">Running Programs on Epiphany</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/running-programs-on-epiphany/" rel="bookmark"><time class="published dt-published" datetime="2015-09-01T13:13:00-05:00" title="2015-09-01 13:13">2015-09-01 13:13</time></a></p>
-                <p class="commentline">
-        
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/running-programs-on-epiphany/" class="u-url">Running Programs on Epiphany</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        Mark Dewing
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/running-programs-on-epiphany/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-09-01T13:13:00-05:00" itemprop="datePublished" title="2015-09-01 13:13">2015-09-01 13:13</time></a>
+            </p>
+                        <p class="commentline">
+    
     <a href="posts/running-programs-on-epiphany/#disqus_thread" data-disqus-identifier="cache/posts/running-programs-on-epiphany.html">Comments</a>
 
 
-        </p>
+                </p>
 </div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>In the <a href="posts/communicating-with-epiphany/index.html">last post</a>, we looked at the memory layout and ran a simple demo.
+            </header><div class="e-content entry-content">
+                    <p>In the <a href="posts/communicating-with-epiphany/index.html">last post</a>, we looked at the memory layout and ran a simple demo.
 Let's take a closer look at how a program starts running.</p>
 <p>For starters, compile and run the program from last time.  We're going to run the program again, this time manually using the low-level mechanism that <code>e-loader</code> uses to start programs.</p>
 <p>Writing a 1 (SYNC) value to the ILATST register will trigger the Sync interrupt, and cause an existing program to run on the core.</p>
@@ -582,25 +793,22 @@ Let's take a closer look at how a program starts running.</p>
 The register addresses are defined in <code>/opt/adapteva/esdk/tools/host/include/epiphany-hal-data.h</code>.
 We want E_REG_ILATST, which is 0xf042C.</p>
 <p>To see if this works, change the input values.</p>
-<pre class="code literal-block">parallella@parallella:~$ e-write 0 0 2000 4 5 0
-[0x00002000] = 0x00000004
-[0x00002004] = 0x00000005
-[0x00002008] = 0x00000000
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">parallella</span><span class="nv">@parallella</span><span class="err">:</span><span class="o">~</span><span class="err">$</span><span class="w"> </span><span class="n">e</span><span class="o">-</span><span class="k">write</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">2000</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">0</span>
+<span class="o">[</span><span class="n">0x00002000</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000004</span>
+<span class="o">[</span><span class="n">0x00002004</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000005</span>
+<span class="o">[</span><span class="n">0x00002008</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span>
+</pre></div>
 
 <p>Now, write the ILATST register to run the program</p>
-<pre class="code literal-block">parallella@parallella:~$ e-write 0 0 0xf042c 1
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">parallella</span><span class="nv">@parallella</span><span class="err">:</span><span class="o">~</span><span class="err">$</span><span class="w"> </span><span class="n">e</span><span class="o">-</span><span class="k">write</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mh">0xf042c</span><span class="w"> </span><span class="mi">1</span>
+</pre></div>
 
 <p>And check the result</p>
-<pre class="code literal-block">parallella@parallella:~$ e-read 0 0 0x2000 3
-[0x00002000] = 0x00000004
-[0x00002004] = 0x00000005
-[0x00002008] = 0x00000009
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">parallella</span><span class="nv">@parallella</span><span class="err">:</span><span class="o">~</span><span class="err">$</span><span class="w"> </span><span class="n">e</span><span class="o">-</span><span class="k">read</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mh">0x2000</span><span class="w"> </span><span class="mi">3</span>
+<span class="o">[</span><span class="n">0x00002000</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000004</span>
+<span class="o">[</span><span class="n">0x00002004</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000005</span>
+<span class="o">[</span><span class="n">0x00002008</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000009</span>
+</pre></div>
 
 <p>It worked!</p>
 <p>Okay, now let's look at the details of what happened.</p>
@@ -611,55 +819,55 @@ The first entry in the table is the Sync interrupt, used to start the program.
 <p>We can disassemble the compiled object file with <code>e-objdump -D</code> and look for address 0 
 (we need -D instead of -d to disassemble all the sections, not just the normal executable sections).</p>
 <p>This looks promising.  Address of 0, in a section called <code>ivt_reset</code>.</p>
-<pre class="code literal-block">Disassembly of section ivt_reset:
+<div class="code"><pre class="code literal-block">Disassembly of section ivt_reset:
 
 00000000 &lt;_start&gt;:
    0:   2ce8 0000       b 58 &lt;.normal_start&gt;
-</pre>
-
+</pre></div>
 
 <p>After the Sync interrupt, control transfers to address 0, and then branches to location 0x58.
 The next section in the objdump output has that address.</p>
-<pre class="code literal-block">Disassembly of section .reserved_crt0:
+<div class="code"><pre class="code literal-block">Disassembly of section .reserved_crt0:
 
 00000058 &lt;.normal_start&gt;:
   58:   720b 0002       mov r3,0x90
   5c:   600b 1002       movt r3,0x0
   60:   0d52            jalr r3
-</pre>
-
+</pre></div>
 
 <p>This loads address 0x90 and jumps to it.
 The <code>mov</code> instruction loads the lower 16 bits of r3 and the <code>movt</code> instruction loads the upper 16 bits.</p>
 <p>Now look for that address</p>
-<pre class="code literal-block">Disassembly of section .text:
+<div class="code"><pre class="code literal-block">Disassembly of section .text:
 
 00000090 &lt;_epiphany_start&gt;:
   90:   be0b 27f2       mov sp,0x7ff0
   94:   a00b 3002       movt sp,0x0
 
    ... 
-</pre>
-
+</pre></div>
 
 <p>This sets up the stack by loading the stack pointer with 0x7ff0, which is the top of the 32K local address space.
 The code calls other routines, which eventually call <code>main</code>, but I won't trace it all here.</p>
-</div>
-    </div>
-    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/communicating-with-epiphany/" class="u-url">Communicating with Epiphany</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/communicating-with-epiphany/" rel="bookmark"><time class="published dt-published" datetime="2015-08-25T14:19:00-05:00" title="2015-08-25 14:19">2015-08-25 14:19</time></a></p>
-                <p class="commentline">
-        
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/communicating-with-epiphany/" class="u-url">Communicating with Epiphany</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        Mark Dewing
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/communicating-with-epiphany/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-08-25T14:19:00-05:00" itemprop="datePublished" title="2015-08-25 14:19">2015-08-25 14:19</time></a>
+            </p>
+                        <p class="commentline">
+    
     <a href="posts/communicating-with-epiphany/#disqus_thread" data-disqus-identifier="cache/posts/communicating-with-epiphany.html">Comments</a>
 
 
-        </p>
+                </p>
 </div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>This post is going to look at the Epiphany memory map, and give a very simple example demonstration.
+            </header><div class="e-content entry-content">
+                    <p>This post is going to look at the Epiphany memory map, and give a very simple example demonstration.
 I will skim over some background information that is covered elsewhere.
 See the following posts and resources that describe the Parallella and Epiphany architectures.</p>
 <h3>Resources</h3>
@@ -713,36 +921,32 @@ The commands <code>e-read</code> and <code>e-write</code> are used to read and w
 To access the core-local memory, use row/column coordinate of the core (0-3 for each), followed by the offset.
 For reading, optionally add the number of 4-byte words to read.  For writing, give a list of 4-byte word values.</p>
 <p>For example, to read 8 bytes from core (0,0)</p>
-<pre class="code literal-block">parallella@parallella:~$ e-read 0 0 0x100 2
-[0x00000100] = 0x782de028
-[0x00000104] = 0x0d906c89
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">parallella</span><span class="nv">@parallella</span><span class="err">:</span><span class="o">~</span><span class="err">$</span><span class="w"> </span><span class="n">e</span><span class="o">-</span><span class="k">read</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mh">0x100</span><span class="w"> </span><span class="mi">2</span>
+<span class="o">[</span><span class="n">0x00000100</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x782de028</span>
+<span class="o">[</span><span class="n">0x00000104</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0d906c89</span>
+</pre></div>
 
 <p>To access the external memory, use a single -1 instead of the row,col coordinates.</p>
-<pre class="code literal-block">parallella@parallella:~$ e-write -1 0 1 2 3
-[0x00000000] = 0x00000001
-[0x00000004] = 0x00000002
-[0x00000008] = 0x00000003
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">parallella</span><span class="nv">@parallella</span><span class="err">:</span><span class="o">~</span><span class="err">$</span><span class="w"> </span><span class="n">e</span><span class="o">-</span><span class="k">write</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span>
+<span class="o">[</span><span class="n">0x00000000</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000001</span>
+<span class="o">[</span><span class="n">0x00000004</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000002</span>
+<span class="o">[</span><span class="n">0x00000008</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000003</span>
+</pre></div>
 
 <p>Upon power up, it appears the memory is filled with random values.
 The <code>epiphany-examples</code> directory contains some useful utilities in the <code>apps</code> directory.
 To fill memory with some values, use <code>e-fill-mem</code> (build it by running the <code>build.sh</code> script first)</p>
 <p>To zero all the local memory in core 0, 0:</p>
-<pre class="code literal-block">parallella@parallella:~/epiphany-examples/apps/e-fill-mem$ ./bin/e-fill-mem.elf  0 0 1 1 8192 0
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">parallella</span><span class="nv">@parallella</span><span class="err">:</span><span class="o">~/</span><span class="n">epiphany</span><span class="o">-</span><span class="n">examples</span><span class="o">/</span><span class="n">apps</span><span class="o">/</span><span class="n">e</span><span class="o">-</span><span class="n">fill</span><span class="o">-</span><span class="n">mem</span><span class="err">$</span><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">e</span><span class="o">-</span><span class="n">fill</span><span class="o">-</span><span class="n">mem</span><span class="p">.</span><span class="n">elf</span><span class="w">  </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">8192</span><span class="w"> </span><span class="mi">0</span>
+</pre></div>
 
 <p>Verify a few locations</p>
-<pre class="code literal-block">parallella@parallella:~/epiphany-examples/apps/e-fill-mem$ e-read 0 0 0 4
-[0x00000000] = 0x00000000
-[0x00000004] = 0x00000000
-[0x00000008] = 0x00000000
-[0x0000000c] = 0x00000000
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">parallella</span><span class="nv">@parallella</span><span class="err">:</span><span class="o">~/</span><span class="n">epiphany</span><span class="o">-</span><span class="n">examples</span><span class="o">/</span><span class="n">apps</span><span class="o">/</span><span class="n">e</span><span class="o">-</span><span class="n">fill</span><span class="o">-</span><span class="n">mem</span><span class="err">$</span><span class="w"> </span><span class="n">e</span><span class="o">-</span><span class="k">read</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">4</span>
+<span class="o">[</span><span class="n">0x00000000</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span>
+<span class="o">[</span><span class="n">0x00000004</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span>
+<span class="o">[</span><span class="n">0x00000008</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span>
+<span class="o">[</span><span class="n">0x0000000c</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span>
+</pre></div>
 
 <p>Nostalgia sidebar: If you want to reminisce about the days of Commodore 64, Apple II's and other microcomputers, alias <code>e-read</code> and <code>e-write</code> to <code>peek</code> and <code>poke</code>. (For the bash shell that would be <code>alias peek=e-read</code> and <code>alias poke=e-write</code>)</p>
 <h3>Simple example of local memory access</h3>
@@ -751,78 +955,76 @@ and saves the result to another location in core-local memory.  We will use the 
 the operation. </p>
 <p>The 32KB of local memory puts all the offsets in the range 0x0000 - 0x8000.   Let's choose a base location 0x2000, which will be above the executable code, and below the stack.</p>
 <p>Start with the following C program (mem.c)</p>
-<pre class="code literal-block"><span class="c1">// Demonstrate local memory access at a low level</span>
+<div class="code"><pre class="code literal-block"><span class="c1">// Demonstrate local memory access at a low level</span>
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="c1">// Location in local memory will not interfere</span>
-    <span class="c1">// with the executable or the stack</span>
-    <span class="kt">int</span> <span class="o">*</span><span class="n">outbuf</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x2000</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">outbuf</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">outbuf</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-    <span class="n">outbuf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Location in local memory will not interfere</span>
+<span class="w">    </span><span class="c1">// with the executable or the stack</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">outbuf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="mh">0x2000</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">outbuf</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">outbuf</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">    </span><span class="n">outbuf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</pre>
-
+</pre></div>
 
 <p>Compile with </p>
-<pre class="code literal-block">e-gcc mem.c -T /opt/adapteva/esdk/bsps/current/fast.ldf -o mem.elf
-</pre>
-
+<div class="code"><pre class="code literal-block">e-gcc mem.c -T /opt/adapteva/esdk/bsps/current/fast.ldf -o mem.elf
+</pre></div>
 
 <p>The -T option refers to a linker script, which controls where various pieces of the executable are placed in memory.</p>
 <p>Set the initial memory locations</p>
-<pre class="code literal-block">parallella@parallella:~$ e-write 0 0 0x2000 1 2 0
-[0x00002000] = 0x00000001
-[0x00002004] = 0x00000002
-[0x00002008] = 0x00000000
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">parallella</span><span class="nv">@parallella</span><span class="err">:</span><span class="o">~</span><span class="err">$</span><span class="w"> </span><span class="n">e</span><span class="o">-</span><span class="k">write</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mh">0x2000</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">0</span>
+<span class="o">[</span><span class="n">0x00002000</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000001</span>
+<span class="o">[</span><span class="n">0x00002004</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000002</span>
+<span class="o">[</span><span class="n">0x00002008</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span>
+</pre></div>
 
 <p>Load and run the program (the -s option to e-loader runs the program after loading)</p>
-<pre class="code literal-block">parallella@parallella:~$ e-loader -s mem.elf 
-Loading program "mem.elf" on cores (0,0)-(0,0)
-e_set_loader_verbosity(): setting loader verbosity to 1.
-e_load_group(): loading ELF file mem.elf ...
-e_load_group(): send SYNC signal to core (0,0)...
-e_start(): SYNC (0xf042c) to core (0,0)...
-e_start(): done.
-e_load_group(): done.
-e_load_group(): done loading.
-e_load_group(): closed connection.
-e_load_group(): leaving loader.
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">parallella</span><span class="err">@</span><span class="n">parallella</span><span class="p">:</span><span class="o">~$</span><span class="w"> </span><span class="n">e</span><span class="o">-</span><span class="n">loader</span><span class="w"> </span><span class="o">-</span><span class="n">s</span><span class="w"> </span><span class="n">mem</span><span class="o">.</span><span class="n">elf</span><span class="w"> </span>
+<span class="n">Loading</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="s2">"mem.elf"</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">cores</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">e_set_loader_verbosity</span><span class="p">():</span><span class="w"> </span><span class="n">setting</span><span class="w"> </span><span class="n">loader</span><span class="w"> </span><span class="n">verbosity</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="mf">1.</span>
+<span class="n">e_load_group</span><span class="p">():</span><span class="w"> </span><span class="n">loading</span><span class="w"> </span><span class="n">ELF</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">mem</span><span class="o">.</span><span class="n">elf</span><span class="w"> </span><span class="o">...</span>
+<span class="n">e_load_group</span><span class="p">():</span><span class="w"> </span><span class="n">send</span><span class="w"> </span><span class="n">SYNC</span><span class="w"> </span><span class="k">signal</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">core</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">...</span>
+<span class="n">e_start</span><span class="p">():</span><span class="w"> </span><span class="n">SYNC</span><span class="w"> </span><span class="p">(</span><span class="mh">0xf042c</span><span class="p">)</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">core</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">...</span>
+<span class="n">e_start</span><span class="p">():</span><span class="w"> </span><span class="n">done</span><span class="o">.</span>
+<span class="n">e_load_group</span><span class="p">():</span><span class="w"> </span><span class="n">done</span><span class="o">.</span>
+<span class="n">e_load_group</span><span class="p">():</span><span class="w"> </span><span class="n">done</span><span class="w"> </span><span class="n">loading</span><span class="o">.</span>
+<span class="n">e_load_group</span><span class="p">():</span><span class="w"> </span><span class="n">closed</span><span class="w"> </span><span class="n">connection</span><span class="o">.</span>
+<span class="n">e_load_group</span><span class="p">():</span><span class="w"> </span><span class="n">leaving</span><span class="w"> </span><span class="n">loader</span><span class="o">.</span>
+</pre></div>
 
 <p>Now verify the program produced the expected result:</p>
-<pre class="code literal-block">parallella@parallella:~$ e-read 0 0 0x2000 3
-[0x00002000] = 0x00000001
-[0x00002004] = 0x00000002
-[0x00002008] = 0x00000003
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">parallella</span><span class="nv">@parallella</span><span class="err">:</span><span class="o">~</span><span class="err">$</span><span class="w"> </span><span class="n">e</span><span class="o">-</span><span class="k">read</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mh">0x2000</span><span class="w"> </span><span class="mi">3</span>
+<span class="o">[</span><span class="n">0x00002000</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000001</span>
+<span class="o">[</span><span class="n">0x00002004</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000002</span>
+<span class="o">[</span><span class="n">0x00002008</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000003</span>
+</pre></div>
 
 <p>Yes.  It worked!</p>
 <p>Now we've seen some concrete low-level details on how memory works on the Parallella and Epiphany.
 Next time I want to look the e-loader in more detail, and how programs start running on the cores.</p>
-</div>
-    </div>
-    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/introduction-to-parallella/" class="u-url">Introduction to Parallella</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/introduction-to-parallella/" rel="bookmark"><time class="published dt-published" datetime="2015-08-20T15:08:00-05:00" title="2015-08-20 15:08">2015-08-20 15:08</time></a></p>
-                <p class="commentline">
-        
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/introduction-to-parallella/" class="u-url">Introduction to Parallella</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        Mark Dewing
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/introduction-to-parallella/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-08-20T15:08:00-05:00" itemprop="datePublished" title="2015-08-20 15:08">2015-08-20 15:08</time></a>
+            </p>
+                        <p class="commentline">
+    
     <a href="posts/introduction-to-parallella/#disqus_thread" data-disqus-identifier="cache/posts/introduction-to-parallella.html">Comments</a>
 
 
-        </p>
+                </p>
 </div>
-    </header><div class="e-content entry-content">
-    <div>
-<p>The Parallella is a single board computer with a dual core ARM and a 16 core Epiphany coprocessor. 
+            </header><div class="e-content entry-content">
+                    <p>The Parallella is a single board computer with a dual core ARM and a 16 core Epiphany coprocessor. 
 I've had some boards sitting around after backing the Kickstarter, and now I've finally started to play with them.</p>
 <p>The main purpose of the board is to highlight the Ephiphany coprocessor, but it has other interesting
 resources as well.  I'd like to look into how to use each of them.</p>
@@ -866,9 +1068,8 @@ However, setting up projects for cross-compiliation can be more challenging.</p>
 <h3>Clang</h3>
 <p>Compiling with clang needs at least the include and lib files from the 'libc6-*-armhf-cross' packages.</p>
 <p>Assuming the version of clang is built to output the 'arm' target, the following should work</p>
-<pre class="code literal-block">clang -target arm-linux-guneabihf -I /usr/arm-linux-gnueabihf/include hello.cpp
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="nv">clang</span><span class="w"> </span><span class="o">-</span><span class="nv">target</span><span class="w"> </span><span class="nv">arm</span><span class="o">-</span><span class="nv">linux</span><span class="o">-</span><span class="nv">guneabihf</span><span class="w"> </span><span class="o">-</span><span class="nv">I</span><span class="w"> </span><span class="o">/</span><span class="nv">usr</span><span class="o">/</span><span class="nv">arm</span><span class="o">-</span><span class="nv">linux</span><span class="o">-</span><span class="nv">gnueabihf</span><span class="o">/</span><span class="k">include</span><span class="w"> </span><span class="nv">hello</span>.<span class="nv">cpp</span>
+</pre></div>
 
 <h2>Cross compiling to Epiphany</h2>
 <p>These are the tools in the ESDK.</p>
@@ -876,45 +1077,46 @@ However, setting up projects for cross-compiliation can be more challenging.</p>
 The tools are prefixed with <code>e-</code>.  Use <code>e-gcc</code> to invoke the compiler.</p>
 <p>For a Linux host, download and install the ESDK from the website (under <code>Software -&gt; Pre-built -&gt; Epiphany SDK</code>)(<a href="ftp://ftp.parallella.org/esdk">direct link</a>).  Look for 'linux_x86_64' in the file name.</p>
 <p>The ESDK has examples you can compile and run.  Sometime later I want to take a closer look at how the Epiphany files are loaded to the coprocessor and run.</p>
-</div>
-    </div>
-    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/introduction/" class="u-url">Introduction</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="posts/introduction/" rel="bookmark"><time class="published dt-published" datetime="2015-08-19T23:18:00-05:00" title="2015-08-19 23:18">2015-08-19 23:18</time></a></p>
-                <p class="commentline">
-        
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/introduction/" class="u-url">Introduction</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        Mark Dewing
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/introduction/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-08-19T23:18:00-05:00" itemprop="datePublished" title="2015-08-19 23:18">2015-08-19 23:18</time></a>
+            </p>
+                        <p class="commentline">
+    
     <a href="posts/introduction/#disqus_thread" data-disqus-identifier="cache/posts/introduction.html">Comments</a>
 
 
-        </p>
+                </p>
 </div>
-    </header><div class="e-content entry-content">
-    <p>This blog will cover whatever bits and pieces of computer technology I find interesting.
+            </header><div class="e-content entry-content">
+                    <p>This blog will cover whatever bits and pieces of computer technology I find interesting.
 Science and research topics can be found over at my <a href="http://quantum_mc.blogspot.com/">Quantum Monte Carlo</a> blog.</p>
-    </div>
-    </article>
+                </div>
+            </article>
 </div>
-
-        <nav class="postindexpager"><ul class="pager">
-<li class="previous">
-                <a href="." rel="prev">Newer posts</a>
-            </li>
-        </ul></nav><script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="//"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
-</div>
-        <!--End of body content-->
-
-        <footer id="footer">
-            Contents © 2018         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+    
+        <ul class="pager postindexpager clearfix">
+<li class="previous"><a href="index-2.html" rel="prev">Newer posts</a></li>
+        </ul>
+<script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><!--End of body content--><footer id="footer">
+            Contents © 2023         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
             
         </footer>
 </div>
 </div>
 
 
-            <script src="assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
-    moment.locale("");
-    fancydates(0, "YYYY-MM-DD HH:mm");
-    </script><!-- end fancy dates -->
+        <script src="assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
 </body>
 </html>

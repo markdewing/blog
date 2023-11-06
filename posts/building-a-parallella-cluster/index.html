@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Building A Parallella Cluster | Journey to the Center of the Computer</title>
 <link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/posts/building-a-parallella-cluster/">
 <!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Mark Dewing">
 <link rel="prev" href="../integration-callbacks/" title="Integration Callbacks with Sympy and LLVM" type="text/html">
@@ -27,74 +30,83 @@ This post documents the choices I made about power distribution, mechanical asse
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
 
-<!-- Menubar -->
-
-<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
-<!-- This keeps the margins nice -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="https://markdewing.github.io/blog/">
-
-                <span id="blog-title">Journey to the Center of the Computer</span>
-            </a>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
         </div>
-<!-- /.navbar-header -->
-        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
-            <ul class="nav navbar-nav">
-<li>
-<a href="../../archive.html">Archive</a>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href="../../">
+
+            <span id="blog-title">Journey to the Center of the Computer</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav">
+<li class="nav-item">
+    <a href="index.md" id="sourcelink" class="nav-link">Source</a>
+    </li>
+
+
+                    
+            </ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
                 </li>
-<li>
-<a href="../../categories/">Tags</a>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
                 </li>
-<li>
-<a href="../../rss.xml">RSS feed</a>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS feed</a>
 
                 
             </li>
 </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-    <a href="index.md" id="sourcelink">Source</a>
-    </li>
-
-                
-            </ul>
 </div>
 <!-- /.navbar-collapse -->
-    </div>
-<!-- /.container -->
-</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
     <div class="body-content">
         <!--Body content-->
-        <div class="row">
-            
-            
+        
+        
+        
 <article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Building A Parallella Cluster</a></h1>
 
         <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn">Mark Dewing</span></p>
-            <p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2017-01-02T20:56:00-05:00" itemprop="datePublished" title="2017-01-02 20:56">2017-01-02 20:56</time></a></p>
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    Mark Dewing
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2017-01-02T20:56:00-05:00" itemprop="datePublished" title="2017-01-02 20:56">2017-01-02 20:56</time></a>
+            </p>
                 <p class="commentline">
-        
-    <a href=".#disqus_thread" data-disqus-identifier="cache/posts/building-a-parallella-cluster.html">Comments</a>
+    
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/building-a-parallella-cluster.html">Comments</a>
 
 
             
         </p>
-<p class="sourceline"><a href="index.md" id="sourcelink">Source</a></p>
+<p class="sourceline"><a href="index.md" class="sourcelink">Source</a></p>
 
         </div>
         
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<p>I finally got around to assembling my small pile of Parallella boards into a cluster.</p>
+    <p>I finally got around to assembling my small pile of Parallella boards into a cluster.</p>
 <p><a href="../../2016/parallella_cluster_side_top_lg.jpg"><img alt="Alternate side view" src="../../2016/parallella_cluster_side_top_sm3.jpg"></a></p>
 <p>This post documents the choices I made about power distribution, mechanical assembly, cooling, software management, etc.
 For background on the individual boards, see my previous post:
@@ -130,46 +142,42 @@ I decided to use <a href="http://docs.ansible.com/ansible/intro_getting_started.
 <p>In addition to controlling operations from a PC, it is useful to designate one node as a 'head node' and install Ansible there as well.
 For MPI, it's easier to run MPI programs from the head node than from the PC.
 For setting up configuration files, it can be useful to create or edit the file and make sure it works on one node, and then copy the file to all the other nodes.</p>
-<p>Ansible and MPI (and general convenience) require setting up <a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/">passwordless ssh login</a>.
-<!--Some directions to set up <a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/">ssh passwordless login</a>--></p>
-<p>Once the keys are set up locally, you can use <code>ssh-copy-id</code> to copy the credentials.</p>
-<pre class="code literal-block"><span class="n">ssh</span><span class="o">-</span><span class="n">copy</span><span class="o">-</span><span class="n">id</span> <span class="o">-</span><span class="n">i</span> <span class="o">~/</span><span class="p">.</span><span class="n">ssh</span><span class="o">/</span><span class="n">id_rsa</span><span class="p">.</span><span class="n">pub</span> <span class="n">parallella</span><span class="err">@</span><span class="mf">10.0.0.145</span>
-</pre>
+<p>Ansible and MPI (and general convenience) require setting up <a href="http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/">passwordless ssh login</a>.</p>
+<!--Some directions to set up [ssh passwordless login](http://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/)-->
 
+<p>Once the keys are set up locally, you can use <code>ssh-copy-id</code> to copy the credentials.</p>
+<div class="code"><pre class="code literal-block"><span class="n">ssh</span><span class="o">-</span><span class="k">copy</span><span class="o">-</span><span class="kt">id</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="o">~/</span><span class="p">.</span><span class="n">ssh</span><span class="o">/</span><span class="n">id_rsa</span><span class="p">.</span><span class="n">pub</span><span class="w"> </span><span class="n">parallella</span><span class="mf">@10.0.0.145</span>
+</pre></div>
 
 <p>I keep a small script that puts this line in the history (named <code>ssh_copy_id</code>)</p>
-<pre class="code literal-block"><span class="n">history</span> <span class="o">-</span><span class="n">s</span> <span class="s">"ssh-copy-id -i ~/.ssh/id_rsa.pub parallella@10.0.0.145"</span>
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">history</span><span class="w"> </span><span class="o">-</span><span class="n">s</span><span class="w"> </span><span class="s">"ssh-copy-id -i ~/.ssh/id_rsa.pub parallella@10.0.0.145"</span>
+</pre></div>
 
 <p>Run the command <code>source ssh_copy_id</code> to put the command on the history list.
 Use the bash history and line editing features to select the command and update to a new address.</p>
 <p>Rather than create a new user, I'm using the default 'parallella' user on the nodes.
 The SSH config (in '.ssh/config') can be set up to switch users upon login.</p>
-<pre class="code literal-block"><span class="n">Host</span> <span class="mf">10.0.0.127</span>
-    <span class="n">User</span> <span class="n">parallella</span>
-</pre>
+<div class="code"><pre class="code literal-block">Host 10.0.0.127
+    User parallella
+</pre></div>
 
+<p>You might wish to <a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/">set up a apt-cache server</a> on a local machine to save on download bandwidth when installing software to all the nodes.</p>
+<!--[Some directions here](http://www.tecmint.com/apt-cache-server-in-ubuntu/)-->
 
-<p>You might wish to <a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/">set up a apt-cache server</a> on a local machine to save on download bandwidth when installing software to all the nodes.
-<!--<a href="http://www.tecmint.com/apt-cache-server-in-ubuntu/">Some directions here</a>--></p>
 <h4>Using Ansible</h4>
 <p>See the <a href="http://docs.ansible.com/ansible/intro_getting_started.html">intro docs</a>.</p>
 <p>The inventory file is a list of IP addresses (one per line).     It can be specified on the command line
 with `-i'.  To see if all the nodes work</p>
-<pre class="code literal-block"><span class="n">ansible</span> <span class="o">-</span><span class="n">i</span> <span class="n">cluster</span><span class="p">.</span><span class="n">ini</span> <span class="n">all</span> <span class="o">-</span><span class="n">m</span> <span class="n">ping</span>
-</pre>
-
+<div class="code"><pre class="code literal-block">ansible -i cluster.ini all -m ping
+</pre></div>
 
 <p>To copy the apt-cache server configuration to all the nodes, use</p>
-<pre class="code literal-block"> <span class="n">ansible</span> <span class="o">-</span><span class="n">i</span> <span class="n">hosts</span> <span class="n">all</span> <span class="o">--</span><span class="n">sudo</span> <span class="o">-</span><span class="n">m</span> <span class="n">copy</span> <span class="o">-</span><span class="n">a</span> <span class="s">"src=/etc/apt/apt.conf.d/02proxy dest=/etc/apt/apt.conf.d/02proxy"</span>
-</pre>
-
+<div class="code"><pre class="code literal-block"> ansible -i hosts all --sudo -m copy -a "src=/etc/apt/apt.conf.d/02proxy dest=/etc/apt/apt.conf.d/02proxy"
+</pre></div>
 
 <p>To shutdown all the nodes, use</p>
-<pre class="code literal-block"><span class="n">ansible</span> <span class="o">-</span><span class="n">i</span> <span class="n">cluster</span><span class="p">.</span><span class="n">ini</span> <span class="n">all</span> <span class="o">--</span><span class="n">sudo</span> <span class="o">-</span><span class="n">m</span> <span class="n">shell</span> <span class="o">-</span><span class="n">a</span> <span class="s">"shutdown now"</span>
-</pre>
-
+<div class="code"><pre class="code literal-block">ansible -i cluster.ini all --sudo -m shell -a "shutdown now"
+</pre></div>
 
 <h3>Compilation</h3>
 <p>In the <a href="https://markdewing.github.io/blog/posts/introduction-to-parallella/">introductory post</a> I talked about cross compiling for the board.
@@ -180,32 +188,27 @@ For instance, one of my project dependencies, HDF, doesn't cross-compile easily 
 <p>The particular software package I'm working with (QMCPACK, which does simulations on atoms, molecules, and solids)
 uses CMake for configuration and build, and builds fine with distcc.</p>
 <p>Install on all nodes with </p>
-<pre class="code literal-block"><span class="n">ansible</span> <span class="o">-</span><span class="n">i</span> <span class="n">cluster</span><span class="p">.</span><span class="n">ini</span> <span class="n">all</span> <span class="o">--</span><span class="n">sudo</span>  <span class="o">-</span><span class="n">a</span> <span class="s">"apt-get install -y distcc"</span>
-</pre>
-
+<div class="code"><pre class="code literal-block">ansible -i cluster.ini all --sudo  -a "apt-get install -y distcc"
+</pre></div>
 
 <p>Set the <code>DISTCC_HOSTS</code> variable to the set of systems to use</p>
-<pre class="code literal-block"><span class="n">export</span> <span class="n">DISTCC_HOSTS</span><span class="o">=</span><span class="s">"localhost @10.0.0.144/2 @10.0.0.145/2"</span>
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">export</span><span class="w"> </span><span class="n">DISTCC_HOSTS</span><span class="o">=</span><span class="s">"localhost @10.0.0.144/2 @10.0.0.145/2"</span>
+</pre></div>
 
 <p>This example shows three hosts. The initial '@' means to use ssh (no daemon required on remote) and the '/2' on the end means to use two threads.</p>
 <p>Now set the C and C++ compilers to <code>distcc &lt;compiler&gt;</code> and run the build.</p>
 <p>For CMake, building a project with MPI, this is</p>
-<pre class="code literal-block"><span class="n">export</span> <span class="n">CC</span><span class="o">=</span><span class="s">"distcc mpicc"</span>
-<span class="n">export</span> <span class="n">CXX</span><span class="o">=</span><span class="s">"distcc mpic++"</span>
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="k">export</span><span class="w"> </span><span class="n">CC</span><span class="o">=</span><span class="s2">"distcc mpicc"</span>
+<span class="k">export</span><span class="w"> </span><span class="n">CXX</span><span class="o">=</span><span class="s2">"distcc mpic++"</span>
+</pre></div>
 
 <p>Then</p>
-<pre class="code literal-block"><span class="n">make</span> <span class="o">-</span><span class="n">j</span> <span class="mi">8</span>
-</pre>
-
+<div class="code"><pre class="code literal-block">make -j 8
+</pre></div>
 
 <p>You might see an warning message </p>
-<pre class="code literal-block"><span class="nx">distccd</span><span class="err">[</span><span class="o">&lt;</span><span class="nb">pid</span><span class="o">&gt;</span><span class="cp">]</span> (tcp_cork_sock) Warning: setsockopt(corked=1) failed: Socket operation on non-socket
-</pre>
-
+<div class="code"><pre class="code literal-block">distccd[&lt;pid&gt;] (tcp_cork_sock) Warning: setsockopt(corked=1) failed: Socket operation on non-socket
+</pre></div>
 
 <p>This can be ignored.  Or follow some directions to <a href="https://jeffreywildman.wordpress.com/2011/02/11/disable-tcp_cork_sock-warnings-when-using-distcc-over-ssh/">silence it</a>.</p>
 <h3>MPI</h3>
@@ -226,7 +229,6 @@ be able to log into each other node (not just head node to other nodes).</p>
 <p><a href="../../2016/parallella_cluster_side_lg.jpg"><img alt="Side view" src="../../2016/parallella_cluster_side_sm2.jpg"></a>   
 <a href="../../2016/parallella_cluster_top_lg.jpg"><img alt="Top view" src="../../2016/parallella_cluster_top_sm2.jpg"></a>  
 <a href="../../2016/parallella_cluster_side_top_lg.jpg"><img alt="Alternate side view" src="../../2016/parallella_cluster_side_top_sm3.jpg"></a></p>
-</div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/ansible/" rel="tag">Ansible</a></li>
@@ -244,7 +246,7 @@ be able to log into each other node (not just head node to other nodes).</p>
             </li>
         </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
         
-        
+    
         <div id="disqus_thread"></div>
         <script>
         var disqus_shortname ="journeytothecenterofthecomputer",
@@ -256,29 +258,27 @@ be able to log into each other node (not just head node to other nodes).</p>
         };
         (function() {
             var dsq = document.createElement('script'); dsq.async = true;
-            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
         })();
-    </script><noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
 </noscript>
-    <a href="//disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
 
 
-        </section></article><script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="//"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
-</div>
-        <!--End of body content-->
-
-        <footer id="footer">
-            Contents © 2018         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+        </section></article><script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><!--End of body content--><footer id="footer">
+            Contents © 2023         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
             
         </footer>
 </div>
 </div>
 
 
-            <script src="../../assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
-    moment.locale("");
-    fancydates(0, "YYYY-MM-DD HH:mm");
-    </script><!-- end fancy dates -->
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
 </body>
 </html>

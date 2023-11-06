@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://markdewing.github.io/blog/</loc>
-  <lastmod>2018-04-27T04:28:00Z</lastmod>
+  <lastmod>2023-11-06T21:42:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/2015/</loc>
@@ -26,8 +26,12 @@
   <lastmod>2018-04-27T04:28:00Z</lastmod>
  </url>
  <url>
+  <loc>https://markdewing.github.io/blog/2023/</loc>
+  <lastmod>2023-11-06T21:42:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://markdewing.github.io/blog/archive.html</loc>
-  <lastmod>2018-04-27T04:28:00Z</lastmod>
+  <lastmod>2023-11-06T21:42:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/</loc>
@@ -131,19 +135,27 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/index-1.html</loc>
-  <lastmod>2018-04-27T04:29:00Z</lastmod>
+  <lastmod>2023-11-06T21:42:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/index-2.html</loc>
+  <lastmod>2023-11-06T21:42:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</loc>
   <lastmod>2018-04-27T04:31:00Z</lastmod>
  </url>
  <url>
-  <loc>https://markdewing.github.io/blog/posts/bash/</loc>
-  <lastmod>2018-04-27T04:28:00Z</lastmod>
+  <loc>https://markdewing.github.io/blog/posts/2018/bash_transforms/</loc>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </url>
  <url>
-  <loc>https://markdewing.github.io/blog/posts/bash_for_c_programmers/</loc>
-  <lastmod>2018-04-27T04:28:00Z</lastmod>
+  <loc>https://markdewing.github.io/blog/posts/2023/differentiable-symbolic-programming/</loc>
+  <lastmod>2023-11-06T21:42:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/posts/2023/my-github-repos/</loc>
+  <lastmod>2023-11-06T21:42:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/building-a-parallella-cluster/</loc>
@@ -160,10 +172,6 @@
  <url>
   <loc>https://markdewing.github.io/blog/posts/first-performance-improvements/</loc>
   <lastmod>2015-09-11T21:13:00Z</lastmod>
- </url>
- <url>
-  <loc>https://markdewing.github.io/blog/posts/hierarchical-timers/</loc>
-  <lastmod>2017-02-20T22:54:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</loc>

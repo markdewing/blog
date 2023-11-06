@@ -7,106 +7,106 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/ansible.xml</loc>
-  <lastmod>2017-01-03T02:56:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/bash.xml</loc>
-  <lastmod>2018-07-10T21:04:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/cmake.xml</loc>
-  <lastmod>2016-02-19T23:06:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/comd.xml</loc>
-  <lastmod>2015-12-09T04:16:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/ctest.xml</loc>
-  <lastmod>2016-02-19T23:06:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/cubature.xml</loc>
-  <lastmod>2016-07-08T21:41:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/cython.xml</loc>
-  <lastmod>2015-10-02T18:58:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/epiphany.xml</loc>
-  <lastmod>2017-01-03T02:56:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/integration.xml</loc>
-  <lastmod>2016-07-08T21:41:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/julia.xml</loc>
-  <lastmod>2015-10-02T18:58:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/llvm.xml</loc>
-  <lastmod>2016-07-08T21:41:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/mantevo.xml</loc>
-  <lastmod>2015-09-04T15:34:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/mpi.xml</loc>
-  <lastmod>2017-01-03T02:56:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/numba.xml</loc>
-  <lastmod>2015-11-13T23:44:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/parallella.xml</loc>
-  <lastmod>2017-01-03T02:56:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/profiling.xml</loc>
-  <lastmod>2015-10-12T17:23:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/pypy.xml</loc>
-  <lastmod>2015-11-04T21:41:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/python.xml</loc>
-  <lastmod>2015-11-13T23:44:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/scripting.xml</loc>
-  <lastmod>2018-07-10T21:04:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/sympy.xml</loc>
-  <lastmod>2016-07-08T21:41:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/vectorization.xml</loc>
-  <lastmod>2015-10-02T03:24:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/vispy.xml</loc>
-  <lastmod>2015-12-09T04:16:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/vmprof.xml</loc>
-  <lastmod>2015-10-12T17:23:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/zynq.xml</loc>
-  <lastmod>2017-01-03T02:56:00Z</lastmod>
+  <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/rss.xml</loc>
-  <lastmod>2018-07-10T21:04:00Z</lastmod>
+  <lastmod>2023-11-06T21:42:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/sitemap.xml</loc>
-  <lastmod>2018-07-10T21:04:00Z</lastmod>
+  <lastmod>2023-11-06T21:42:00Z</lastmod>
  </sitemap>
 </sitemapindex>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (Mantevo)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/mantevo.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Fri, 04 Sep 2015 15:34:31 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Comparing languages with miniapps</title><link>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The &lt;a href="https://mantevo.org/"&gt;Mantevo project&lt;/a&gt; provides a collection of miniapps, which are simplified versions
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Journey to the Center of the Computer (Posts about Mantevo)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/mantevo.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Sun, 18 Jun 2023 17:08:31 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Comparing languages with miniapps</title><link>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;The &lt;a href="https://mantevo.org/"&gt;Mantevo project&lt;/a&gt; provides a collection of miniapps, which are simplified versions
 of real scientific applications that make it easier to explore performance, scaling, languages, programming models, etc.
 I want to focus on the language aspect and port some apps to new languages to see how they compare. &lt;/p&gt;
 &lt;p&gt;The first miniapp I started with is &lt;a href="http://www.exmatex.org/comd.html"&gt;CoMD&lt;/a&gt;, a molecular dynamics code in C.&lt;/p&gt;
@@ -65,40 +65,40 @@ The ultimate goal is near C/Fortran speeds using a higher-level language to expr
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;Language/Compiler  &lt;/th&gt;
-&lt;th align="left"&gt;Version&lt;/th&gt;
-&lt;th align="right"&gt;Time/atom (microseconds)&lt;/th&gt;
+&lt;th style="text-align: left;"&gt;Version&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;Time/atom (microseconds)&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;C - gcc&lt;/td&gt;
-&lt;td align="left"&gt;4.8.2&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;4.8.2&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.3&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Julia&lt;/td&gt;
-&lt;td align="left"&gt;0.3.11&lt;/td&gt;
-&lt;td align="right"&gt;153.0&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;0.3.11&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;153.0&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Julia&lt;/td&gt;
-&lt;td align="left"&gt;0.4.0-dev+6990&lt;/td&gt;
-&lt;td align="right"&gt;88.8&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;0.4.0-dev+6990&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;88.8&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Python&lt;/td&gt;
-&lt;td align="left"&gt;2.7.10 (from Anaconda)  &lt;/td&gt;
-&lt;td align="right"&gt;941.0&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;2.7.10 (from Anaconda)  &lt;/td&gt;
+&lt;td style="text-align: right;"&gt;941.0&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Numba&lt;/td&gt;
-&lt;td align="left"&gt;0.20.0&lt;/td&gt;
-&lt;td align="right"&gt;789.0&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;0.20.0&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;789.0&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Pypy&lt;/td&gt;
-&lt;td align="left"&gt;2.6.1&lt;/td&gt;
-&lt;td align="right"&gt;98.4&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;2.6.1&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;98.4&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -118,4 +118,4 @@ under these two systems in the next few posts.&lt;/p&gt;
 &lt;!--
 Julia and Numba have similar stages (infer types, convert to LLVM IR, convert to native code), and so I hope to look
 at them in parallel going forward.  
---&gt;&lt;/div&gt;</description><category>CoMD</category><category>julia</category><category>Mantevo</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</guid><pubDate>Wed, 02 Sep 2015 16:18:50 GMT</pubDate></item></channel></rss>
+--&gt;</description><category>CoMD</category><category>julia</category><category>Mantevo</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</guid><pubDate>Wed, 02 Sep 2015 16:18:50 GMT</pubDate></item></channel></rss>

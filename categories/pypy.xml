@@ -1,65 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Journey to the Center of the Computer (PyPy)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/pypy.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Wed, 04 Nov 2015 21:41:02 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Performance Updates with PyPy 4.0</title><link>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The PyPy team recently released version &lt;a href="http://morepypy.blogspot.com/2015/10/pypy-400-released-jit-with-simd.html"&gt;4.0&lt;/a&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Journey to the Center of the Computer (Posts about PyPy)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/pypy.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Sun, 18 Jun 2023 17:08:31 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Performance Updates with PyPy 4.0</title><link>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;The PyPy team recently released version &lt;a href="http://morepypy.blogspot.com/2015/10/pypy-400-released-jit-with-simd.html"&gt;4.0&lt;/a&gt;
 (The jump in version number is to reduce confusion with the Python version supported.)
 One of the features is improved performance.&lt;/p&gt;
 &lt;p&gt;But first, an issue with reporting accurate timings with this version of CoMD should be addressed. The initial iteration contains overhead from tracing and JIT compilation (Cython and Numba have the same issue).
 For this example we are concerned with the steady-state timing, so the time for the first iteration should be excluded.
 I've added a '--skip' parameter to the CoMD code (default: 1) that skips the first &lt;code&gt;printRate&lt;/code&gt; steps (default: 10) in computing the overall average update rate at the end.&lt;/p&gt;
 &lt;p&gt;Now the table with the most recent performance numbers  (from &lt;a href="http://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/"&gt;this post&lt;/a&gt; ), updated with PyPy 4.0 results:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Language/compiler  &lt;/th&gt;
-&lt;th&gt;Version   &lt;/th&gt;
-&lt;th align="right"&gt;Time&lt;/th&gt;
-&lt;th align="right"&gt;&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Python&lt;/td&gt;
-&lt;td&gt;2.7.10&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;PyPy&lt;/td&gt;
-&lt;td&gt;2.6.1&lt;/td&gt;
-&lt;td align="right"&gt;96&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Numba&lt;/td&gt;
-&lt;td&gt;0.21.0&lt;/td&gt;
-&lt;td align="right"&gt;47&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;PyPy&lt;/td&gt;
-&lt;td&gt;4.0&lt;/td&gt;
-&lt;td align="right"&gt;30&lt;/td&gt;
-&lt;td align="right"&gt;    New result&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Cython&lt;/td&gt;
-&lt;td&gt;0.23.3&lt;/td&gt;
-&lt;td align="right"&gt;13&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Julia&lt;/td&gt;
-&lt;td&gt;0.4.0-rc3&lt;/td&gt;
-&lt;td align="right"&gt;6.1&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;C&lt;/td&gt;
-&lt;td&gt;4.8.2&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
+&lt;p&gt;| Language/compiler   | Version   | Time|
+|-------------------|--------------|--------------:|------------:|
+| Python            | 2.7.10       |  1014          | |
+| PyPy              | 2.6.1        |    96         | |
+| Numba             | 0.21.0       |     47     | |
+| PyPy              | 4.0          |    30         |      New result |
+| Cython            | 0.23.3       |     13     | |
+| Julia             | 0.4.0-rc3    |    6.1     | |
+| C                 | 4.8.2        |    2.3          | |&lt;/p&gt;
 &lt;p&gt;&lt;br&gt;
 Times are all in μs/atom. System size is 4000 atoms.
 Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
@@ -67,7 +22,7 @@ Hardware is Xeon E5-2630 v3 @ 2.4 Ghz, OS is Ubuntu 12.04.
 &lt;p&gt;The new release of PyPy also includes some SIMD vectorization support (&lt;code&gt;--jit vec=1&lt;/code&gt; or &lt;code&gt;--jit vec_all=1&lt;/code&gt;).  Neither of these provided any improvement in performance on this code.   Not too surprising given the vectorization support is new, and the code contains
 conditionals in the inner loop.&lt;/p&gt;
 &lt;p&gt;PyPy 4.0 gives a very good 34x performance improvement over bare Python, and 3x improvement over the previous release (2.6.1).
-PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>PyPy</category><guid>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</guid><pubDate>Wed, 04 Nov 2015 21:39:00 GMT</pubDate></item><item><title>Towards Profiling Accelerated Python</title><link>https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;One of the conclusions from last post is a need for better profiling tools to show where time is spent in the code.
+PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)&lt;/p&gt;</description><category>CoMD</category><category>PyPy</category><guid>https://markdewing.github.io/blog/posts/updated-performance-with-pypy-40/</guid><pubDate>Wed, 04 Nov 2015 21:39:00 GMT</pubDate></item><item><title>Towards Profiling Accelerated Python</title><link>https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;One of the conclusions from last post is a need for better profiling tools to show where time is spent in the code.
 Profiling Python + JIT'ed code requires dealing with a couple of issues.&lt;/p&gt;
 &lt;p&gt;The first issue is collecting stack information at different language levels.
 A native profiler collects a stack for the JIT'ed (or compiled extension) code, but eventually the stack enters the implementation of the Python interpreter loop.
@@ -89,7 +44,7 @@ The simplest way to keep it for use after the run is to follow the Linux perf st
 &lt;p&gt;To enable Numba with vmprof, I've created a version of llvmlite that is amenable to stack collection, at the &lt;em&gt;perf&lt;/em&gt; branch &lt;a href="https://github.com/markdewing/llvmlite/tree/perf"&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;This does two things:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Keep the frame pointer in JIT'ed code, so a backtrace can be taken.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;li&gt;Keep the frame pointer in JIT'ed code, so a backtrace can be taken.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
 &lt;li&gt;Output a perf-compatible JIT map file (not on by default - need to call &lt;code&gt;enable_jit_events&lt;/code&gt; to turn it on)&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;To use this, modify Numba to enable JIT events and frame pointers:&lt;/p&gt;
@@ -110,10 +65,10 @@ Filtering and aggregating Numba stacks remains to be done (meaning neither the C
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
-&lt;p&gt;With x86_64, it is possible to use DWARF debug information to walk the stack.  I couldn't figure out how to output the appropriate debug information.  LLVM 3.6 has a promising target option named &lt;code&gt;JITEmitDebugInfo&lt;/code&gt;.  However, &lt;code&gt;JITEmitDebugInfo&lt;/code&gt; is a lie!  It's not hooked up to anything, and has been removed in LLVM 3.7. &lt;a class="footnote-backref" href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;↩&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;With x86_64, it is possible to use DWARF debug information to walk the stack.  I couldn't figure out how to output the appropriate debug information.  LLVM 3.6 has a promising target option named &lt;code&gt;JITEmitDebugInfo&lt;/code&gt;.  However, &lt;code&gt;JITEmitDebugInfo&lt;/code&gt; is a lie!  It's not hooked up to anything, and has been removed in LLVM 3.7. &lt;a class="footnote-backref" href="https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/#fnref:1" title="Jump back to footnote 1 in the text"&gt;↩&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;&lt;/div&gt;</description><category>Numba</category><category>PyPy</category><category>python</category><category>vmprof</category><guid>https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/</guid><pubDate>Thu, 08 Oct 2015 01:58:00 GMT</pubDate></item><item><title>Improvements in CoMD Cell Method Performance</title><link>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;A &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements/"&gt;previous post&lt;/a&gt; showed some performance improvements with the &lt;em&gt;nsquared&lt;/em&gt; version of the code.
+&lt;/div&gt;</description><category>Numba</category><category>PyPy</category><category>python</category><category>vmprof</category><guid>https://markdewing.github.io/blog/posts/towards-profiling-accelerated-python/</guid><pubDate>Thu, 08 Oct 2015 01:58:00 GMT</pubDate></item><item><title>Improvements in CoMD Cell Method Performance</title><link>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;A &lt;a href="http://markdewing.github.io/blog/posts/first-performance-improvements/"&gt;previous post&lt;/a&gt; showed some performance improvements with the &lt;em&gt;nsquared&lt;/em&gt; version of the code.
 This post will tackle the &lt;em&gt;cell&lt;/em&gt; version of the code.
 In the &lt;em&gt;nsquared&lt;/em&gt; version the time-consuming inner loop had no function calls.
 The &lt;em&gt;cell&lt;/em&gt; version does call other functions, which may complicate optimization.&lt;/p&gt;
@@ -122,46 +77,46 @@ The &lt;em&gt;cell&lt;/em&gt; version does call other functions, which may compl
 &lt;tr&gt;
 &lt;th&gt;Language/compiler  &lt;/th&gt;
 &lt;th&gt;Version   &lt;/th&gt;
-&lt;th align="right"&gt;Initial time&lt;/th&gt;
-&lt;th align="right"&gt;  Final time&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;Initial time&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;  Final time&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;C&lt;/td&gt;
 &lt;td&gt;4.8.2&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.3&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.3&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Python&lt;/td&gt;
 &lt;td&gt;2.7.10&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
-&lt;td align="right"&gt;1014&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;1014&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;1014&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;PyPy&lt;/td&gt;
 &lt;td&gt;2.6.1&lt;/td&gt;
-&lt;td align="right"&gt;96&lt;/td&gt;
-&lt;td align="right"&gt;96&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;96&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;96&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Julia&lt;/td&gt;
 &lt;td&gt;0.4.0-rc3&lt;/td&gt;
-&lt;td align="right"&gt;87&lt;/td&gt;
-&lt;td align="right"&gt;6.1&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;87&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;6.1&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Cython&lt;/td&gt;
 &lt;td&gt;0.23.3&lt;/td&gt;
-&lt;td align="right"&gt;729&lt;/td&gt;
-&lt;td align="right"&gt;13&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;729&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;13&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Numba&lt;/td&gt;
 &lt;td&gt;0.21.0&lt;/td&gt;
-&lt;td align="right"&gt;867&lt;/td&gt;
-&lt;td align="right"&gt;47&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;867&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;47&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -224,7 +179,7 @@ The Cython annotated output is probably the the best - it highlights which lines
 However it is not integrated with profiler output, so in a project of any size, it's not clear where a user should spend time adding types.  &lt;/p&gt;
 &lt;p&gt;Julia has some useful collection and feedback tools, but they would be much more helpful if combined.  The memory allocation output is bytes allocated.
 It's useful for finding allocations where none were expected, or for allocations in known hot loops, but it's less clear which other allocations are impacting performance.
-Ideally this could be integrated with profiler output and weighted by time spent to show which allocations are actually affecting execution time.&lt;/p&gt;&lt;/div&gt;</description><category>CoMD</category><category>cython</category><category>julia</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</guid><pubDate>Fri, 02 Oct 2015 18:56:00 GMT</pubDate></item><item><title>First Performance Improvements</title><link>https://markdewing.github.io/blog/posts/first-performance-improvements/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The &lt;a href="http://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/"&gt;previous post&lt;/a&gt; introduced the CoMD miniapp in Python and Julia.
+Ideally this could be integrated with profiler output and weighted by time spent to show which allocations are actually affecting execution time.&lt;/p&gt;</description><category>CoMD</category><category>cython</category><category>julia</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/improvements-in-comd-cell-method-performance/</guid><pubDate>Fri, 02 Oct 2015 18:56:00 GMT</pubDate></item><item><title>First Performance Improvements</title><link>https://markdewing.github.io/blog/posts/first-performance-improvements/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;The &lt;a href="http://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/"&gt;previous post&lt;/a&gt; introduced the CoMD miniapp in Python and Julia.
 This post will look a little deeper into the performance of Julia and various Python compilers.
 I will use the nsquared version of the code for simplicity.&lt;/p&gt;
 &lt;p&gt;The &lt;code&gt;computeForce&lt;/code&gt; function in &lt;code&gt;ljforce&lt;/code&gt; takes almost all the time, and it is here we should focus.
@@ -232,52 +187,51 @@ In the nsquared version there are no further function calls inside this loop, wh
 easier to analyze and improve the performance.&lt;/p&gt;
 &lt;p&gt;The summary performance table (all times are in microseconds/atom, the system is the smallest size at 256 atoms)&lt;/p&gt;
 &lt;!-- from laptop --&gt;
-
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;Language/compiler  &lt;/th&gt;
 &lt;th&gt;version   &lt;/th&gt;
-&lt;th align="right"&gt;Initial time&lt;/th&gt;
-&lt;th align="right"&gt;  Final time&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;Initial time&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;  Final time&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;Python&lt;/td&gt;
 &lt;td&gt;2.7.10&lt;/td&gt;
-&lt;td align="right"&gt;560&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;560&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;PyPy&lt;/td&gt;
 &lt;td&gt;2.6.1&lt;/td&gt;
-&lt;td align="right"&gt;98&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;98&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;HOPE&lt;/td&gt;
 &lt;td&gt;0.4.0&lt;/td&gt;
-&lt;td align="right"&gt;8&lt;/td&gt;
-&lt;td align="right"&gt;&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;8&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Cython&lt;/td&gt;
 &lt;td&gt;0.23.1&lt;/td&gt;
-&lt;td align="right"&gt;335&lt;/td&gt;
-&lt;td align="right"&gt;8.3&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;335&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;8.3&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Numba&lt;/td&gt;
 &lt;td&gt;0.21.0&lt;/td&gt;
-&lt;td align="right"&gt;450&lt;/td&gt;
-&lt;td align="right"&gt;8.3&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;450&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;8.3&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Julia&lt;/td&gt;
 &lt;td&gt;0.5.0-dev+50&lt;/td&gt;
-&lt;td align="right"&gt;44&lt;/td&gt;
-&lt;td align="right"&gt;7.1&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;44&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;7.1&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -317,19 +271,18 @@ This transformation enables effective compilation of the loop.&lt;/p&gt;
 &lt;!--Loop-lifting is a way for Numba to extract a loop into a separate function in order to compile the loop.--&gt;
 
 &lt;p&gt;The beginning of the function now looks like&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;    &lt;span class="nd"&gt;@numba.jit&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;    &lt;span class="nd"&gt;@numba&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;jit&lt;/span&gt;
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;computeForce&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;atoms&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sim&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-        &lt;span class="c"&gt;# hoist the attribute lookups of these values&lt;/span&gt;
+        &lt;span class="c1"&gt;# hoist the attribute lookups of these values&lt;/span&gt;
         &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;atoms&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;
         &lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;atoms&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt;
         &lt;span class="n"&gt;bounds&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;atoms&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bounds&lt;/span&gt;
         &lt;span class="n"&gt;nAtoms&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;atoms&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nAtoms&lt;/span&gt;
         &lt;span class="n"&gt;epsilon&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;epsilon&lt;/span&gt;
 
-        &lt;span class="c"&gt;# rest of original function&lt;/span&gt;
-        &lt;span class="c"&gt;# ...&lt;/span&gt;
-&lt;/pre&gt;
-
+        &lt;span class="c1"&gt;# rest of original function&lt;/span&gt;
+        &lt;span class="c1"&gt;# ...&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Now Numba can compile the time consuming loop, and this gives about 9 μs/atom.&lt;/p&gt;
 &lt;p&gt;The loop that zeros the force can be slightly improved by either looping over the last dimension
@@ -342,7 +295,7 @@ This initial time (335 μs/atom) gives a 40% improvement over regular python, bu
 In order to do this we need to hoist the attribute lookups and assign to temporary variables, as in the Numba version.
 At this step, we add types for the same variables as the Numba version.
 The beginning of the function looks like this:&lt;/p&gt;
-&lt;pre class="code literal-block"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;computeForce&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;atoms&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;div class="code"&gt;&lt;pre class="code literal-block"&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;computeForce&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;atoms&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
         &lt;span class="n"&gt;cdef&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt; &lt;span class="n"&gt;nAtoms&lt;/span&gt;
         &lt;span class="n"&gt;cdef&lt;/span&gt; &lt;span class="n"&gt;double&lt;/span&gt; &lt;span class="n"&gt;epsilon&lt;/span&gt;
         &lt;span class="n"&gt;cdef&lt;/span&gt; &lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ndarray&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;dtype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;double_t&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ndim&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;
@@ -355,10 +308,9 @@ The beginning of the function looks like this:&lt;/p&gt;
         &lt;span class="n"&gt;nAtoms&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;atoms&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nAtoms&lt;/span&gt;
         &lt;span class="n"&gt;epsilon&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;epsilon&lt;/span&gt;
 
-        &lt;span class="c"&gt;# rest of original function&lt;/span&gt;
-        &lt;span class="c"&gt;# ...&lt;/span&gt;
-&lt;/pre&gt;
-
+        &lt;span class="c1"&gt;# rest of original function&lt;/span&gt;
+        &lt;span class="c1"&gt;# ...&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The time for this change about 54 μs/atom.&lt;/p&gt;
 &lt;p&gt;Cython has a convenient feature that creates an annotated HTML file highlighting lines in the 
@@ -387,7 +339,7 @@ discovering what changes need to be made and where to make them.&lt;/p&gt;
 &lt;li&gt;With Julia and Numba, it's hard to connect intermediate code stages (internal IR, LLVM IR, assembly) to the original code, and to spot potential performance issues there.  The Cython annotation output is nice here.&lt;/li&gt;
 &lt;li&gt;The difference between operating on dynamic objects versus the underlying value types.&lt;/li&gt;
 &lt;li&gt;How well does the final assembly utilize the hardware. How to use hardware sampling for analysis.&lt;/li&gt;
-&lt;/ul&gt;&lt;/div&gt;</description><category>cython</category><category>julia</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/first-performance-improvements/</guid><pubDate>Fri, 18 Sep 2015 04:48:00 GMT</pubDate></item><item><title>Comparing languages with miniapps</title><link>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;div&gt;&lt;p&gt;The &lt;a href="https://mantevo.org/"&gt;Mantevo project&lt;/a&gt; provides a collection of miniapps, which are simplified versions
+&lt;/ul&gt;</description><category>cython</category><category>julia</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/first-performance-improvements/</guid><pubDate>Fri, 18 Sep 2015 04:48:00 GMT</pubDate></item><item><title>Comparing languages with miniapps</title><link>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;The &lt;a href="https://mantevo.org/"&gt;Mantevo project&lt;/a&gt; provides a collection of miniapps, which are simplified versions
 of real scientific applications that make it easier to explore performance, scaling, languages, programming models, etc.
 I want to focus on the language aspect and port some apps to new languages to see how they compare. &lt;/p&gt;
 &lt;p&gt;The first miniapp I started with is &lt;a href="http://www.exmatex.org/comd.html"&gt;CoMD&lt;/a&gt;, a molecular dynamics code in C.&lt;/p&gt;
@@ -453,40 +405,40 @@ The ultimate goal is near C/Fortran speeds using a higher-level language to expr
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;Language/Compiler  &lt;/th&gt;
-&lt;th align="left"&gt;Version&lt;/th&gt;
-&lt;th align="right"&gt;Time/atom (microseconds)&lt;/th&gt;
+&lt;th style="text-align: left;"&gt;Version&lt;/th&gt;
+&lt;th style="text-align: right;"&gt;Time/atom (microseconds)&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;C - gcc&lt;/td&gt;
-&lt;td align="left"&gt;4.8.2&lt;/td&gt;
-&lt;td align="right"&gt;2.3&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;4.8.2&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;2.3&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Julia&lt;/td&gt;
-&lt;td align="left"&gt;0.3.11&lt;/td&gt;
-&lt;td align="right"&gt;153.0&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;0.3.11&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;153.0&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Julia&lt;/td&gt;
-&lt;td align="left"&gt;0.4.0-dev+6990&lt;/td&gt;
-&lt;td align="right"&gt;88.8&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;0.4.0-dev+6990&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;88.8&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Python&lt;/td&gt;
-&lt;td align="left"&gt;2.7.10 (from Anaconda)  &lt;/td&gt;
-&lt;td align="right"&gt;941.0&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;2.7.10 (from Anaconda)  &lt;/td&gt;
+&lt;td style="text-align: right;"&gt;941.0&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Numba&lt;/td&gt;
-&lt;td align="left"&gt;0.20.0&lt;/td&gt;
-&lt;td align="right"&gt;789.0&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;0.20.0&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;789.0&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Pypy&lt;/td&gt;
-&lt;td align="left"&gt;2.6.1&lt;/td&gt;
-&lt;td align="right"&gt;98.4&lt;/td&gt;
+&lt;td style="text-align: left;"&gt;2.6.1&lt;/td&gt;
+&lt;td style="text-align: right;"&gt;98.4&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -506,4 +458,4 @@ under these two systems in the next few posts.&lt;/p&gt;
 &lt;!--
 Julia and Numba have similar stages (infer types, convert to LLVM IR, convert to native code), and so I hope to look
 at them in parallel going forward.  
---&gt;&lt;/div&gt;</description><category>CoMD</category><category>julia</category><category>Mantevo</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</guid><pubDate>Wed, 02 Sep 2015 16:18:50 GMT</pubDate></item></channel></rss>
+--&gt;</description><category>CoMD</category><category>julia</category><category>Mantevo</category><category>Numba</category><category>PyPy</category><category>python</category><guid>https://markdewing.github.io/blog/posts/comparing-languages-with-miniapps/</guid><pubDate>Wed, 02 Sep 2015 16:18:50 GMT</pubDate></item></channel></rss>
