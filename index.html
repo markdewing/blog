@@ -12,7 +12,7 @@
 <link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/">
 <link rel="next" href="index-1.html" type="text/html">
-<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/2023/my-github-repos/" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/2024/testing-scientific-software/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -63,7 +63,125 @@ bg-dark
 
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/2023/my-github-repos/" class="u-url">Guide to my Github Repositories</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/2024/testing-scientific-software/" class="u-url">Testing Scientific Software</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
+            <p class="dateline">
+            <a href="posts/2024/testing-scientific-software/" rel="bookmark">
+            <time class="published dt-published" datetime="2024-04-25T11:20:00-05:00" itemprop="datePublished" title="2024-04-25 11:20">2024-04-25 11:20</time></a>
+            </p>
+                <p class="commentline">
+    
+    <a href="posts/2024/testing-scientific-software/#disqus_thread" data-disqus-identifier="cache/posts/2024/testing-scientific-software.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <p>A perennial question when writing scientific code is how do you know the code is producing the right answer?</p>
+<p>This post describes the <a href="https://github.com/QMCPACK/qmc_algorithms">QMC algorithms</a> repository and testing in QMCPACK development to provide some answers this question.
+QMCPACK implements Quantum Monte Carlo (QMC) methods for solving the Schödinger equation for atoms, molecules, and solids.</p>
+<p>The repository focuses on a few areas to contribute to testing and understanding scientific software:
+1. Derived formulas using symbolic math
+2. Code generation from symbolic math
+3. Small problems with simple algorithms
+4. Reproduce and explain papers</p>
+<p>Another driving force in this work is that I have a strong conviction that symbolic mathematics is the most appropriate semantic level to describe scientific algorithms.
+In this repository, Sympy is used for symbolic mathematics.</p>
+<h3>Deriving formulas</h3>
+<p>Some parts of scientific code are the final result of a series of derivation steps that are then
+translated to code.  How do we know these steps are correct?  Especially the final step of math to code.
+Usually these steps are all carried out by hand, with opportunities for errors to creep in.
+We can use the computer to perform and check some of these steps.</p>
+<h4>Computing derivatives for comparisons</h4>
+<p>A Padé (rational function) form is the simplest functional form for a Jastrow factor, which describes electron-electron or electron-nucleus correlation in a wavefunction.
+The <a href="https://github.com/QMCPACK/qmc_algorithms/blob/master/Wavefunctions/Pade_Jastrow.ipynb">Pade_Jastrow.ipynb</a> notebook simply expresses the form, computes some derivatives, and evaluates them at a particular value.</p>
+<p>The simplest way to use the results is to cut and paste the values from the notebook to the test case.
+This gets tedious very quickly and is not easy to regenerate, especially when there are more
+than a few values to copy.
+It's straightforward to make a little template to output the values in a form
+that is more directly usable in the test.</p>
+<p>For example, the following Python code will output a line suitable for use in a C++ unit test (with <a href="https://github.com/catchorg/Catch2">Catch2</a> assertions).</p>
+<div class="code"><pre class="code literal-block"><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">r</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s1">'A B r'</span><span class="p">)</span>
+<span class="n">sym_u</span> <span class="o">=</span> <span class="n">A</span><span class="o">*</span><span class="n">r</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">B</span><span class="o">*</span><span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="n">A</span><span class="o">/</span><span class="n">B</span>
+<span class="n">val_u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">subs</span><span class="p">({</span><span class="n">A</span><span class="p">:</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span><span class="mf">1.0</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'CHECK(u == Approx(</span><span class="si">{</span><span class="n">val_u</span><span class="si">}</span><span class="s1">));'</span><span class="p">)</span>
+</pre></div>
+
+<h4>Other Derivations</h4>
+<p>There are a few types of splines used in QMCPACK.</p>
+<p>For <a href="https://github.com/QMCPACK/qmc_algorithms/blob/master/Wavefunctions/Cubic%20Splines%20Basic.ipynb">cubic splines</a>, the notebook sets up the equations based on constraints and boundary conditions.
+It computes an example and solve the equations using a dense linear solver. (An example of using a simpler algorithm for validation.  The real code uses a more efficient tridiagonal solver.)
+This gets incorporated into QMCPACK tests with the script <a href="https://github.com/QMCPACK/qmcpack/blob/develop/src/Numerics/tests/gen_cubic_spline.py">gen_cubic_spline.py</a> and the output of that script is in <a href="https://github.com/QMCPACK/qmcpack/blob/develop/src/Numerics/tests/test_one_dim_cubic_spline.cpp">test_one_dim_cubic_spline.cpp</a>.</p>
+<p>B-splines are used in a one-dimensional form for Jastrow electron-electron and electron-ion correlation factors.
+And also in a three-dimensional form for representing single-particle periodic orbitals.
+They are much faster to evaluate than a plane wave representation.
+The <a href="https://github.com/QMCPACK/qmc_algorithms/blob/master/Wavefunctions/Explain_Bspline.ipynb">Explain_Bspline.ipnyb</a> notebook starts from B-splines defined in Sympy and works through how they get used in QMCPACK.</p>
+<h3>Code generation</h3>
+<p>Code generation is used for the solver for the coefficients of cubic splines.
+It starts from the tridiagonal matrix equations from Wikipedia, derives the cubic spline equations (same as previously), combines the two and outputs the resulting algorithm to C++ code.</p>
+<p>The notebook is <a href="https://github.com/QMCPACK/qmc_algorithms/blob/master/Wavefunctions/CubicSplineSolver.ipynb">CubicSplineSolver.ipynb</a>.
+The corresponding script in QMCPACK is <a href="https://github.com/QMCPACK/qmcpack/blob/develop/src/Numerics/codegen/gen_cubic_spline_solver.py">gen_cubic_spline_solver.py</a>.
+The generated spline solver is located in <a href="https://github.com/QMCPACK/qmcpack/blob/develop/src/Numerics/SplineSolvers.h">SplineSolvers.h</a>.</p>
+<p>Some simpler code generation in the QMCPACK repository involves the angular part of atomic orbitals.<br>
+There is a notebook about <a href="https://github.com/QMCPACK/qmc_algorithms/blob/master/Wavefunctions/GaussianOrbitals.ipynb">Gaussian orbitals</a>.
+In this case, the starting expression is simple and computing the various derivatives is tedious
+and the script in QMCPACK, <a href="https://github.com/QMCPACK/qmcpack/blob/develop/src/Numerics/codegen/gen_cartesian_tensor.py">gen_cartesian_tensor.py</a>, takes care of that part.</p>
+<h3>Simple algorithms</h3>
+<p>Some ways to obtain reference values for test cases include special cases that have analytic solutions
+and small problems that can be solved using an alternative method that is easier to understand and verify than the implemented algorithm.</p>
+<p>Computing long-range sums of periodic Coulomb potentials requires some tricks to ensure convergence.
+The Ewald method splits the sum in two pieces and uses the Fourier transform of the long-range part for faster convergence. It is implemented in a simple Python script, <a href="https://github.com/QMCPACK/qmc_algorithms/blob/master/LongRange/ewald_sum.py">ewald_sum.py</a>, which can be used to verify more sophisticated splits of the sum used in the code.</p>
+<p>For the Schrödinger equation, an exact analytic solution is known for the hydrogen atom.
+A deliberately incorrect wavefunction is used as a trial wavefunction in <a href="https://github.com/QMCPACK/qmc_algorithms/blob/master/Variational/Variational_Hydrogen.ipynb">Variational_Hydrogen.ipynb</a> to demonstrate the variational principle.</p>
+<p>A slightly larger problem is that of a helium atom.
+The ground state wavefunction for a helium atom does not have an analytic solution and is the simplest example involving electron-electron correlation.
+The notebook <a href="https://github.com/QMCPACK/qmc_algorithms/blob/master/Variational/Variational_Helium.ipynb">Variational_Helium.ipynb</a> uses symbolic means to find the derivatives of the local
+energy, and grid-based integration instead of Monte Carlo.
+(The details of the integration are discussed <a href="https://markdewing.github.io/blog/posts/integration-callbacks/">here</a>.)</p>
+<p>Another approach to the derivatives is autodifferentiation.
+There is a minimal QMC code used for creating reference values, particular for derivatives of variational parameters and orbital rotation.
+It uses the <a href="https://github.com/HIPS/autograd">autograd</a> package for differentiation.
+The QMC loop is in <a href="https://github.com/QMCPACK/qmcpack/blob/develop/src/QMCWaveFunctions/tests/run_qmc.py">run_qmc.py</a>.</p>
+<p>The target systems are:
+* Helium atom in <a href="https://github.com/QMCPACK/qmcpack/blob/develop/src/QMCWaveFunctions/tests/gen_rotated_lcao_wf.py">gen_rotated_lcao_wf.py</a>
+* Beryllium atom in <a href="https://github.com/QMCPACK/qmcpack/blob/develop/src/QMCWaveFunctions/tests/rot_be_sto_wf.py">rot_be_sto_wf.py</a>
+* Beryllium atom with two determinants in <a href="https://github.com/QMCPACK/qmcpack/blob/develop/src/QMCWaveFunctions/tests/rot_multi_be_sto_wf.py">rot_multi_be_sto_wf.py</a>
+* Solid Beryllium with a psuedopotential in <a href="https://github.com/QMCPACK/qmcpack/blob/develop/src/QMCWaveFunctions/tests/eval_bspline_spo.py">eval_bspline_spo.py</a></p>
+<p>(To improve on the performance of run_qmc.py and related scripts, I wrote a version using the multiprocessing package in Python. For even more performance, there is a port of these scripts to Julia.)</p>
+<h3>Reproduce and explain papers</h3>
+<p>Published papers contain derivations that leave intermediate steps as an exercise for the reader 
+should they want to reproduce or implement the described algorithm.</p>
+<p>There is a nice writeup, contributed by Andrew Baczewski, to explain and reproduce a paper <a href="https://journals.aps.org/pra/abstract/10.1103/PhysRevA.30.2713">"Observations on the statistical iteration of matrices"</a>
+in this notebook
+<a href="https://github.com/QMCPACK/qmc_algorithms/blob/master/StochasticReconfiguration/Reproduce_Hetherington_PRA1984.ipynb">Reproduce Hetherington PRA1984.ipynb</a>
+The paper describes a stochastic reconfiguration method for controlling variance and bias in a Monte Carlo simulation.</p>
+<p>Another example involves a cusp correction scheme, which adds some modifications to Gaussian-type orbitals
+commonly used in quantum chemistry to work better for a Quantum Monte Carlo wavefunction.
+It comes from the paper 
+<a href="https://doi.org/10.1063/1.1940588">Scheme for adding electron-nucleus cusps to Gaussian orbitals</a>.
+The notebook
+<a href="https://github.com/QMCPACK/qmc_algorithms/blob/master/Wavefunctions/CuspCorrection.ipynb">CuspCorrection.ipynb</a>
+follows through solving some polynomial equations and presents some examples.
+The script used to generate reference values for tests in QMCPACK is <a href="https://github.com/QMCPACK/qmcpack/blob/develop/src/QMCWaveFunctions/tests/gen_cusp_corr.py">gen_cusp_corr.py</a>.</p>
+<p>The process for using notebooks is
+1. Jupyter notebook provides exposition of an algorithm or concept.
+2. The code gets copied to a script in the appropriate test directory in the
+QMCPACK repository, and that location is the code that produces the results for the QMCPACK tests.</p>
+<p>This does result in duplication of code, but at least the scripts and tests in the QMCPACK repository are self-contained.</p>
+<h3>Final thoughts</h3>
+<p>This post described several techniques for testing scientific software.</p>
+<p>One of the important aspects of learning is working with the material and wrestling with it.
+At some point, you have to do the derivation yourself in order to learn it.
+These notebooks are a record of my approach to exploring these topics.
+Are these useful to anyone else? Could they be made more useful?</p>
+<p>The descriptions in many of the notebooks are very short and could be expanded.
+What would make them more useful?  For someone trying to understand
+the code?  Or for someone trying to reproduce and extend the work?</p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/2023/my-github-repos/" class="u-url">Guide to my Github Repositories</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 Mark Dewing
@@ -860,74 +978,6 @@ Finally it runs <code>vmproftocallgrind</code> using these files as input.</p>
 <li>It should work with C extensions and Cython as well.</li>
 </ul>
 </div>
-    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/towards-profiling-accelerated-python/" class="u-url">Towards Profiling Accelerated Python</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                Mark Dewing
-            </span></p>
-            <p class="dateline">
-            <a href="posts/towards-profiling-accelerated-python/" rel="bookmark">
-            <time class="published dt-published" datetime="2015-10-07T20:58:00-05:00" itemprop="datePublished" title="2015-10-07 20:58">2015-10-07 20:58</time></a>
-            </p>
-                <p class="commentline">
-    
-    <a href="posts/towards-profiling-accelerated-python/#disqus_thread" data-disqus-identifier="cache/posts/towards-profiling-accelerated-python.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="e-content entry-content">
-    <p>One of the conclusions from last post is a need for better profiling tools to show where time is spent in the code.
-Profiling Python + JIT'ed code requires dealing with a couple of issues.</p>
-<p>The first issue is collecting stack information at different language levels.
-A native profiler collects a stack for the JIT'ed (or compiled extension) code, but eventually the stack enters the implementation of the Python interpreter loop.
-Unless we are trying to optimized the interpreter loop, this is not useful.
-We would rather know what Python code is being executed.
-Python profilers can collect the stack at the Python level, but can't collect native code stacks.</p>
-<p>The PyPy developers created a solution in <a href="https://vmprof.readthedocs.org/en/latest/">vmprof</a>.
-It walks the stack like a native profiler, but also hooks the Python interpreter
-so that it can collect the Python code's file, function, and line number.
-This solution is general to any type of compiled extension (C extensions, Cython, Numba, etc.)
-Read the section in the vmprof docs on <a href="https://vmprof.readthedocs.org/en/latest/#why-a-new-profiler">Why a new profiler?</a> for more information.</p>
-<p>The second issue is particular to JIT'ed code - resolving symbol information after the run.
-For low overhead, native profilers collect a minimum of information at runtime (usually the Instruction Pointer (IP) address at each stack level).
-These IP addresses need to resolved to symbol information after collection.
-Normally this information is kept in debug sections that are generated at compile time.
-However, with JIT compilation, the functions and their address mappings are generated at runtime.</p>
-<p>LLVM includes an interface to get symbol information at runtime.
-The simplest way to keep it for use after the run is to follow the Linux perf standard (documented <a href="https://github.com/torvalds/linux/blob/master/tools/perf/Documentation/jit-interface.txt">here</a>), which stores the address, size, and function name in a file <code>/tmp/perf-&lt;pid&gt;.map</code>.</p>
-<p>To enable Numba with vmprof, I've created a version of llvmlite that is amenable to stack collection, at the <em>perf</em> branch <a href="https://github.com/markdewing/llvmlite/tree/perf">here</a>.</p>
-<p>This does two things:</p>
-<ol>
-<li>Keep the frame pointer in JIT'ed code, so a backtrace can be taken.<sup id="fnref:1"><a class="footnote-ref" href="posts/towards-profiling-accelerated-python/#fn:1">1</a></sup>
-</li>
-<li>Output a perf-compatible JIT map file (not on by default - need to call <code>enable_jit_events</code> to turn it on)</li>
-</ol>
-<p>To use this, modify Numba to enable JIT events and frame pointers:</p>
-<ol>
-<li>In  <code>targets\codegen.py</code>, at the end of the <code>_init</code> method of <code>BaseCPUCodegen</code>, add <code>self._engine.enable_jit_events()</code>
-</li>
-<li>And for good measure, turn on frame pointers for Numba code as well (set <code>CFLAGS=-fno-omit-frame-pointer</code> before building it)</li>
-</ol>
-<p>The next piece is a modified version of vmprof ( in branch <a href="https://github.com/markdewing/vmprof-python/tree/numba"><em>numba</em></a> ).
-So far all it does is read the perf compatible output and dump raw stacks.
-Filtering and aggregating Numba stacks remains to be done (meaning neither the CLI nor the GUI display work yet).</p>
-<p>How to use what works, so far:</p>
-<ol>
-<li>Run vmprof, using perf-enabled Numba above:  <code>python -m vmprof -o vmprof.out &lt;target python&gt;</code>
-</li>
-<li>Copy map file <code>/tmp/perf-&lt;pid&gt;.map</code> to some directory.   I usually copy <code>vmprof.out</code> to something like <code>vmprof-&lt;pid&gt;.out</code> to remember which files correlate.</li>
-<li>View raw stacks with <code>vmprofdump vmprof-&lt;pid&gt;.out --perf perf-&lt;pid&gt;.map</code>.  </li>
-</ol>
-<div class="footnote">
-<hr>
-<ol>
-<li id="fn:1">
-<p>With x86_64, it is possible to use DWARF debug information to walk the stack.  I couldn't figure out how to output the appropriate debug information.  LLVM 3.6 has a promising target option named <code>JITEmitDebugInfo</code>.  However, <code>JITEmitDebugInfo</code> is a lie!  It's not hooked up to anything, and has been removed in LLVM 3.7. <a class="footnote-backref" href="posts/towards-profiling-accelerated-python/#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
-</li>
-</ol>
-</div>
-    </div>
     </article>
 </div>
 
@@ -935,7 +985,7 @@ Filtering and aggregating Numba stacks remains to be done (meaning neither the C
 <li class="next"><a href="index-1.html" rel="next">Older posts</a></li>
         </ul>
 <script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><!--End of body content--><footer id="footer">
-            Contents © 2023         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2024         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
             
         </footer>

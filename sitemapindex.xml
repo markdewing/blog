@@ -75,7 +75,7 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/python.xml</loc>
-  <lastmod>2023-06-18T17:08:00Z</lastmod>
+  <lastmod>2024-04-25T16:28:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/scripting.xml</loc>
@@ -83,7 +83,11 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/sympy.xml</loc>
-  <lastmod>2023-06-18T17:08:00Z</lastmod>
+  <lastmod>2024-04-25T16:28:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/testing.xml</loc>
+  <lastmod>2024-04-25T16:28:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/categories/vectorization.xml</loc>
@@ -103,10 +107,10 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/rss.xml</loc>
-  <lastmod>2023-11-06T21:53:00Z</lastmod>
+  <lastmod>2024-04-25T16:28:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/sitemap.xml</loc>
-  <lastmod>2023-11-06T21:54:00Z</lastmod>
+  <lastmod>2024-04-25T16:28:00Z</lastmod>
  </sitemap>
 </sitemapindex>
