@@ -16,6 +16,7 @@ This post describes the [QMC algorithms](https://github.com/QMCPACK/qmc_algorith
 QMCPACK implements Quantum Monte Carlo (QMC) methods for solving the Sch&ouml;dinger equation for atoms, molecules, and solids.
 
 The repository focuses on a few areas to contribute to testing and understanding scientific software:
+
 1. Derived formulas using symbolic math
 2. Code generation from symbolic math
 3. Small problems with simple algorithms

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Journey to the Center of the Computer (Posts about sympy)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/sympy.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Thu, 25 Apr 2024 16:29:09 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Testing Scientific Software</title><link>https://markdewing.github.io/blog/posts/2024/testing-scientific-software/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;A perennial question when writing scientific code is how do you know the code is producing the right answer?&lt;/p&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Journey to the Center of the Computer (Posts about sympy)</title><link>https://markdewing.github.io/blog/</link><description></description><atom:link href="https://markdewing.github.io/blog/categories/sympy.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Fri, 26 Apr 2024 02:05:48 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Testing Scientific Software</title><link>https://markdewing.github.io/blog/posts/2024/testing-scientific-software/</link><dc:creator>Mark Dewing</dc:creator><description>&lt;p&gt;A perennial question when writing scientific code is how do you know the code is producing the right answer?&lt;/p&gt;
 &lt;p&gt;This post describes the &lt;a href="https://github.com/QMCPACK/qmc_algorithms"&gt;QMC algorithms&lt;/a&gt; repository and testing in QMCPACK development to provide some answers this question.
 QMCPACK implements Quantum Monte Carlo (QMC) methods for solving the Schödinger equation for atoms, molecules, and solids.&lt;/p&gt;
-&lt;p&gt;The repository focuses on a few areas to contribute to testing and understanding scientific software:
-1. Derived formulas using symbolic math
-2. Code generation from symbolic math
-3. Small problems with simple algorithms
-4. Reproduce and explain papers&lt;/p&gt;
+&lt;p&gt;The repository focuses on a few areas to contribute to testing and understanding scientific software:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Derived formulas using symbolic math&lt;/li&gt;
+&lt;li&gt;Code generation from symbolic math&lt;/li&gt;
+&lt;li&gt;Small problems with simple algorithms&lt;/li&gt;
+&lt;li&gt;Reproduce and explain papers&lt;/li&gt;
+&lt;/ol&gt;
 &lt;p&gt;Another driving force in this work is that I have a strong conviction that symbolic mathematics is the most appropriate semantic level to describe scientific algorithms.
 In this repository, Sympy is used for symbolic mathematics.&lt;/p&gt;
 &lt;h3&gt;Deriving formulas&lt;/h3&gt;
