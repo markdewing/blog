@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Investigations into hardware and software details">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Journey to the Center of the Computer (old posts, page 2) | Journey to the Center of the Computer</title>
+<link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
+<link rel="canonical" href="https://markdewing.github.io/blog/index-2.html">
+<link rel="prev" href="." type="text/html">
+<link rel="next" href="index-1.html" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]-->
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark
+bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href=".">
+
+            <span id="blog-title">Journey to the Center of the Computer</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
+<li class="nav-item">
+<a href="archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="categories/" class="nav-link">Tags</a>
+                </li>
+<li class="nav-item">
+<a href="rss.xml" class="nav-link">RSS feed</a>
+
+                
+            </li>
+</ul>
+<ul class="navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+
+    
+
+
+    
+<div class="postindex">
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/prototype-for-profiling-python/" class="u-url">Prototype for Profiling Python</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
+            <p class="dateline">
+            <a href="posts/prototype-for-profiling-python/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-10-12T12:20:00-05:00" itemprop="datePublished" title="2015-10-12 12:20">2015-10-12 12:20</time></a>
+            </p>
+                <p class="commentline">
+    
+    <a href="posts/prototype-for-profiling-python/#disqus_thread" data-disqus-identifier="cache/posts/prototype-for-profiling-python.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <p><a href="posts/towards-profiling-accelerated-python/">Last post</a> covered some technical background using vmprof to profile Python with compiled or JIT'ed extensions.
+Now I've created a prototype that can convert the output to callgrind format so it can be viewed with <a href="http://kcachegrind.sourceforge.net/html/Home.html">KCachegrind</a>.</p>
+<p>To install the prototype using the Anaconda distribution:</p>
+<ol>
+<li>Create a new environment (if you do not use a new environment, these packages may conflict with an existing Numba install): <code>conda create -n profiling python numpy</code>
+</li>
+<li>Switch to the new environment: <code>source activate profiling</code>
+</li>
+<li>Install prototype versions of Numba and llvmlite: <code>conda install -c https://conda.anaconda.org/mdewing numba-profiling</code>
+</li>
+<li>Install prototype version of vmprof: <code>conda install -c https://conda.anaconda.org/mdewing vmprof-numba</code>
+</li>
+<li>Make sure libunwind is installed.  (On Ubuntu <code>apt-get install libunwind8-dev</code>.)
+(On Ubuntu, it must be the -dev version.  If not installed, the error message when trying to run vmprof is <code>ImportError: libunwind.so.8: cannot open shared object file: No such file or directory</code>)</li>
+<li>Install KCachegrind (On Ubuntu, <code>apt-get install kcachegrind</code>)</li>
+</ol>
+<p>There is a wrapper (<code>vmprofrun</code>) that automates the running and processing steps.
+To use it, run <code>vmprofrun &lt;target python script&gt; [arguments to the python script]</code>. 
+(No need to specify <code>python</code> - that gets added to the command line automatically.)
+By default it will output <code>vmprof-&lt;pid&gt;.out</code>, which can be viewed in KCachegrind.</p>
+<p>Underneath, the <code>vmprofrun</code> tool saves the vmprof output during the run to <code>out.vmprof</code>. After the run, it automatically copies the <code>/tmp/perf-&lt;pid&gt;.map</code> file to the current directory (if running under Numba).
+It moves <code>out.vmprof</code> to <code>out-&lt;pid&gt;.vmprof</code>.
+Finally it runs <code>vmproftocallgrind</code> using these files as input.</p>
+<h4>Limitations</h4>
+<ol>
+<li>Only works on 64-bit Linux</li>
+<li>Function-level profiles only - no line information (for either python or native code)</li>
+<li>Sometimes the profiling hangs during the run - kill the process and try again.</li>
+<li>Works with Python 2.7 or 3.4</li>
+<li>Not well validated or tested yet</li>
+<li>It does not work well yet with the existing vmprof web visualization and CLI tools.</li>
+</ol>
+<p>Other notes:</p>
+<ul>
+<li>The stack dump tool will process the stacks to remove the Python interpreter frames.</li>
+<li>By default the Numba <code>Dispatcher_call</code> level is removed.  Otherwise the call graph in KCachegrind gets tangled by all the call paths running through this function.</li>
+<li>It should work with C extensions and Cython as well.</li>
+</ul>
+</div>
+    </article>
+</div>
+
+        <ul class="pager postindexpager clearfix">
+<li class="previous"><a href="." rel="prev">Newer posts</a></li>
+            <li class="next"><a href="index-1.html" rel="next">Older posts</a></li>
+        </ul>
+<script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><!--End of body content--><footer id="footer">
+            Contents © 2024         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
+
+
+        <script src="assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>

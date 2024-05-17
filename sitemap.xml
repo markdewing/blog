@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://markdewing.github.io/blog/</loc>
-  <lastmod>2024-04-25T16:28:00Z</lastmod>
+  <lastmod>2024-05-17T21:01:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/2015/</loc>
@@ -31,15 +31,15 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/2024/</loc>
-  <lastmod>2024-04-25T16:28:00Z</lastmod>
+  <lastmod>2024-05-17T21:00:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/archive.html</loc>
-  <lastmod>2024-04-25T16:28:00Z</lastmod>
+  <lastmod>2024-05-17T21:01:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/</loc>
-  <lastmod>2024-04-25T16:28:00Z</lastmod>
+  <lastmod>2024-05-17T21:01:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/categories/ansible/</loc>
@@ -102,6 +102,10 @@
   <lastmod>2015-08-20T20:10:00Z</lastmod>
  </url>
  <url>
+  <loc>https://markdewing.github.io/blog/categories/profiling-perfetto-chrome/</loc>
+  <lastmod>2024-05-17T21:01:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://markdewing.github.io/blog/categories/profiling/</loc>
   <lastmod>2015-10-12T17:23:00Z</lastmod>
  </url>
@@ -143,7 +147,11 @@
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/index-1.html</loc>
-  <lastmod>2024-04-25T16:28:00Z</lastmod>
+  <lastmod>2024-05-17T21:01:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/index-2.html</loc>
+  <lastmod>2024-05-17T21:01:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/2018/bash_for_c_programmers/</loc>
@@ -152,6 +160,10 @@
  <url>
   <loc>https://markdewing.github.io/blog/posts/2023/my-github-repos/</loc>
   <lastmod>2023-11-06T21:42:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://markdewing.github.io/blog/posts/2024/introduction-to-chrome-tracing/</loc>
+  <lastmod>2024-05-17T21:00:00Z</lastmod>
  </url>
  <url>
   <loc>https://markdewing.github.io/blog/posts/2024/testing-scientific-software/</loc>

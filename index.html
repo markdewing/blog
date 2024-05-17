@@ -11,8 +11,8 @@
 <meta name="generator" content="Nikola (getnikola.com)">
 <link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
 <link rel="canonical" href="https://markdewing.github.io/blog/">
-<link rel="next" href="index-1.html" type="text/html">
-<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/2024/testing-scientific-software/" type="text/html">
+<link rel="next" href="index-2.html" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/2024/introduction-to-chrome-tracing/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -63,7 +63,221 @@ bg-dark
 
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/2024/testing-scientific-software/" class="u-url">Testing Scientific Software</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/2024/introduction-to-chrome-tracing/" class="u-url">Introduction to Chrome Tracing</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Mark Dewing
+            </span></p>
+            <p class="dateline">
+            <a href="posts/2024/introduction-to-chrome-tracing/" rel="bookmark">
+            <time class="published dt-published" datetime="2024-05-17T10:44:34-06:00" itemprop="datePublished" title="2024-05-17 10:44">2024-05-17 10:44</time></a>
+            </p>
+                <p class="commentline">
+    
+    <a href="posts/2024/introduction-to-chrome-tracing/#disqus_thread" data-disqus-identifier="cache/posts/2024/chrome_tracing.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="e-content entry-content">
+    <p>The Chrome trace viewer (and the improved Perfetto viewer) were written for
+Chrome and Android system profiling, but they make great general purpose
+timeline viewers for your own trace data.</p>
+<p>This post is about the trace format and some minimal C++ code to generate the
+trace output in your own projects.</p>
+<p>The viewer built-in to Chrome can be opened with "chrome:tracing" in the URL bar, or use the improved Perfetto viewer at <a href="https://ui.perfetto.dev">ui.perfetto.dev</a></p>
+<p>The Chrome Trace Format is documented <a href="https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU">here</a>.</p>
+<p>There are a number of event types, but to start with we need the
+duration events ('B' and 'E' pairs) and/or completed events ('X', which combine
+a duration event into a single event entry)</p>
+<p>To start, we can experiment by writing a file by hand.
+The <code>pid</code> (Process Id), <code>tid</code> (Thread Id), <code>ph</code> (Phase, basically the event type), and <code>ts</code> (timestep, in microseconds) fields are required.
+The <code>name</code> field is technically not required, but you'll most likely want to use it.
+The <code>args</code> field holds arbitrary extra information that can be display when the
+event is selected.</p>
+<p>Note that duration events have some ordering requirements - they must be
+ordered by time within a single thread.  The complete events have no such
+requirement, and so are a little easier to work with.</p>
+<p>The following file has two events (cleverly named "event1" and "event2"):</p>
+<div class="code"><pre class="code literal-block"><span class="p">[</span>
+<span class="w"> </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"event1"</span><span class="p">,</span><span class="nt">"ph"</span><span class="p">:</span><span class="s2">"B"</span><span class="p">,</span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">  </span><span class="nt">"pid"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="nt">"tid"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">},</span>
+<span class="w"> </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"event1"</span><span class="p">,</span><span class="nt">"ph"</span><span class="p">:</span><span class="s2">"E"</span><span class="p">,</span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"100"</span><span class="p">,</span><span class="nt">"pid"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="nt">"tid"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">},</span>
+<span class="w"> </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"event2"</span><span class="p">,</span><span class="nt">"ph"</span><span class="p">:</span><span class="s2">"B"</span><span class="p">,</span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"200"</span><span class="p">,</span><span class="nt">"pid"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="nt">"tid"</span><span class="p">:</span><span class="s2">"2"</span><span class="p">},</span>
+<span class="w"> </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"event2"</span><span class="p">,</span><span class="nt">"ph"</span><span class="p">:</span><span class="s2">"E"</span><span class="p">,</span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"400"</span><span class="p">,</span><span class="nt">"pid"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="nt">"tid"</span><span class="p">:</span><span class="s2">"2"</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">"args"</span><span class="p">:{</span><span class="nt">"iteration"</span><span class="p">:</span><span class="mi">1</span><span class="w">    </span><span class="p">}}</span>
+<span class="p">]</span>
+</pre></div>
+
+<p>Load that into Perfetto and we get this:</p>
+<p><img alt="Perfetto timeline viewer with two events" src="2024/perfetto_trace1b.png"></p>
+<p>In the screenshot, "event2" is selected and the information in the <code>args</code> field
+is shown in the lower right.</p>
+<p>Here is the same file using complete events. The complete events add a 'dur' element which is the duration of the event.
+The unit of time is microsecond, but the times and durations can be floating point numbers for more precision.</p>
+<div class="code"><pre class="code literal-block"><span class="p">[</span>
+<span class="w"> </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"event1"</span><span class="p">,</span><span class="nt">"ph"</span><span class="p">:</span><span class="s2">"X"</span><span class="p">,</span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="w">  </span><span class="nt">"dur"</span><span class="p">:</span><span class="s2">"100"</span><span class="p">,</span><span class="nt">"pid"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">"tid"</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span>
+<span class="w"> </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"event2"</span><span class="p">,</span><span class="nt">"ph"</span><span class="p">:</span><span class="s2">"X"</span><span class="p">,</span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"200"</span><span class="p">,</span><span class="nt">"dur"</span><span class="p">:</span><span class="s2">"200"</span><span class="p">,</span><span class="nt">"pid"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">"tid"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">"args"</span><span class="p">:{</span><span class="nt">"iteration"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+
+<h3>Simple Tracing in C++</h3>
+<p>One possible interface could use the following class.</p>
+<div class="code"><pre class="code literal-block"><span class="k">class</span><span class="w"> </span><span class="nc">Timer</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">TimePoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">time_point</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">start</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">stop</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">Timer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">name_</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">TimePoint</span><span class="w"> </span><span class="n">start_time_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name_</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>The start time is stored for use in computing the elapsed time.
+This could be avoided by just outputting 'B' and 'E' events, but for this
+example we will output 'X' events.</p>
+<p>The timer also keeps a name, which is used for the name of the event.</p>
+<p>Also declare a function to write the trace at the end of the run.</p>
+<div class="code"><pre class="code literal-block"><span class="c1">// Write trace to file in JSON format</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">writeTrace</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">fname</span><span class="p">);</span>
+</pre></div>
+
+<p>Now, on to the implementation file.
+Create a structure to hold all the information for an event.</p>
+<div class="code"><pre class="code literal-block"><span class="k">struct</span><span class="w"> </span><span class="nc">EventRecord</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">timestamp</span><span class="p">;</span><span class="w"> </span><span class="c1">// in seconds</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">event_type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="w"> </span><span class="n">tid</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">duration</span><span class="p">;</span><span class="w"> </span><span class="c1">// in seconds</span>
+
+<span class="w">    </span><span class="n">EventRecord</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">ts</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="w"> </span><span class="n">tid1</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">dur</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">timestamp</span><span class="p">(</span><span class="n">ts</span><span class="p">),</span><span class="w"> </span><span class="n">event_type</span><span class="p">(</span><span class="n">type</span><span class="p">),</span><span class="w"> </span><span class="n">name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span><span class="w"> </span><span class="n">tid</span><span class="p">(</span><span class="n">tid1</span><span class="p">),</span><span class="w"> </span><span class="n">duration</span><span class="p">(</span><span class="n">dur</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>Then some storage for the events and a mutex for thread safety.</p>
+<div class="code"><pre class="code literal-block"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">EventRecord</span><span class="o">&gt;</span><span class="w"> </span><span class="n">events</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">event_mutex</span><span class="p">;</span>
+</pre></div>
+
+<p>It's convenient to store the program start time so all the
+event start times can be computed relative to the start of the
+program.
+(Yes, I'm using global variables. That's good enough for a simple implementation.)</p>
+<div class="code"><pre class="code literal-block"><span class="k">using</span><span class="w"> </span><span class="n">TimePoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">time_point</span><span class="p">;</span>
+<span class="n">TimePoint</span><span class="w"> </span><span class="n">program_start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+</pre></div>
+
+<p>The implementation of the start function is simple - just save the clock time
+ for later.</p>
+<div class="code"><pre class="code literal-block"><span class="kt">void</span><span class="w"> </span><span class="nf">Timer::start</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">start_time_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>The stop function is a bit more involved.
+It gets the clock, computes the start time (relative to program start), the duration, and gets the thread id.</p>
+<div class="code"><pre class="code literal-block"><span class="kt">void</span><span class="w"> </span><span class="nf">Timer::stop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">TimePoint</span><span class="w"> </span><span class="n">stop_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">from_program_start</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">start_time_</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">program_start</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stop_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time_</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="w"> </span><span class="n">tid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">();</span>
+</pre></div>
+
+<p>The next part of the stop function saves the record in  the event record vector.
+The mutex is there in case these timers are being called from multiple threads.</p>
+<div class="code"><pre class="code literal-block"><span class="w">  </span><span class="n">event_mutex</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+<span class="w">  </span><span class="n">events</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span>
+<span class="w">      </span><span class="n">EventRecord</span><span class="p">(</span><span class="n">from_program_start</span><span class="p">.</span><span class="n">count</span><span class="p">(),</span><span class="w"> </span><span class="sc">'X'</span><span class="p">,</span><span class="w"> </span><span class="n">name_</span><span class="p">,</span><span class="w"> </span><span class="n">tid</span><span class="p">,</span><span class="w"> </span><span class="n">dur</span><span class="p">.</span><span class="n">count</span><span class="p">()));</span>
+<span class="w">  </span><span class="n">event_mutex</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Finally, the event information is written to a JSON file.
+It's convenient to map the thread id to a small integer for readability.
+This code segment also open the file.</p>
+<div class="code"><pre class="code literal-block"><span class="kt">void</span><span class="w"> </span><span class="nf">writeTrace</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">fname</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Map thread id to a small integer</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">small_tid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tid_map</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">fname</span><span class="p">);</span>
+</pre></div>
+
+<p>Next is to output the opening JSON section.
+Then the loop over events and the code for mapping the thread id.</p>
+<div class="code"><pre class="code literal-block"><span class="w">  </span><span class="n">f</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"{</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">  </span><span class="n">f</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sa">R</span><span class="s">"</span><span class="dl">(</span><span class="s">"traceEvents": [</span><span class="dl">)</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">events</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">idx</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">EventRecord</span><span class="w"> </span><span class="o">&amp;</span><span class="n">er</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">events</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tid_map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">er</span><span class="p">.</span><span class="n">tid</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">tid_map</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">tid_map</span><span class="p">[</span><span class="n">er</span><span class="p">.</span><span class="n">tid</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">small_tid</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+</pre></div>
+
+<p>In the next part of the function, the event record is output
+Times are converted from seconds in the record to microseconds for the JSON file.
+At the end of the loop is a check to avoid the comma after the final entry.</p>
+<div class="code"><pre class="code literal-block"><span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sa">R</span><span class="s">"</span><span class="dl">(</span><span class="s">{"name":"</span><span class="dl">)</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">er</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sa">R</span><span class="s">"</span><span class="dl">(</span><span class="s">",</span><span class="dl">)</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sa">R</span><span class="s">"</span><span class="dl">(</span><span class="s">"ph":"</span><span class="dl">)</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">er</span><span class="p">.</span><span class="n">event_type</span>
+<span class="w">      </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sa">R</span><span class="s">"</span><span class="dl">(</span><span class="s">",</span><span class="dl">)</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sa">R</span><span class="s">"</span><span class="dl">(</span><span class="s">"pid":"</span><span class="dl">)</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sa">R</span><span class="s">"</span><span class="dl">(</span><span class="s">",</span><span class="dl">)</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sa">R</span><span class="s">"</span><span class="dl">(</span><span class="s">"tid":"</span><span class="dl">)</span><span class="s">"</span>
+<span class="w">      </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">tid_map</span><span class="p">[</span><span class="n">er</span><span class="p">.</span><span class="n">tid</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sa">R</span><span class="s">"</span><span class="dl">(</span><span class="s">",</span><span class="dl">)</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sa">R</span><span class="s">"</span><span class="dl">(</span><span class="s">"ts":</span><span class="dl">)</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">er</span><span class="p">.</span><span class="n">timestamp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1.0e6</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">er</span><span class="p">.</span><span class="n">event_type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">'X'</span><span class="p">)</span>
+<span class="w">      </span><span class="n">f</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sa">R</span><span class="s">"</span><span class="dl">(</span><span class="s">,"dur":</span><span class="dl">)</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">er</span><span class="p">.</span><span class="n">duration</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1.0e6</span><span class="p">);</span>
+<span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"}"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">events</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">f</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">",</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">f</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">f</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"}"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>An example of using the trace code</p>
+<div class="code"><pre class="code literal-block"><span class="cp">#include</span><span class="w"> </span><span class="cpf">"trace.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span><span class="c1"> // for sleep</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">Timer</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="s">"first"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">t1</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">Timer</span><span class="w"> </span><span class="n">t2</span><span class="p">(</span><span class="s">"second"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">t2</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">t2</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">t1</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">writeTrace</span><span class="p">(</span><span class="s">"out1.json"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Viewing the "out1.json" file in Perfetto, we get
+<img alt="Perfetto timeline view from tracing example" src="2024/perfetto_trace2b.png"></p>
+<p>These files can be found at this <a href="https://gist.github.com/markdewing/982877af92e5b852fc25daec25cc59f6">gist</a></p>
+<h3>Final thoughts</h3>
+<p>This post has looked at using the Chrome Trace Format and the Perfetto viewer and presented a minimal C++ library for collecting and writing out trace data.</p>
+<p>A future post will look at the trace information from the OpenMP offload runtime (built-in to the LLVM mainline OpenMP) and how to combine it with application-level trace data.</p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/2024/testing-scientific-software/" class="u-url">Testing Scientific Software</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 Mark Dewing
@@ -924,67 +1138,11 @@ conditionals in the inner loop.</p>
 <p>PyPy 4.0 gives a very good 34x performance improvement over bare Python, and 3x improvement over the previous release (2.6.1).
 PyPy is attractive here in that no modifications made to the source.  (Both Cython and Numba required source changes)</p>
     </div>
-    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/prototype-for-profiling-python/" class="u-url">Prototype for Profiling Python</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                Mark Dewing
-            </span></p>
-            <p class="dateline">
-            <a href="posts/prototype-for-profiling-python/" rel="bookmark">
-            <time class="published dt-published" datetime="2015-10-12T12:20:00-05:00" itemprop="datePublished" title="2015-10-12 12:20">2015-10-12 12:20</time></a>
-            </p>
-                <p class="commentline">
-    
-    <a href="posts/prototype-for-profiling-python/#disqus_thread" data-disqus-identifier="cache/posts/prototype-for-profiling-python.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="e-content entry-content">
-    <p><a href="posts/towards-profiling-accelerated-python/">Last post</a> covered some technical background using vmprof to profile Python with compiled or JIT'ed extensions.
-Now I've created a prototype that can convert the output to callgrind format so it can be viewed with <a href="http://kcachegrind.sourceforge.net/html/Home.html">KCachegrind</a>.</p>
-<p>To install the prototype using the Anaconda distribution:</p>
-<ol>
-<li>Create a new environment (if you do not use a new environment, these packages may conflict with an existing Numba install): <code>conda create -n profiling python numpy</code>
-</li>
-<li>Switch to the new environment: <code>source activate profiling</code>
-</li>
-<li>Install prototype versions of Numba and llvmlite: <code>conda install -c https://conda.anaconda.org/mdewing numba-profiling</code>
-</li>
-<li>Install prototype version of vmprof: <code>conda install -c https://conda.anaconda.org/mdewing vmprof-numba</code>
-</li>
-<li>Make sure libunwind is installed.  (On Ubuntu <code>apt-get install libunwind8-dev</code>.)
-(On Ubuntu, it must be the -dev version.  If not installed, the error message when trying to run vmprof is <code>ImportError: libunwind.so.8: cannot open shared object file: No such file or directory</code>)</li>
-<li>Install KCachegrind (On Ubuntu, <code>apt-get install kcachegrind</code>)</li>
-</ol>
-<p>There is a wrapper (<code>vmprofrun</code>) that automates the running and processing steps.
-To use it, run <code>vmprofrun &lt;target python script&gt; [arguments to the python script]</code>. 
-(No need to specify <code>python</code> - that gets added to the command line automatically.)
-By default it will output <code>vmprof-&lt;pid&gt;.out</code>, which can be viewed in KCachegrind.</p>
-<p>Underneath, the <code>vmprofrun</code> tool saves the vmprof output during the run to <code>out.vmprof</code>. After the run, it automatically copies the <code>/tmp/perf-&lt;pid&gt;.map</code> file to the current directory (if running under Numba).
-It moves <code>out.vmprof</code> to <code>out-&lt;pid&gt;.vmprof</code>.
-Finally it runs <code>vmproftocallgrind</code> using these files as input.</p>
-<h4>Limitations</h4>
-<ol>
-<li>Only works on 64-bit Linux</li>
-<li>Function-level profiles only - no line information (for either python or native code)</li>
-<li>Sometimes the profiling hangs during the run - kill the process and try again.</li>
-<li>Works with Python 2.7 or 3.4</li>
-<li>Not well validated or tested yet</li>
-<li>It does not work well yet with the existing vmprof web visualization and CLI tools.</li>
-</ol>
-<p>Other notes:</p>
-<ul>
-<li>The stack dump tool will process the stacks to remove the Python interpreter frames.</li>
-<li>By default the Numba <code>Dispatcher_call</code> level is removed.  Otherwise the call graph in KCachegrind gets tangled by all the call paths running through this function.</li>
-<li>It should work with C extensions and Cython as well.</li>
-</ul>
-</div>
     </article>
 </div>
 
         <ul class="pager postindexpager clearfix">
-<li class="next"><a href="index-1.html" rel="next">Older posts</a></li>
+<li class="next"><a href="index-2.html" rel="next">Older posts</a></li>
         </ul>
 <script>var disqus_shortname="journeytothecenterofthecomputer";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><!--End of body content--><footer id="footer">
             Contents © 2024         <a href="mailto:markdewing%20(at)%20gmail%20(dot)%20com">Mark Dewing</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         

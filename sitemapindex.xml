@@ -66,6 +66,10 @@
   <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
  <sitemap>
+  <loc>https://markdewing.github.io/blog/categories/profiling-perfetto-chrome.xml</loc>
+  <lastmod>2024-05-17T21:01:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>https://markdewing.github.io/blog/categories/profiling.xml</loc>
   <lastmod>2023-06-18T17:08:00Z</lastmod>
  </sitemap>
@@ -107,10 +111,10 @@
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/rss.xml</loc>
-  <lastmod>2024-04-26T02:05:00Z</lastmod>
+  <lastmod>2024-05-17T21:01:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://markdewing.github.io/blog/sitemap.xml</loc>
-  <lastmod>2024-04-26T02:05:00Z</lastmod>
+  <lastmod>2024-05-17T21:01:00Z</lastmod>
  </sitemap>
 </sitemapindex>
